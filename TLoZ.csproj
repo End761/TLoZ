@@ -8,7 +8,38 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Buffs\StasisDebuff.png" />
+    <None Remove="Items\Tools\Paraglider.png" />
+    <None Remove="Items\Tools\SheikahSlate.png" />
+    <None Remove="Items\Tools\SheikahSlate2.png" />
+    <None Remove="Items\Weapons\MasterSword\Buckle_Body.png" />
+    <None Remove="Items\Weapons\MasterSword\MasterSword.png" />
+    <None Remove="Items\Weapons\MasterSword\MasterSwordDroppedInWorld.png" />
+    <None Remove="Items\Weapons\MasterSword\MasterSwordSheath.png" />
+    <None Remove="Items\Weapons\MasterSword\MasterSwordSheathBelt.png" />
+    <None Remove="Items\Weapons\MasterSword\MasterSwordSheathed.png" />
+    <None Remove="Items\Weapons\MasterSword\MasterSword_Glow.png" />
+    <None Remove="Projectiles\Runes\BombRound.png" />
+    <None Remove="Projectiles\Runes\BombRound2.png" />
+    <None Remove="Projectiles\Runes\BombSquare.png" />
+    <None Remove="Textures\Misc\Magnesis.png" />
+    <None Remove="Textures\Misc\Magnesis_PullFX.png" />
+    <None Remove="Textures\Misc\StasisArrow.png" />
+    <None Remove="Textures\Misc\StasisArrowMiddle.png" />
+    <None Remove="Textures\Misc\StasisChains.png" />
+    <None Remove="Textures\UI\Runes\BombRune1.png" />
+    <None Remove="Textures\UI\Runes\BombRune2.png" />
+    <None Remove="Textures\UI\Runes\CryonisRune.png" />
+    <None Remove="Textures\UI\Runes\MagnesisRune.png" />
+    <None Remove="Textures\UI\Runes\SelectedRune.png" />
+    <None Remove="Textures\UI\Runes\StasisRune.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="mscorlib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Enums\" />
+    <Folder Include="Textures\Misc\" />
   </ItemGroup>
   <Target Name="BuildMod" AfterTargets="Build">
     <Exec Command="&quot;$(tMLBuildServerPath)&quot; -build $(ProjectDir) -eac $(TargetPath) -define $(DefineConstants) -unsafe $(AllowUnsafeBlocks)" />

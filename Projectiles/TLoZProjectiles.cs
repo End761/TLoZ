@@ -13,77 +13,77 @@ namespace TLoZ.Projectiles
     {
         public override bool InstancePerEntity => true;
         public static TLoZProjectiles GetFor(Projectile projectile) => projectile.GetGlobalProjectile<TLoZProjectiles>();
-        public int StasisTimer;
-        public bool Stasised => StasisTimer > 0;
-        public bool LastStasisedState;
-        public Vector2 StasisLaunchDirection;
-        public float StasisLaunchSpeed;
-        public float PostStasisLaunchTimer;
-        public Vector2[] RandomStasisPositions;
-        public float StasisChainsOpacity;
+        public int stasisTimer;
+        public bool Stasised => stasisTimer > 0;
+        public bool lastStasisedState;
+        public Vector2 stasisLaunchDirection;
+        public float stasisLaunchSpeed;
+        public float postStasisLaunchTimer;
+        public Vector2[] randomStasisPositions;
+        public float stasisChainsOpacity;
 
-        public int CantGetHitTimer;
+        public int cantGetHitTimer;
         private bool _isHostile;
-        public bool CanBeStasised; 
+        public bool canBeStasised; 
         public override void SetDefaults(Projectile projectile)
         {
-            RandomStasisPositions = new[] { Vector2.Zero, Vector2.Zero, Vector2.Zero, Vector2.Zero };
-            CanBeStasised = projectile.type == ProjectileID.Boulder || projectile.type == mod.ProjectileType<BombRound>();
+            randomStasisPositions = new[] { Vector2.Zero, Vector2.Zero, Vector2.Zero, Vector2.Zero };
+            canBeStasised = projectile.type == ProjectileID.Boulder || projectile.type == mod.ProjectileType<BombRound>();
             _isHostile = projectile.hostile;
         }
         public override void PostAI(Projectile projectile)
         {
-            if (StasisChainsOpacity > 0.0f) StasisChainsOpacity -= 0.02f;
-            LastStasisedState = Stasised;
+            if (stasisChainsOpacity > 0.0f) stasisChainsOpacity -= 0.02f;
+            lastStasisedState = Stasised;
         }
         public override bool PreAI(Projectile projectile)
         {
-            if(Stasised && !LastStasisedState)
+            if(Stasised && !lastStasisedState)
             {
-                StasisChainsOpacity = 2.0f;
+                stasisChainsOpacity = 2.0f;
                 for (int i = 0; i < 4; i++)
                 {
                     float x = Main.rand.Next(-60, 60);
                     float y = Main.rand.Next(-60, 60);
-                    RandomStasisPositions[i] = projectile.Center + new Vector2(x, y);
+                    randomStasisPositions[i] = projectile.Center + new Vector2(x, y);
                 }
             }
-            if (StasisTimer > 0)
-                StasisTimer--;
-            if(StasisTimer == 1)
+            if (stasisTimer > 0)
+                stasisTimer--;
+            if(stasisTimer == 1)
             {
                 Main.PlaySound(13);
             }
-            if (CantGetHitTimer > 0) CantGetHitTimer--;
-            if (PostStasisLaunchTimer > 0.0f) PostStasisLaunchTimer -= 0.1f; 
+            if (cantGetHitTimer > 0) cantGetHitTimer--;
+            if (postStasisLaunchTimer > 0.0f) postStasisLaunchTimer -= 0.1f; 
             if(Stasised)
             {
                 projectile.timeLeft++;
                 projectile.hostile = false;
-                PostStasisLaunchTimer = 6.5f;
+                postStasisLaunchTimer = 6.5f;
                 foreach (Projectile proj in Main.projectile)
                 {
                     if (!proj.active || proj == projectile)
                         continue;
-                    if (projectile.Hitbox.Intersects(proj.Hitbox) && CantGetHitTimer <= 0)
+                    if (projectile.Hitbox.Intersects(proj.Hitbox) && cantGetHitTimer <= 0)
                     {
-                        CantGetHitTimer = 5;
+                        cantGetHitTimer = 5;
                         if (proj.penetrate != -1)
                         {
-                            CantGetHitTimer = 10;
+                            cantGetHitTimer = 10;
                             proj.Kill();
                         }
                         Main.PlaySound(21);
-                        StasisLaunchDirection = proj.velocity.SafeNormalize(-Vector2.UnitY);
-                        StasisLaunchSpeed += proj.knockBack * 0.5f;
+                        stasisLaunchDirection = proj.velocity.SafeNormalize(-Vector2.UnitY);
+                        stasisLaunchSpeed += proj.knockBack * 0.5f;
                     }
                 }
                 return false;
             } 
             if (projectile.hostile != _isHostile) projectile.hostile = _isHostile;
-            if (StasisLaunchDirection * StasisLaunchSpeed != Vector2.Zero) projectile.velocity = StasisLaunchDirection * StasisLaunchSpeed;
-            StasisLaunchDirection = Vector2.Zero;
-            StasisLaunchSpeed = 0.0f;
+            if (stasisLaunchDirection * stasisLaunchSpeed != Vector2.Zero) projectile.velocity = stasisLaunchDirection * stasisLaunchSpeed;
+            stasisLaunchDirection = Vector2.Zero;
+            stasisLaunchSpeed = 0.0f;
             return base.PreAI(projectile);
         }
         public override bool ShouldUpdatePosition(Projectile projectile)
@@ -96,22 +96,22 @@ namespace TLoZ.Projectiles
         {
             if (!projectile.active)
                 return false;
-            if (StasisChainsOpacity > 0.0f)
+            if (stasisChainsOpacity > 0.0f)
             {
-                for (int i = 0; i < RandomStasisPositions.Length; i++)
+                for (int i = 0; i < randomStasisPositions.Length; i++)
                 {
-                    TLoZNpcs.DrawStasisChains(spriteBatch, projectile.Center, RandomStasisPositions[i], StasisChainsOpacity);
+                    LoZnpCs.DrawStasisChains(spriteBatch, projectile.Center, randomStasisPositions[i], stasisChainsOpacity);
                 }
             }
             if (Stasised)
             {
                 // Draw the start
-                float rotation = StasisLaunchDirection.ToRotation() - (float)Math.PI / 2;
-                Color color = StasisLaunchSpeed > 14f ? Color.Red : StasisLaunchSpeed > 7f ? Color.Orange : Color.Yellow;
+                float rotation = stasisLaunchDirection.ToRotation() - (float)Math.PI / 2;
+                Color color = stasisLaunchSpeed > 14f ? Color.Red : stasisLaunchSpeed > 7f ? Color.Orange : Color.Yellow;
                 lightColor = color;
-                spriteBatch.Draw(TLoZTextures.Misc_StasisArrow, projectile.Center + (StasisLaunchDirection * StasisLaunchSpeed) - Main.screenPosition, new Rectangle(0, 0, 16, 10), color, rotation, new Vector2(8, 5), projectile.scale, SpriteEffects.None, 1f);
-                spriteBatch.Draw(TLoZTextures.Misc_StasisArrowMiddle, projectile.Center + (StasisLaunchDirection) - Main.screenPosition, new Rectangle(0, 0, 16, (int)(2 * StasisLaunchSpeed * 5)), color, rotation, new Vector2(8, 5), projectile.scale, SpriteEffects.None, 1f);
-                spriteBatch.Draw(TLoZTextures.Misc_StasisArrow, projectile.Center + (StasisLaunchDirection) + new Vector2(0, (2 * StasisLaunchSpeed * 4.95f) * projectile.scale).RotatedBy(rotation) - Main.screenPosition, new Rectangle(0, 8, 16, 12), color, rotation, new Vector2(8, 5), projectile.scale, SpriteEffects.None, 1f);
+                spriteBatch.Draw(TLoZTextures.MiscStasisArrow, projectile.Center + (stasisLaunchDirection * stasisLaunchSpeed) - Main.screenPosition, new Rectangle(0, 0, 16, 10), color, rotation, new Vector2(8, 5), projectile.scale, SpriteEffects.None, 1f);
+                spriteBatch.Draw(TLoZTextures.MiscStasisArrowMiddle, projectile.Center + (stasisLaunchDirection) - Main.screenPosition, new Rectangle(0, 0, 16, (int)(2 * stasisLaunchSpeed * 5)), color, rotation, new Vector2(8, 5), projectile.scale, SpriteEffects.None, 1f);
+                spriteBatch.Draw(TLoZTextures.MiscStasisArrow, projectile.Center + (stasisLaunchDirection) + new Vector2(0, (2 * stasisLaunchSpeed * 4.95f) * projectile.scale).RotatedBy(rotation) - Main.screenPosition, new Rectangle(0, 8, 16, 12), color, rotation, new Vector2(8, 5), projectile.scale, SpriteEffects.None, 1f);
             }
             return true;
         }

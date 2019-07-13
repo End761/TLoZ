@@ -1,56 +1,44 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using TLoZ.Items.Weapons.MasterSword;
 using TLoZ.NPCs;
 using TLoZ.Projectiles;
 using TLoZ.Projectiles.Runes;
+using TLoZ.Runes;
 
-namespace TLoZ
+namespace TLoZ.Players
 {
-    public class TLoZPlayer : ModPlayer
+    public sealed partial class TLoZPlayer : ModPlayer
     {
-        public bool NotUsingMasterSword;
-        public bool HasMasterSword;
-        public NPC LastNPCChat;
-        public int ResponseIndex;
+        public int responseIndex;
+
         public static TLoZPlayer Get(Player player) => player.GetModPlayer<TLoZPlayer>();
-        
+
         public bool Holds(int type) => player.HeldItem.type == type;
 
-        public Vector2 StasisLaunchVelocity;
-        public float PostStasisLaunchTimer;
+        public Vector2 stasisLaunchVelocity;
+        public float postStasisLaunchTimer;
 
-        public bool HasBomb;
-        private int _selectedRune;
-        public int SelectedRune
-        {
-            get { return _selectedRune; }
-            set
-            {
-                _selectedRune = value;
-                if (_selectedRune > 4) _selectedRune = 0;
-                if (_selectedRune < 0) _selectedRune = 4;
-            }
-        }
-
-        public bool UsesParaglider;
+        public bool usesParaglider;
         private int _paragliderNoFallDamageTimer;
 
         #region Rune Selection UI variables
-        public float Opacity;
-        public bool IsSelectingRune => TLoZInput.ChangeRune.Current;
-        public int InputLag;
+        public float opacity;
+
+        public bool IsSelectingRune => TLoZInput.changeRune.Current;
+        public int inputLag;
         #endregion
+
         public override void SetupStartInventory(IList<Item> items, bool mediumcoreDeath)
         {
-            if (TLoZClientConfig.ShouldSpawnWithClothes)
+            if (TLoZClientConfig.shouldSpawnWithClothes)
             {
                 Item hat = new Item();
                 hat.SetDefaults(ItemID.HerosHat);
@@ -64,112 +52,126 @@ namespace TLoZ
                 items.Add(pants);
             }
         }
+
         public override void ResetEffects()
         {
-            if(Main.gameMenu)
+            if (Main.gameMenu)
                 HasBomb = false;
-            if(player.ownedProjectileCounts[mod.ProjectileType<BombRound>()] <= 0)
-            {
+
+            if (player.ownedProjectileCounts[mod.ProjectileType<BombRound>()] <= 0)
                 HasBomb = false;
-            }
+
             HasMasterSword = player.HasItem(mod.ItemType<MasterSword>());
-            NotUsingMasterSword = player.itemAnimation <= 0 && Holds(mod.ItemType<MasterSword>());
-            if (LastNPCChat != null && LastNPCChat.active)
-                HandleNPCChat(LastNPCChat);
-            if (StasisLaunchVelocity != Vector2.Zero)
+            UsingMasterSword = !(player.itemAnimation <= 0 && Holds(mod.ItemType<MasterSword>()));
+
+            if (LastChatFromNPC != null && LastChatFromNPC.active)
+                HandleNPCChat(LastChatFromNPC);
+
+            if (stasisLaunchVelocity != Vector2.Zero)
             {
-                player.velocity = StasisLaunchVelocity * 2;
+                player.velocity = stasisLaunchVelocity * 2;
                 player.gravity = 0;
-                StasisLaunchVelocity = Vector2.Zero;
+                stasisLaunchVelocity = Vector2.Zero;
             }
-            if (PostStasisLaunchTimer > 0.0f) PostStasisLaunchTimer -= 0.1f;
-            if (InputLag > 0) InputLag--;
+
+            if (postStasisLaunchTimer > 0.0f) postStasisLaunchTimer -= 0.1f;
+            if (inputLag > 0) inputLag--;
+
             if (_paragliderNoFallDamageTimer > 0)
             {
                 player.noFallDmg = true;
                 _paragliderNoFallDamageTimer--;
             }
-            if (UsesParaglider)
+
+            if (usesParaglider)
             {
                 _paragliderNoFallDamageTimer = 60;
                 player.maxFallSpeed *= 0.05f;
+
                 if (player.velocity.Y != 0)
                 {
                     player.moveSpeed *= 2.25f;
                     player.maxRunSpeed *= 2.25f;
                     player.runAcceleration *= 2.25f;
                 }
+
                 bool upDrafted = false;
+
                 for (int i = 0; i < 10; i++)
                 {
                     if (Main.tile[(int)player.position.X / 16, (int)player.position.Y / 16 + i].type == TileID.Campfire)
-                    {
                         upDrafted = true;
-                    }
                 }
-                if(upDrafted)
+
+                if (upDrafted)
                     player.velocity.Y = -20f;
             }
         }
+
         public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)
         {
-            TLoZNpcs tlozTarget = TLoZNpcs.GetFor(npc);
-            if (tlozTarget.Stasised)
-            {
+            LoZnpCs tlozTarget = LoZnpCs.GetFor(npc);
+
+            if (tlozTarget.stasised)
                 return false;
-            }
+
             return base.CanBeHitByNPC(npc, ref cooldownSlot);
         }
+
         public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
         {
-            TLoZNpcs tlozTarget = TLoZNpcs.GetFor(npc);
-            if (tlozTarget.PostStasisFlyTimer > 0.0f)
+            LoZnpCs tlozTarget = LoZnpCs.GetFor(npc);
+
+            if (tlozTarget.postStasisFlyTimer > 0.0f)
             {
-                 PostStasisLaunchTimer = 6.5f;
-                 StasisLaunchVelocity = npc.velocity;
+                postStasisLaunchTimer = 6.5f;
+                stasisLaunchVelocity = npc.velocity;
             }
         }
+
         public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
         {
             TLoZProjectiles tlozProj = TLoZProjectiles.GetFor(proj);
-            if(tlozProj.PostStasisLaunchTimer > 0.0f)
+            if (tlozProj.postStasisLaunchTimer > 0.0f)
             {
-                PostStasisLaunchTimer = 6.5f;
-                StasisLaunchVelocity = proj.velocity;
+                postStasisLaunchTimer = 6.5f;
+                stasisLaunchVelocity = proj.velocity;
             }
 
         }
+
         public override void UpdateDead()
         {
-            UsesParaglider = false;
+            usesParaglider = false;
             HasBomb = false;
-            StasisLaunchVelocity = Vector2.Zero;
-            PostStasisLaunchTimer = 0;
-            InputLag = 0;
+            stasisLaunchVelocity = Vector2.Zero;
+            postStasisLaunchTimer = 0;
+            inputLag = 0;
         }
+
         public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
         {
-            TLoZNpcs tlozTarget = TLoZNpcs.GetFor(target);
-            if (tlozTarget.Stasised)
+            LoZnpCs tlozTarget = LoZnpCs.GetFor(target);
+            if (tlozTarget.stasised)
             {
                 crit = false;
                 damage *= 0;
                 target.life += 1;
-                tlozTarget.StasisLaunchDirection = Helpers.DirectToMouse(target.Center, 1f);
-                tlozTarget.StasisLaunchSpeed += item.knockBack * 0.5f;
+                tlozTarget.stasisLaunchDirection = Helpers.DirectToMouse(target.Center, 1f);
+                tlozTarget.stasisLaunchSpeed += item.knockBack * 0.5f;
             }
         }
         public override bool? CanHitNPC(Item item, NPC target)
         {
             if (item.type == mod.ItemType<MasterSword>() && (target.type == NPCID.Clothier || target.type == NPCID.OldMan))
                 return true;
-            if (TLoZNpcs.GetFor(target).Stasised)
+            if (LoZnpCs.GetFor(target).stasised)
                 return true;
             return base.CanHitNPC(item, target);
         }
         public override bool? CanHitNPCWithProj(Projectile proj, NPC target)
         {
-            if (TLoZNpcs.GetFor(target).Stasised)
+            if (LoZnpCs.GetFor(target).stasised)
                 return true;
             return base.CanHitNPCWithProj(proj, target);
         }
@@ -177,50 +179,31 @@ namespace TLoZ
         {
             if (HasBomb)
                 player.bodyFrame.Y = 5 * 56;
+
             if (HasMasterSword)
             {
-                layers.Insert(layers.FindIndex(x => x.Name == "Arms"), MasterSword.MasterSwordSheathBelt);
-                layers.Insert(0, MasterSword.MasterSwordSheath);
+                layers.Insert(layers.FindIndex(x => x.Name.Equals("Arms")), MasterSword.masterSwordSheathBelt);
+                layers.Insert(0, MasterSword.masterSwordSheath);
             }
-            if(UsesParaglider)
+
+            if (usesParaglider)
             {
                 player.bodyFrame.Y = 5 * 56;
-                layers.Add(Paraglider);
+                layers.Add(paraglider);
             }
+
+            ModifyGlowPlayerDrawLayers(layers);
         }
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            if(IsSelectingRune)
-            {
-                var inputLag = 10;
-                if (triggersSet.Left && InputLag <= 0)
-                {
-                    InputLag = inputLag;
-                    SelectedRune -= 1;
-                }
-                if (triggersSet.Right && InputLag <= 0)
-                {
-                    InputLag = inputLag;
-                    SelectedRune += 1;
-                }
-                if(PlayerInput.ScrollWheelDelta > 0 && InputLag <= 0)
-                {
-                    SelectedRune++;
-                }
-                if (PlayerInput.ScrollWheelDelta < 0 && InputLag <= 0)
-                {
-                    SelectedRune--;
-                }
-                PlayerInput.ScrollWheelDelta = 0;
-            }
-            if(TLoZInput.EquipParaglider.JustPressed)
-            {
-                UsesParaglider = !UsesParaglider;
-            }
+            ProcessRuneSelectionTriggers(triggersSet);
+
+            if (TLoZInput.equipParaglider.JustPressed)
+                usesParaglider = !usesParaglider;
         }
         public override void SetControls()
         {
-            if(PostStasisLaunchTimer > 0.0f) BlockInputs();
+            if (postStasisLaunchTimer > 0.0f) BlockInputs();
             if (IsSelectingRune) BlockInputs(true, false, false, false);
         }
         //Custom Methods:
@@ -231,10 +214,27 @@ namespace TLoZ
             {
                 if (npc.type == NPCID.Clothier)
                 {
-                    Main.npcChatText = TLoZDialogues.Clothier_MasterSwordReactions[ResponseIndex];
+                    Main.npcChatText = TLoZDialogues.clothierMasterSwordReactions[responseIndex];
                 }
             }
         }
+
+        public override TagCompound Save()
+        {
+            TagCompound tag = new TagCompound();
+
+            SaveRunes(tag);
+
+            return tag;
+        }
+
+        public override void Load(TagCompound tag)
+        {
+            LoadRunes(tag);
+
+            base.Load(tag);
+        }
+
         private void BlockInputs(bool blockDirections = true, bool blockJumps = true, bool blockItemUse = true, bool blockOther = true)
         {
             if (blockDirections)
@@ -260,7 +260,7 @@ namespace TLoZ
             }
         }
 
-        public static readonly PlayerLayer Paraglider = new PlayerLayer("TLoZ", "Paraglider", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)
+        public static readonly PlayerLayer paraglider = new PlayerLayer("TLoZ", "Paraglider", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)
         {
             if (drawInfo.shadow != 0f)
                 return;
@@ -284,5 +284,12 @@ namespace TLoZ
                 );
             Main.playerDrawData.Add(sheathData);
         });
+
+        private bool HasMasterSword { get; set; }
+        public bool UsingMasterSword { get; private set; }
+
+        public bool HasBomb { get; set; }
+
+        public NPC LastChatFromNPC { get; internal set; }
     }
 }

@@ -1,16 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using TLoZ.Buffs;
 using TLoZ.GlowMasks;
+using TLoZ.Players;
 
 namespace TLoZ.Items.Weapons.MasterSword
 {
@@ -74,9 +69,9 @@ namespace TLoZ.Items.Weapons.MasterSword
                     _nearBoss = true;
             }
             if (_nearBoss || _nearEvil)
-                item.GetGlobalItem<TLoZItems>().GMD = _nearBossGlow;
+                item.GetGlobalItem<TLoZGlobalItem>().gmd = _nearBossGlow;
             else
-                item.GetGlobalItem<TLoZItems>().GMD = null;
+                item.GetGlobalItem<TLoZGlobalItem>().gmd = null;
         }
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
@@ -97,7 +92,7 @@ namespace TLoZ.Items.Weapons.MasterSword
                     1f
                 );
         }
-        public static readonly PlayerLayer MasterSwordSheath = new PlayerLayer("TLoZ", "SheathLayer", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)
+        public static readonly PlayerLayer masterSwordSheath = new PlayerLayer("TLoZ", "SheathLayer", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)
         {
             if (drawInfo.shadow != 0f)
                 return;
@@ -109,6 +104,7 @@ namespace TLoZ.Items.Weapons.MasterSword
 
             int offsetY = 6;
             int offsetX = 6 * drawPlayer.direction;
+
             Color color = Lighting.GetColor((int)drawPlayer.Center.X / 16, (int)drawPlayer.Center.Y / 16);
             DrawData sheathData = new DrawData
             (
@@ -122,7 +118,8 @@ namespace TLoZ.Items.Weapons.MasterSword
                 drawPlayer.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally,
                 1
                 );
-            DrawData SwordData = new DrawData
+
+            DrawData swordData = new DrawData
             (
                 ModContent.GetTexture("TLoZ/Items/Weapons/MasterSword/MasterSwordSheathed"),
                 new Vector2((int)drawPlayer.MountedCenter.X + 2 * drawPlayer.direction, (int)drawPlayer.MountedCenter.Y - 2) - Main.screenPosition,
@@ -134,11 +131,13 @@ namespace TLoZ.Items.Weapons.MasterSword
                 drawPlayer.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally,
                 1
                 );
-            if (drawPlayer.HeldItem.type != TLoZ.instance.ItemType<MasterSword>() || TLoZPlayer.Get(drawPlayer).NotUsingMasterSword)
-                Main.playerDrawData.Add(SwordData);
+
+            if (drawPlayer.HeldItem.type != LoZ.Instance.ItemType<MasterSword>() || !TLoZPlayer.Get(drawPlayer).UsingMasterSword)
+                Main.playerDrawData.Add(swordData);
+
             Main.playerDrawData.Add(sheathData);
         });
-        public static readonly PlayerLayer MasterSwordSheathBelt = new PlayerLayer("TLoZ", "SheathBeltLayer", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)
+        public static readonly PlayerLayer masterSwordSheathBelt = new PlayerLayer("TLoZ", "SheathBeltLayer", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)
         {
             if (drawInfo.shadow != 0f)
                 return;

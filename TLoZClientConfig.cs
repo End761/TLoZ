@@ -5,15 +5,17 @@ namespace TLoZ
 {
     public class TLoZClientConfig : ModConfig
     {
-        public override ConfigScope Mode => ConfigScope.ClientSide;
         [Header("[c/ffff00: General Settings]")]
         [Label("All new characters spawn with Hero Clothes")]
         [DefaultValue(true)]
-        public bool SpawnWithClothes;
-        public static bool ShouldSpawnWithClothes;
+        public bool spawnWithClothes;
+        public static bool shouldSpawnWithClothes;
+
         public override void OnChanged()
         {
-            ShouldSpawnWithClothes = SpawnWithClothes;
+            shouldSpawnWithClothes = spawnWithClothes;
         }
+
+        public override ConfigScope Mode => ConfigScope.ClientSide;
     }
 }

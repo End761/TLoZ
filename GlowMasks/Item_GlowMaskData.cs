@@ -2,20 +2,20 @@
 {
     public class GlowMaskData
     {
-        public int Width;
-        public int Height;
-        public int FrameCount;
-        public string TexturePath;
-        public int FrameSpeed;
-        public string Mod;
-        public GlowMaskData(string p, string m, int w, int h, int FC = 0, int FSpeed = 7)
+        public int width;
+        public int height;
+        public int frameCount;
+        public string texturePath;
+        public int frameSpeed;
+        public string mod;
+        public GlowMaskData(string p, string m, int w, int h, int fc = 0, int fSpeed = 7)
         {
-            Mod = m;
-            FrameSpeed = FSpeed;
-            TexturePath = p;
-            Width = w;
-            Height = h;
-            FrameCount = FC;
+            mod = m;
+            frameSpeed = fSpeed;
+            texturePath = p;
+            width = w;
+            height = h;
+            frameCount = fc;
         }
     }
 }

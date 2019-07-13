@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-
-namespace TLoZ.Projectiles.Runes
+﻿namespace TLoZ.Projectiles.Runes
 {
     public class BombRound : BombBase
     {

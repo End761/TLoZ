@@ -2,10 +2,10 @@
 {
     public static class TLoZDialogues
     {
-        public static string[] Clothier_MasterSwordReactions;
+        public static string[] clothierMasterSwordReactions;
         public static void Load()
         {
-            Clothier_MasterSwordReactions = new string[]
+            clothierMasterSwordReactions = new string[]
             {
                 "Don't swing that thing around, little boy. You don't want to banish your elders into the void, do you?",
                 "I'm not a fan of the idea of being sealed yet again...",
@@ -14,7 +14,7 @@
         }
         public static void Unload()
         {
-            Clothier_MasterSwordReactions = null;
+            clothierMasterSwordReactions = null;
         }
     }
 }

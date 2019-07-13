@@ -3,49 +3,49 @@ using Terraria.ModLoader;
 using Terraria;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using TLoZ.UIs;
 
 namespace TLoZ
 {
-    public class TLoZ : Mod
-	{
-        public static TLoZ instance;
+    public class LoZ : Mod
+    {
+        public LoZ()
+        {
+        }
 
-        public TLoZ()
-		{
-		}
         public override void Load()
         {
-            instance = this;
+            Instance = this;
+
             if (!Main.dedServ)
             {
-                TLoZInput.Load(instance);
+                TLoZInput.Load(Instance);
                 TLoZTextures.Load();
                 UIManager.Load();
             }
+
             TLoZDialogues.Load();
         }
+
         public override void UpdateUI(GameTime gameTime)
         {
             UIManager.UpdateUIs(gameTime);
         }
+
         public override void Unload()
         {
-            instance = null;
+            Instance = null;
+
             TLoZInput.Unload();
             TLoZTextures.Unload();
             TLoZDialogues.Unload();
         }
+
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            layers.Insert(0, new LegacyGameInterfaceLayer("RuneSelectionLayer",
-                delegate
-                {
-                    if (UIManager.RuneSelection != null)
-                        UIManager.RuneSelection.Draw(Main.spriteBatch);
-                    return true;
-                }
-                )
-                );
+            layers.Insert(0, new RuneSelectionLayer(UIManager.RuneSelectionUI));
         }
+
+        public static LoZ Instance { get; private set; }
     }
 }
