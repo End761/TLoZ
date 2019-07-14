@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Terraria.GameInput;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using TLoZ.Extensions;
 using TLoZ.Runes;
 
 namespace TLoZ.Players
@@ -26,20 +23,20 @@ namespace TLoZ.Players
                 if (triggersSet.Left && inputLag <= 0)
                 {
                     inputLag = newInputLag;
-                    SelectedRune = RuneManager.Instance.GetPrevious(SelectedRune);
+                    SelectedRune = UnlockedRunes.Previous(SelectedRune);
                 }
 
                 if (triggersSet.Right && inputLag <= 0)
                 {
                     inputLag = newInputLag;
-                    SelectedRune = RuneManager.Instance.GetNext(SelectedRune);
+                    SelectedRune = UnlockedRunes.Next(SelectedRune);
                 }
 
                 if (PlayerInput.ScrollWheelDelta > 0 && this.inputLag <= 0)
-                    SelectedRune = RuneManager.Instance.GetNext(SelectedRune);
+                    SelectedRune = UnlockedRunes.Next(SelectedRune);
 
                 if (PlayerInput.ScrollWheelDelta < 0 && this.inputLag <= 0)
-                    SelectedRune = RuneManager.Instance.GetPrevious(SelectedRune);
+                    SelectedRune = UnlockedRunes.Previous(SelectedRune);
 
                 PlayerInput.ScrollWheelDelta = 0;
             }

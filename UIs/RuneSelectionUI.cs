@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Microsoft.Xna.Framework;
-using ReLogic.Graphics;
+using TLoZ.Extensions;
 using TLoZ.Players;
 using TLoZ.Runes;
 
@@ -27,8 +27,8 @@ namespace TLoZ.UIs
             float decreasedScale = 0.75f;
 
             Rune
-                nextRune = RuneManager.Instance.GetNext(tlozPlayer.SelectedRune),
-                previousRune = RuneManager.Instance.GetPrevious(tlozPlayer.SelectedRune);
+                nextRune = tlozPlayer.UnlockedRunes.Next(tlozPlayer.SelectedRune),
+                previousRune = tlozPlayer.UnlockedRunes.Previous(tlozPlayer.SelectedRune);
 
             Utils.DrawBorderString(spriteBatch, tlozPlayer.SelectedRune.DisplayName, position + new Vector2(-30, 35), Color.White);
 

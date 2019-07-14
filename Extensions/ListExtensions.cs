@@ -5,9 +5,9 @@ namespace TLoZ.Extensions
 {
     public static class ListExtensions
     {
-        public static T Previous<T>(this List<T> list, T current) => Previous<T>(list, current, true);
+        public static T Previous<T>(this IList<T> list, T current) => Previous<T>(list, current, true);
 
-        public static T Previous<T>(this List<T> list, T current, bool loop)
+        public static T Previous<T>(this IList<T> list, T current, bool loop)
         {
             int index = list.IndexOf(current);
 
@@ -22,9 +22,9 @@ namespace TLoZ.Extensions
                 return list[index - 1];
         }
 
-        public static T Next<T>(this List<T> list, T current) => Previous<T>(list, current, true);
+        public static T Next<T>(this IList<T> list, T current) => Previous<T>(list, current, true);
 
-        public static T Next<T>(this List<T> list, T current, bool loop)
+        public static T Next<T>(this IList<T> list, T current, bool loop)
         {
             int index = list.IndexOf(current);
 

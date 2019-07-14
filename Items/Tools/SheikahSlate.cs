@@ -1,10 +1,5 @@
 ﻿using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria;
-using TLoZ.Buffs;
-using TLoZ.Projectiles;
-using Microsoft.Xna.Framework;
-using TLoZ.Projectiles.Runes;
 using TLoZ.Players;
 
 namespace TLoZ.Items.Tools

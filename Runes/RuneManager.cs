@@ -1,5 +1,4 @@
-﻿using Terraria.Graphics;
-using TLoZ.Managers;
+﻿using TLoZ.Managers;
 
 namespace TLoZ.Runes
 {

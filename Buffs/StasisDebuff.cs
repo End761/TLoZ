@@ -1,5 +1,4 @@
 ﻿using Terraria;
-using Terraria.ModLoader;
 using TLoZ.NPCs;
 
 namespace TLoZ.Buffs

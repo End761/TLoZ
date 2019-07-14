@@ -11,7 +11,6 @@ using TLoZ.Items.Weapons.MasterSword;
 using TLoZ.NPCs;
 using TLoZ.Projectiles;
 using TLoZ.Projectiles.Runes;
-using TLoZ.Runes;
 
 namespace TLoZ.Players
 {
