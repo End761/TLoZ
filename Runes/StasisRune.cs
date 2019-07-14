@@ -17,7 +17,7 @@ namespace TLoZ.Runes
         {
             foreach (NPC npc in Main.npc)
             {
-                if (!npc.active) continue;
+                if (!npc.active || npc.boss) continue;
 
                 if (Collision.CheckAABBvLineCollision(npc.position, npc.Hitbox.Size(), player.Center, Main.MouseWorld))
                 {
@@ -28,12 +28,12 @@ namespace TLoZ.Runes
 
             foreach (Projectile projectile in Main.projectile)
             {
-                if (!projectile.active || !TLoZProjectiles.GetFor(projectile).canBeStasised)
+                if (!projectile.active || !TLoZGlobalProjectile.GetFor(projectile).canBeStasised)
                     continue;
 
                 if (Collision.CheckAABBvLineCollision(projectile.position, projectile.Hitbox.Size(), player.Center, Main.MouseWorld))
                 {
-                    TLoZProjectiles.GetFor(projectile).stasisTimer = 420;
+                    TLoZGlobalProjectile.GetFor(projectile).stasisTimer = 420;
                     break;
                 }
             }

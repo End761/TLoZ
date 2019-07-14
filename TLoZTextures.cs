@@ -12,8 +12,8 @@ namespace TLoZ
             MiscStasisArrowMiddle = ModContent.GetTexture("TLoZ/Textures/Misc/StasisArrowMiddle");
             MiscStasisChain = ModContent.GetTexture("TLoZ/Textures/Misc/StasisChains");
 
-            UIBombSquareRune = ModContent.GetTexture("TLoZ/Textures/UI/Runes/" + nameof(BombRoundRune));
-            UIBombRoundRune = ModContent.GetTexture("TLoZ/Textures/UI/Runes/" + nameof(BombSquareRune));
+            UIBombRoundRune = ModContent.GetTexture("TLoZ/Textures/UI/Runes/" + nameof(BombRoundRune));
+            UIBombSquareRune = ModContent.GetTexture("TLoZ/Textures/UI/Runes/" + nameof(BombSquareRune));
             UIStasisRune = ModContent.GetTexture("TLoZ/Textures/UI/Runes/StasisRune");
             UIMagnesisRune = ModContent.GetTexture("TLoZ/Textures/UI/Runes/MagnesisRune");
             UICryonisRune = ModContent.GetTexture("TLoZ/Textures/UI/Runes/CryonisRune");

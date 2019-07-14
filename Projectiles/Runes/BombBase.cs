@@ -7,7 +7,7 @@ using TLoZ.Players;
 
 namespace TLoZ.Projectiles.Runes
 {
-    public abstract class BombBase : ModProjectile
+    public abstract class BombBase : TLoZProjectile
     {
         public override void SetDefaults()
         {

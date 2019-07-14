@@ -12,6 +12,7 @@ namespace TLoZ.Runes
             Stasis = Add(new StasisRune()) as StasisRune;
 
             BombRound = Add(new BombRoundRune()) as BombRoundRune;
+            BombSquare = Add(new BombSquareRune()) as BombSquareRune;
         }
 
         public Rune GetPrevious(Rune current)

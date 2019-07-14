@@ -131,7 +131,7 @@ namespace TLoZ.Players
 
         public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
         {
-            TLoZProjectiles tlozProj = TLoZProjectiles.GetFor(proj);
+            TLoZGlobalProjectile tlozProj = TLoZGlobalProjectile.GetFor(proj);
             if (tlozProj.postStasisLaunchTimer > 0.0f)
             {
                 postStasisLaunchTimer = 6.5f;

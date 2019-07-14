@@ -64,7 +64,7 @@ namespace TLoZ.Players
         private void LoadRunes(TagCompound tag)
         {
             if (tag.ContainsKey(nameof(SelectedRune)))
-                SelectedRune = RuneManager.Instance[nameof(SelectedRune)];
+                SelectedRune = RuneManager.Instance[tag.GetString(nameof(SelectedRune))];
 
             UnlockedRunes.Clear();
             List<string> runeNames = tag.GetList<string>(nameof(UnlockedRunes)) as List<string>;

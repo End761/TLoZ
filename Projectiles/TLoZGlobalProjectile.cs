@@ -9,10 +9,10 @@ using TLoZ.Projectiles.Runes;
 
 namespace TLoZ.Projectiles
 {
-    public class TLoZProjectiles : GlobalProjectile
+    public class TLoZGlobalProjectile : GlobalProjectile
     {
         public override bool InstancePerEntity => true;
-        public static TLoZProjectiles GetFor(Projectile projectile) => projectile.GetGlobalProjectile<TLoZProjectiles>();
+        public static TLoZGlobalProjectile GetFor(Projectile projectile) => projectile.GetGlobalProjectile<TLoZGlobalProjectile>();
         public int stasisTimer;
         public bool Stasised => stasisTimer > 0;
         public bool lastStasisedState;

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\references\tModLoader.targets" />
   <PropertyGroup>
@@ -7,6 +7,11 @@
     <PlatformTarget>x86</PlatformTarget>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Enums\**" />
+    <EmbeddedResource Remove="Enums\**" />
+    <None Remove="Enums\**" />
+  </ItemGroup>
   <ItemGroup>
     <None Remove="Buffs\StasisDebuff.png" />
     <None Remove="Items\Tools\Paraglider.png" />
@@ -27,8 +32,10 @@
     <None Remove="Textures\Misc\StasisArrow.png" />
     <None Remove="Textures\Misc\StasisArrowMiddle.png" />
     <None Remove="Textures\Misc\StasisChains.png" />
+    <None Remove="Textures\UI\Runes\BombRoundRune.png" />
     <None Remove="Textures\UI\Runes\BombRune1.png" />
     <None Remove="Textures\UI\Runes\BombRune2.png" />
+    <None Remove="Textures\UI\Runes\BombSquareRune.png" />
     <None Remove="Textures\UI\Runes\CryonisRune.png" />
     <None Remove="Textures\UI\Runes\MagnesisRune.png" />
     <None Remove="Textures\UI\Runes\SelectedRune.png" />
@@ -38,8 +45,8 @@
     <Reference Include="mscorlib" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Enums\" />
     <Folder Include="Textures\Misc\" />
+    <Folder Include="Textures\UI\Runes\" />
   </ItemGroup>
   <Target Name="BuildMod" AfterTargets="Build">
     <Exec Command="&quot;$(tMLBuildServerPath)&quot; -build $(ProjectDir) -eac $(TargetPath) -define $(DefineConstants) -unsafe $(AllowUnsafeBlocks)" />

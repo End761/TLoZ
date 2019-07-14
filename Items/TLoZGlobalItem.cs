@@ -37,7 +37,7 @@ namespace TLoZ.Items
                 if (!proj.active)
                     continue;
 
-                TLoZProjectiles tlozPlayer = TLoZProjectiles.GetFor(proj);
+                TLoZGlobalProjectile tlozPlayer = TLoZGlobalProjectile.GetFor(proj);
 
                 if (hitbox.Intersects(proj.Hitbox) && tlozPlayer.Stasised && tlozPlayer.cantGetHitTimer <= 0)
                 {
