@@ -3,13 +3,16 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using TLoZ.Players;
+using TLoZ.Runes;
 
 namespace TLoZ.Projectiles.Runes
 {
     public abstract class BombBase : TLoZProjectile
     {
+        private int _existanceTimer;
         public override void SetDefaults()
         {
+            _existanceTimer = 0;
             projectile.hostile = true;
             projectile.friendly = true;
             projectile.width = 20;
@@ -29,6 +32,9 @@ namespace TLoZ.Projectiles.Runes
             projectile.netUpdate = true;
             projectile.netUpdate2 = true;
 
+            if (_existanceTimer < 15)
+                _existanceTimer++;
+
             int dusto = Dust.NewDust(projectile.Center - new Vector2(2, 18).RotatedBy(projectile.rotation), 0, 0, DustID.AncientLight, 0, 0, 0, default(Color), 2f);
 
             Main.dust[dusto].noGravity = true;
@@ -41,10 +47,10 @@ namespace TLoZ.Projectiles.Runes
             {
                 Owner.heldProj = projectile.whoAmI;
                 TLoZPlayer.HasBomb = true;
-
+                TLoZPlayer.itemUseDelay = 15;
                 projectile.Center = new Vector2((int)Owner.position.X, (int)Owner.position.Y) + new Vector2(10, -8);
 
-                if (Owner.controlUseItem && Owner.itemAnimation == 0)
+                if (Owner.controlUseItem && Owner.itemAnimation == 0 && _existanceTimer >= 15)
                 {
                     projectile.velocity = Owner.velocity.X != 0 && !Owner.controlDown? new Vector2(8 * Owner.direction, -8) : Vector2.Zero;
                     projectile.ai[1] = 1;
@@ -71,7 +77,7 @@ namespace TLoZ.Projectiles.Runes
                     projectile.ai[0] = 0;
                     projectile.ai[1] = 0;
                 }
-                else if(Vector2.Distance(projectile.Center, Owner.Center) > 16 * 5)
+                else if(Vector2.Distance(projectile.Center, Owner.Center) > 16 * 5 && RequiredRune)
                 {
                     projectile.damage = 200;
                     projectile.ai[0] = 1;
@@ -142,5 +148,6 @@ namespace TLoZ.Projectiles.Runes
 
         public Player Owner => Main.player[projectile.owner];
         public TLoZPlayer TLoZPlayer => TLoZPlayer.Get(Owner);
+        public virtual bool RequiredRune => TLoZPlayer.SelectedRune is BombRoundRune;
     }
 }

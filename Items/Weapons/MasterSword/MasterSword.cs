@@ -132,7 +132,7 @@ namespace TLoZ.Items.Weapons.MasterSword
                 1
                 );
 
-            if (drawPlayer.HeldItem.type != LoZ.Instance.ItemType<MasterSword>() || !TLoZPlayer.Get(drawPlayer).UsingMasterSword)
+            if (drawPlayer.HeldItem.type != TLoZ.Instance.ItemType<MasterSword>() || !TLoZPlayer.Get(drawPlayer).UsingMasterSword)
                 Main.playerDrawData.Add(swordData);
 
             Main.playerDrawData.Add(sheathData);

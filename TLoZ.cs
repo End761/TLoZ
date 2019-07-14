@@ -4,12 +4,13 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using TLoZ.UIs;
+using TLoZ.Runes;
 
 namespace TLoZ
 {
-    public class LoZ : Mod
+    public class TLoZ : Mod
     {
-        public LoZ()
+        public TLoZ()
         {
         }
 
@@ -23,7 +24,7 @@ namespace TLoZ
                 TLoZTextures.Load();
                 UIManager.Load();
             }
-
+            StasisableProjectiles.Load();
             TLoZDialogues.Load();
         }
 
@@ -35,7 +36,7 @@ namespace TLoZ
         public override void Unload()
         {
             Instance = null;
-
+            StasisableProjectiles.Unload();
             TLoZInput.Unload();
             TLoZTextures.Unload();
             TLoZDialogues.Unload();
@@ -46,6 +47,6 @@ namespace TLoZ
             layers.Insert(0, new RuneSelectionLayer(UIManager.RuneSelectionUI));
         }
 
-        public static LoZ Instance { get; private set; }
+        public static TLoZ Instance { get; private set; }
     }
 }

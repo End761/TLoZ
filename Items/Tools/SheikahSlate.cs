@@ -17,19 +17,10 @@ namespace TLoZ.Items.Tools
             item.useTime = 20;
             item.useAnimation = 20;
             item.useStyle = 1;
-            item.UseSound = SoundID.Item1;
             item.melee = true;
             item.autoReuse = true;
             item.useTurn = true;
             item.noUseGraphic = true;
-        }
-
-        public override bool CanUseItem(Player player)
-        {
-            TLoZPlayer tlozPlayer = TLoZPlayer.Get(player);
-
-            
-            return base.CanUseItem(player);
         }
 
         public override bool UseItem(Player player)
@@ -43,7 +34,5 @@ namespace TLoZ.Items.Tools
 
             return base.UseItem(player);
         }
-
-        public override bool AltFunctionUse(Player player) => true;
     }
 }

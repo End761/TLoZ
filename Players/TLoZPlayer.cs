@@ -35,6 +35,8 @@ namespace TLoZ.Players
         public int inputLag;
         #endregion
 
+        public int itemUseDelay;
+
         public override void SetupStartInventory(IList<Item> items, bool mediumcoreDeath)
         {
             if (TLoZClientConfig.shouldSpawnWithClothes)
@@ -61,6 +63,9 @@ namespace TLoZ.Players
         {
             if (Main.gameMenu)
                 HasBomb = false;
+
+            if (itemUseDelay > 0)
+                itemUseDelay--;
 
             if (player.ownedProjectileCounts[mod.ProjectileType<BombRound>()] <= 0)
                 HasBomb = false;

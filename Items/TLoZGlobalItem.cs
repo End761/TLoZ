@@ -24,7 +24,7 @@ namespace TLoZ.Items
         {
             TLoZPlayer tlozPlayer = TLoZPlayer.Get(player);
 
-            if (tlozPlayer.HasBomb || tlozPlayer.usesParaglider) return false;
+            if (tlozPlayer.HasBomb || tlozPlayer.usesParaglider || tlozPlayer.itemUseDelay > 0) return false;
 
             return base.CanUseItem(item, player);
         }

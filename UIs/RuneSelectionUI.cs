@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using TLoZ.Extensions;
 using TLoZ.Players;
 using TLoZ.Runes;
+using TLoZ.Items.Tools;
 
 namespace TLoZ.UIs
 {
@@ -14,6 +15,10 @@ namespace TLoZ.UIs
         {
             TLoZPlayer tlozPlayer = TLoZPlayer.Get(Main.LocalPlayer);
 
+            if(Main.LocalPlayer.HeldItem.type == TLoZ.Instance.ItemType<SheikahSlate>() && tlozPlayer.SelectedRune is StasisRune)
+            {
+                spriteBatch.Draw(Main.magicPixel, Vector2.Zero, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Yellow * 0.15f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
+            }
             if (!tlozPlayer.IsSelectingRune) return;
 
             Vector2 position = new Vector2(Main.screenWidth / 2, Main.screenHeight / 2 - 120);
@@ -33,8 +38,11 @@ namespace TLoZ.UIs
             Utils.DrawBorderString(spriteBatch, tlozPlayer.SelectedRune.DisplayName, position + new Vector2(-30, 35), Color.White);
 
             spriteBatch.Draw(tlozPlayer.SelectedRune.RuneTexture, position, null, Color.White, 0f, new Vector2(32, 32), 1f, SpriteEffects.None, 1f);
-            spriteBatch.Draw(previousRune.RuneTexture, position - new Vector2(64, 0), null, Color.White, 0f, new Vector2(32, 32), decreasedScale, SpriteEffects.None, 1f);
-            spriteBatch.Draw(nextRune.RuneTexture, position + new Vector2(64, 0), null, Color.White, 0f, new Vector2(32, 32), decreasedScale, SpriteEffects.None, 1f);
+            if (tlozPlayer.UnlockedRunes.Count > 1)
+            {
+                spriteBatch.Draw(previousRune.RuneTexture, position - new Vector2(64, 0), null, Color.White, 0f, new Vector2(32, 32), decreasedScale, SpriteEffects.None, 1f);
+                spriteBatch.Draw(nextRune.RuneTexture, position + new Vector2(64, 0), null, Color.White, 0f, new Vector2(32, 32), decreasedScale, SpriteEffects.None, 1f);
+            }
         }
     }
 }

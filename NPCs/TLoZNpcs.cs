@@ -2,10 +2,13 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using TLoZ.Buffs;
+using TLoZ.Items.Tools;
 using TLoZ.Players;
+using TLoZ.Runes;
 
 namespace TLoZ.NPCs
 {
@@ -45,7 +48,7 @@ namespace TLoZ.NPCs
             {
                 Color color = stasisLaunchSpeed > 14f ? Color.Red : stasisLaunchSpeed > 7f ? Color.Orange : Color.Yellow;
 
-                npc.color = color;
+                //npc.color = color;
                 npc.frameCounter = 0;
                 npc.noGravity = true;
                 npc.Center = preStasisPosition;
@@ -119,14 +122,25 @@ namespace TLoZ.NPCs
         }
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
         {
+            if (!npc.boss && npc.active && Main.LocalPlayer.HeldItem.type == mod.ItemType<SheikahSlate>() && TLoZPlayer.Get(Main.LocalPlayer).SelectedRune is StasisRune)
+            {
+                Helpers.StartShader(spriteBatch);
+                GameShaders.Armor.Apply(GameShaders.Armor.GetShaderIdFromItemId(ItemID.PixieDye), npc);
+            }
+            else
+            {
+                Helpers.EndShader(spriteBatch);
+            }
             if (stasisChainsOpacity > 0.0f)
             {
                 for (int i = 0; i < randomStasisPositions.Length; i++)
                     DrawStasisChains(spriteBatch, npc.Center, randomStasisPositions[i], stasisChainsOpacity);
             }
-
             if (stasised)
             {
+                Helpers.StartShader(spriteBatch);
+                int shaderID = stasisLaunchSpeed > 14f ? GameShaders.Armor.GetShaderIdFromItemId(ItemID.InfernalWispDye) : stasisLaunchSpeed > 7f ? GameShaders.Armor.GetShaderIdFromItemId(ItemID.UnicornWispDye) : GameShaders.Armor.GetShaderIdFromItemId(ItemID.PixieDye);
+                GameShaders.Armor.Apply(shaderID, npc);
                 // Draw the start
                 float rotation = stasisLaunchDirection.ToRotation() - (float)Math.PI / 2;
                 Color color = stasisLaunchSpeed > 14f ? Color.Red : stasisLaunchSpeed > 7f ? Color.Orange : Color.Yellow;
@@ -134,9 +148,14 @@ namespace TLoZ.NPCs
                 spriteBatch.Draw(TLoZTextures.MiscStasisArrow, npc.Center + (stasisLaunchDirection * stasisLaunchSpeed) - Main.screenPosition, new Rectangle(0, 0, 16, 10), color, rotation, new Vector2(8, 5), npc.scale, SpriteEffects.None, 1f);
                 spriteBatch.Draw(TLoZTextures.MiscStasisArrowMiddle, npc.Center + (stasisLaunchDirection) - Main.screenPosition, new Rectangle(0, 0, 16, (int)(2 * stasisLaunchSpeed * 5)), color, rotation, new Vector2(8, 5), npc.scale, SpriteEffects.None, 1f);
                 spriteBatch.Draw(TLoZTextures.MiscStasisArrow, npc.Center + (stasisLaunchDirection) + new Vector2(0, (2 * stasisLaunchSpeed * 4.95f) * npc.scale).RotatedBy(rotation) - Main.screenPosition, new Rectangle(0, 8, 16, 12), color, rotation, new Vector2(8, 5), npc.scale, SpriteEffects.None, 1f);
+
             }
 
             return base.PreDraw(npc, spriteBatch, drawColor);
+        }
+        public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
+        {
+            Helpers.EndShader(spriteBatch);
         }
 
         public static void DrawStasisChains(SpriteBatch spriteBatch, Vector2 startPosition, Vector2 endPosition, float opacity = 1f)

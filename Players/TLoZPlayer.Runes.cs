@@ -18,26 +18,28 @@ namespace TLoZ.Players
         {
             if (IsSelectingRune)
             {
-                int newInputLag = 10;
-
-                if (triggersSet.Left && inputLag <= 0)
+                if (UnlockedRunes.Count > 0)
                 {
-                    inputLag = newInputLag;
-                    SelectedRune = UnlockedRunes.Previous(SelectedRune);
+                    int newInputLag = 10;
+
+                    if (triggersSet.Left && inputLag <= 0)
+                    {
+                        inputLag = newInputLag;
+                        SelectedRune = UnlockedRunes.Previous(SelectedRune);
+                    }
+
+                    if (triggersSet.Right && inputLag <= 0)
+                    {
+                        inputLag = newInputLag;
+                        SelectedRune = UnlockedRunes.Next(SelectedRune);
+                    }
+
+                    if (PlayerInput.ScrollWheelDelta > 0 && this.inputLag <= 0)
+                        SelectedRune = UnlockedRunes.Next(SelectedRune);
+
+                    if (PlayerInput.ScrollWheelDelta < 0 && this.inputLag <= 0)
+                        SelectedRune = UnlockedRunes.Previous(SelectedRune);
                 }
-
-                if (triggersSet.Right && inputLag <= 0)
-                {
-                    inputLag = newInputLag;
-                    SelectedRune = UnlockedRunes.Next(SelectedRune);
-                }
-
-                if (PlayerInput.ScrollWheelDelta > 0 && this.inputLag <= 0)
-                    SelectedRune = UnlockedRunes.Next(SelectedRune);
-
-                if (PlayerInput.ScrollWheelDelta < 0 && this.inputLag <= 0)
-                    SelectedRune = UnlockedRunes.Previous(SelectedRune);
-
                 PlayerInput.ScrollWheelDelta = 0;
             }
         }
