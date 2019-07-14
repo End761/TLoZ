@@ -53,6 +53,11 @@ namespace TLoZ.Players
             }
         }
 
+        public override void Initialize()
+        {
+            InitializeRunes();
+        }
+
         public override void ResetEffects()
         {
             if (Main.gameMenu)

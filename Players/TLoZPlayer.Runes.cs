@@ -12,6 +12,11 @@ namespace TLoZ.Players
 {
     public sealed partial class TLoZPlayer : ModPlayer
     {
+        private void InitializeRunes()
+        {
+            UnlockedRunes = new List<Rune>();
+        }
+
         private void ProcessRuneSelectionTriggers(TriggersSet triggersSet)
         {
             if (IsSelectingRune)
@@ -66,7 +71,6 @@ namespace TLoZ.Players
             if (tag.ContainsKey(nameof(SelectedRune)))
                 SelectedRune = RuneManager.Instance[tag.GetString(nameof(SelectedRune))];
 
-            UnlockedRunes.Clear();
             List<string> runeNames = tag.GetList<string>(nameof(UnlockedRunes)) as List<string>;
             
             for (int i = 0; i < runeNames.Count; i++)
@@ -76,6 +80,6 @@ namespace TLoZ.Players
 
         public Rune SelectedRune { get; private set; }
 
-        internal List<Rune> UnlockedRunes { get; private set; } = new List<Rune>();
+        internal List<Rune> UnlockedRunes { get; private set; }
     }
 }
