@@ -63,6 +63,7 @@ namespace TLoZ.NPCs
 
             if (postStasisFlyTimer > 0.0f)
                 npc.noGravity = true;
+
             else if (npc.noGravity != noGravityDefault)
                 npc.noGravity = noGravityDefault;
 

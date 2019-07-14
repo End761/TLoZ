@@ -54,8 +54,12 @@ namespace TLoZ.Projectiles
             {
                 Main.PlaySound(13);
             }
-            if (cantGetHitTimer > 0) cantGetHitTimer--;
-            if (postStasisLaunchTimer > 0.0f) postStasisLaunchTimer -= 0.1f; 
+            if (cantGetHitTimer > 0)
+                cantGetHitTimer--;
+
+            if (postStasisLaunchTimer > 0.0f)
+                postStasisLaunchTimer -= 0.1f; 
+
             if(Stasised)
             {
                 projectile.timeLeft++;
@@ -80,8 +84,12 @@ namespace TLoZ.Projectiles
                 }
                 return false;
             } 
-            if (projectile.hostile != _isHostile) projectile.hostile = _isHostile;
-            if (stasisLaunchDirection * stasisLaunchSpeed != Vector2.Zero) projectile.velocity = stasisLaunchDirection * stasisLaunchSpeed;
+            if (projectile.hostile != _isHostile)
+                projectile.hostile = _isHostile;
+
+            if (stasisLaunchDirection * stasisLaunchSpeed != Vector2.Zero)
+                projectile.velocity = stasisLaunchDirection * stasisLaunchSpeed;
+
             stasisLaunchDirection = Vector2.Zero;
             stasisLaunchSpeed = 0.0f;
             return base.PreAI(projectile);
