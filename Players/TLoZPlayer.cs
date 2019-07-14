@@ -36,6 +36,8 @@ namespace TLoZ.Players
         public int inputLag;
         #endregion
 
+        public int delayedItemUsageTimer;
+
         public override void SetupStartInventory(IList<Item> items, bool mediumcoreDeath)
         {
             if (TLoZClientConfig.shouldSpawnWithClothes)
@@ -61,6 +63,9 @@ namespace TLoZ.Players
             if (player.ownedProjectileCounts[mod.ProjectileType<BombRound>()] <= 0)
                 HasBomb = false;
 
+            if (delayedItemUsageTimer > 0)
+                delayedItemUsageTimer--;
+
             HasMasterSword = player.HasItem(mod.ItemType<MasterSword>());
             UsingMasterSword = !(player.itemAnimation <= 0 && Holds(mod.ItemType<MasterSword>()));
 
@@ -74,8 +79,11 @@ namespace TLoZ.Players
                 stasisLaunchVelocity = Vector2.Zero;
             }
 
-            if (postStasisLaunchTimer > 0.0f) postStasisLaunchTimer -= 0.1f;
-            if (inputLag > 0) inputLag--;
+            if (postStasisLaunchTimer > 0.0f)
+                postStasisLaunchTimer -= 0.1f;
+
+            if (inputLag > 0)
+                inputLag--;
 
             if (_paragliderNoFallDamageTimer > 0)
             {
@@ -110,7 +118,7 @@ namespace TLoZ.Players
 
         public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)
         {
-            LoZnpCs tlozTarget = LoZnpCs.GetFor(npc);
+            TLoZnpCs tlozTarget = TLoZnpCs.GetFor(npc);
 
             if (tlozTarget.stasised)
                 return false;
@@ -120,7 +128,7 @@ namespace TLoZ.Players
 
         public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
         {
-            LoZnpCs tlozTarget = LoZnpCs.GetFor(npc);
+            TLoZnpCs tlozTarget = TLoZnpCs.GetFor(npc);
 
             if (tlozTarget.postStasisFlyTimer > 0.0f)
             {
@@ -151,7 +159,7 @@ namespace TLoZ.Players
 
         public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
         {
-            LoZnpCs tlozTarget = LoZnpCs.GetFor(target);
+            TLoZnpCs tlozTarget = TLoZnpCs.GetFor(target);
             if (tlozTarget.stasised)
             {
                 crit = false;
@@ -165,13 +173,13 @@ namespace TLoZ.Players
         {
             if (item.type == mod.ItemType<MasterSword>() && (target.type == NPCID.Clothier || target.type == NPCID.OldMan))
                 return true;
-            if (LoZnpCs.GetFor(target).stasised)
+            if (TLoZnpCs.GetFor(target).stasised)
                 return true;
             return base.CanHitNPC(item, target);
         }
         public override bool? CanHitNPCWithProj(Projectile proj, NPC target)
         {
-            if (LoZnpCs.GetFor(target).stasised)
+            if (TLoZnpCs.GetFor(target).stasised)
                 return true;
             return base.CanHitNPCWithProj(proj, target);
         }
@@ -203,8 +211,12 @@ namespace TLoZ.Players
         }
         public override void SetControls()
         {
-            if (postStasisLaunchTimer > 0.0f) BlockInputs();
-            if (IsSelectingRune) BlockInputs(true, false, false, false);
+            if (postStasisLaunchTimer > 0.0f)
+                BlockInputs();
+
+            if (IsSelectingRune)
+                BlockInputs(true, false, false, false);
+
         }
         //Custom Methods:
 

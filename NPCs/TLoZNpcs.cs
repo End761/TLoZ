@@ -9,9 +9,9 @@ using TLoZ.Players;
 
 namespace TLoZ.NPCs
 {
-    public class LoZnpCs : GlobalNPC
+    public class TLoZnpCs : GlobalNPC
     {
-        public static LoZnpCs GetFor(NPC npc) => npc.GetGlobalNPC<LoZnpCs>();
+        public static TLoZnpCs GetFor(NPC npc) => npc.GetGlobalNPC<TLoZnpCs>();
 
         #region Rune variables
 

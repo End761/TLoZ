@@ -25,9 +25,9 @@ namespace TLoZ.Items
         {
             TLoZPlayer tlozPlayer = TLoZPlayer.Get(player);
 
-            if (tlozPlayer.HasBomb || tlozPlayer.usesParaglider) return false;
+            if (tlozPlayer.HasBomb || tlozPlayer.usesParaglider || tlozPlayer.delayedItemUsageTimer > 0) return false;
 
-            return base.CanUseItem(item, player);
+            return true;
         }
 
         public override void MeleeEffects(Item item, Player player, Rectangle hitbox)

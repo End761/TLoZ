@@ -9,8 +9,10 @@ namespace TLoZ.Projectiles.Runes
 {
     public abstract class BombBase : TLoZProjectile
     {
+        private int _existsFor;
         public override void SetDefaults()
         {
+            _existsFor = 0;
             projectile.hostile = true;
             projectile.friendly = true;
             projectile.width = 20;
@@ -29,7 +31,7 @@ namespace TLoZ.Projectiles.Runes
         {
             projectile.netUpdate = true;
             projectile.netUpdate2 = true;
-
+            if (_existsFor < 15) _existsFor++;
             int dusto = Dust.NewDust(projectile.Center - new Vector2(2, 18).RotatedBy(projectile.rotation), 0, 0, DustID.AncientLight, 0, 0, 0, default(Color), 2f);
 
             Main.dust[dusto].noGravity = true;
@@ -42,15 +44,16 @@ namespace TLoZ.Projectiles.Runes
             {
                 Owner.heldProj = projectile.whoAmI;
                 TLoZPlayer.HasBomb = true;
+                TLoZPlayer.delayedItemUsageTimer = 15;
 
                 projectile.Center = new Vector2((int)Owner.position.X, (int)Owner.position.Y) + new Vector2(10, -8);
 
-                if (Owner.controlUseItem && Owner.itemAnimation == 0)
+                if (Owner.controlUseItem && Owner.itemAnimation == 0 && _existsFor >= 15)
                 {
+                    TLoZPlayer.HasBomb = false;
                     projectile.velocity = Owner.velocity.X != 0 && !Owner.controlDown? new Vector2(8 * Owner.direction, -8) : Vector2.Zero;
                     projectile.ai[1] = 1;
 
-                    TLoZPlayer.HasBomb = false;
                 }
             }
             if (projectile.ai[1] >= 1)

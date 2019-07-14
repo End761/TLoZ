@@ -16,7 +16,7 @@ namespace TLoZ.Players
         {
             if (IsSelectingRune)
             {
-                int newInputLag = 10;
+                int newInputLag = 8;
 
                 if (triggersSet.Left && inputLag <= 0)
                 {
