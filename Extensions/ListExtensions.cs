@@ -11,7 +11,7 @@ namespace TLoZ.Extensions
         {
             int index = list.IndexOf(current);
 
-            if (index == 0)
+            if (index <= 0)
             {
                 if (loop)
                     return list[list.Count - 1];
@@ -22,13 +22,13 @@ namespace TLoZ.Extensions
                 return list[index - 1];
         }
 
-        public static T Next<T>(this IList<T> list, T current) => Previous<T>(list, current, true);
+        public static T Next<T>(this IList<T> list, T current) => Next<T>(list, current, true);
 
         public static T Next<T>(this IList<T> list, T current, bool loop)
         {
             int index = list.IndexOf(current);
 
-            if (index == list.Count - 1)
+            if (index >= list.Count - 1)
             {
                 if (loop)
                     return list[0];
