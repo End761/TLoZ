@@ -33,6 +33,8 @@ namespace TLoZ.Items
         {
             foreach(Projectile proj in Main.projectile)
             {
+				if(proj == null )
+					continue;
                 if (!proj.active)
                     continue;
 

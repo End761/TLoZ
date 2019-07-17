@@ -18,12 +18,7 @@
     <None Remove="Items\Tools\SheikahSlate.png" />
     <None Remove="Items\Tools\SheikahSlate2.png" />
     <None Remove="Items\Weapons\MasterSword\Buckle_Body.png" />
-    <None Remove="Items\Weapons\MasterSword\MasterSword.png" />
-    <None Remove="Items\Weapons\MasterSword\MasterSwordDroppedInWorld.png" />
-    <None Remove="Items\Weapons\MasterSword\MasterSwordSheath.png" />
     <None Remove="Items\Weapons\MasterSword\MasterSwordSheathBelt.png" />
-    <None Remove="Items\Weapons\MasterSword\MasterSwordSheathed.png" />
-    <None Remove="Items\Weapons\MasterSword\MasterSword_Glow.png" />
     <None Remove="Projectiles\Runes\BombRound.png" />
     <None Remove="Projectiles\Runes\BombRound2.png" />
     <None Remove="Projectiles\Runes\BombSquare.png" />

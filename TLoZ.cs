@@ -10,22 +10,22 @@ namespace TLoZ
 {
     public class TLoZ : Mod
     {
+        internal static TLoZClientConfig loZClientConfig;
         public TLoZ()
         {
+            Instance = this;
         }
 
         public override void Load()
         {
-            Instance = this;
-
             if (!Main.dedServ)
             {
                 TLoZInput.Load(Instance);
-                TLoZTextures.Load();
+                TLoZTexxtures.Load();
                 UIManager.Load();
+                StasisableProjectiles.Load();
+                TLoZDialogues.Load();
             }
-            StasisableProjectiles.Load();
-            TLoZDialogues.Load();
         }
 
         public override void UpdateUI(GameTime gameTime)
@@ -35,16 +35,18 @@ namespace TLoZ
 
         public override void Unload()
         {
-            Instance = null;
             StasisableProjectiles.Unload();
             TLoZInput.Unload();
-            TLoZTextures.Unload();
+            TLoZTexxtures.Unload();
             TLoZDialogues.Unload();
+            Instance = null;
+            loZClientConfig = null;
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             layers.Insert(0, new RuneSelectionLayer(UIManager.RuneSelectionUI));
+            layers.Insert(1, new MiscInputsLayer(UIManager.MiscInputsUI));
         }
 
         public static TLoZ Instance { get; private set; }

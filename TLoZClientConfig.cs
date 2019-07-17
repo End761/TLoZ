@@ -9,11 +9,15 @@ namespace TLoZ
         [Label("All new characters spawn with Hero Clothes")]
         [DefaultValue(true)]
         public bool spawnWithClothes;
-        public static bool shouldSpawnWithClothes;
 
-        public override void OnChanged()
+        [Label("Disable In-Game controls tips")]
+        [DefaultValue(false)]
+        [Tooltip("Will disable some in-game help tooltips( such as one during Rune selection process )")]
+        public bool disableTips;
+
+        public override void OnLoaded()
         {
-            shouldSpawnWithClothes = spawnWithClothes;
+            TLoZ.loZClientConfig = this;
         }
 
         public override ConfigScope Mode => ConfigScope.ClientSide;

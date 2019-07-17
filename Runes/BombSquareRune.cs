@@ -8,7 +8,7 @@ namespace TLoZ.Runes
 {
     public sealed class BombSquareRune : Rune
     {
-        public BombSquareRune() : base("bombSquareRune", "Bomb (Square)", TLoZTextures.UIBombSquareRune)
+        public BombSquareRune() : base("bombSquareRune", "Bomb (Square)", TLoZTexxtures.UIBombSquareRune)
         {
         }
 

@@ -4,7 +4,7 @@ using TLoZ.Runes;
 
 namespace TLoZ
 {
-    public static class TLoZTextures
+    public static class TLoZTexxtures
     {
         public static void Load()
         {
@@ -17,6 +17,9 @@ namespace TLoZ
             UIStasisRune = ModContent.GetTexture("TLoZ/Textures/UI/Runes/StasisRune");
             UIMagnesisRune = ModContent.GetTexture("TLoZ/Textures/UI/Runes/MagnesisRune");
             UICryonisRune = ModContent.GetTexture("TLoZ/Textures/UI/Runes/CryonisRune");
+
+            UIKeyboardInput = ModContent.GetTexture("TLoZ/Textures/UI/KeyboardInput");
+            UIMouseInput = ModContent.GetTexture("TLoZ/Textures/UI/MouseInput");
         }
 
         public static void Unload()
@@ -30,6 +33,9 @@ namespace TLoZ
             UIStasisRune = null;
             UICryonisRune = null;
             UIMagnesisRune = null;
+
+            UIMouseInput = null;
+            UIKeyboardInput = null;
         }
 
         public static Texture2D MiscStasisArrow { get; private set; }
@@ -41,5 +47,8 @@ namespace TLoZ
         public static Texture2D UIMagnesisRune { get; private set; }
         public static Texture2D UIStasisRune { get; private set; }
         public static Texture2D UICryonisRune { get; private  set; }
+
+        public static Texture2D UIKeyboardInput { get; private set; }
+        public static Texture2D UIMouseInput { get; private set; }
     }
 }

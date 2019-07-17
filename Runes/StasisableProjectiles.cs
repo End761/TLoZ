@@ -21,7 +21,6 @@ namespace TLoZ.Runes
         public static void Unload()
         {
             SuitableProjectiles.Clear();
-            SuitableProjectiles = null;
         }
     }
 }

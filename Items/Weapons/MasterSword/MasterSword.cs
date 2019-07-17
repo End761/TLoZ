@@ -9,43 +9,45 @@ using TLoZ.Players;
 
 namespace TLoZ.Items.Weapons.MasterSword
 {
-    public class MasterSword : ModItem
+    public class MasterSword : TLoZItem
     {
         private GlowMaskData _nearBossGlow;
-        private bool _nearBoss;
-        private bool _nearEvil;
-        public override void SetStaticDefaults()
+
+        private bool _nearBoss, _nearEvil;
+
+        public MasterSword() : base("Master Sword", "The Blade of Evil's Bane", 50, 50, 0, 0, 5)
         {
-            DisplayName.SetDefault("Master Sword");
-            Tooltip.SetDefault("The Blade of Evil's Bane");
+
         }
+
         public override void SetDefaults()
         {
-            _nearBossGlow = new GlowMaskData("Items/Weapons/MasterSword/MasterSword_Glow", "TLoZ", 38, 38);
+            base.SetDefaults();
+            _nearBossGlow = new GlowMaskData("Items/Weapons/MasterSword/MasterSword_Glow", "TLoZ", 48, 48);
             item.melee = true;
             item.knockBack = 3f;
-            item.rare = 4;
             item.useTime = 20;
             item.useAnimation = 20;
             item.useStyle = 1;
             item.UseSound = SoundID.Item1;
-            item.width = 40;
-            item.height = 40;
             item.melee = true;
             item.autoReuse = true;
             item.useTurn = true;
             item.damage = 30;
         }
+
         public override void PostReforge()
         {
             item.prefix = 0;
             item.Prefix(0);
         }
+
         public override bool ReforgePrice(ref int reforgePrice, ref bool canApplyDiscount)
         {
             reforgePrice = 0;
             return base.ReforgePrice(ref reforgePrice, ref canApplyDiscount);
         }
+
         public override void MeleeEffects(Player player, Rectangle hitbox)
         {
             if (_nearBoss || _nearEvil)
@@ -53,10 +55,12 @@ namespace TLoZ.Items.Weapons.MasterSword
                 Lighting.AddLight(new Vector2(hitbox.X + hitbox.Width / 2, hitbox.Y + hitbox.Height / 2), .9f, .9f, 1.8f);
             }
         }
-        public override void ModifyWeaponDamage(Player player, ref float add, ref float mult)
+
+        public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)
         {
             if (_nearBoss || _nearEvil) mult = 2;
         }
+
         public override void UpdateInventory(Player player)
         {
             _nearBoss = false;
@@ -73,10 +77,12 @@ namespace TLoZ.Items.Weapons.MasterSword
             else
                 item.GetGlobalItem<TLoZGlobalItem>().gmd = null;
         }
+
         public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
             return false;
         }
+
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
             spriteBatch.Draw
@@ -92,6 +98,7 @@ namespace TLoZ.Items.Weapons.MasterSword
                     1f
                 );
         }
+
         public static readonly PlayerLayer masterSwordSheath = new PlayerLayer("TLoZ", "SheathLayer", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)
         {
             if (drawInfo.shadow != 0f)
@@ -113,7 +120,7 @@ namespace TLoZ.Items.Weapons.MasterSword
                 null,
                 color,
                 0,
-                new Vector2(15, 15),
+                new Vector2(17, 17),
                 1f,
                 drawPlayer.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally,
                 1
@@ -126,7 +133,7 @@ namespace TLoZ.Items.Weapons.MasterSword
                 null,
                 color,
                 0,
-                new Vector2(19, 19),
+                new Vector2(24, 24),
                 1f,
                 drawPlayer.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally,
                 1
@@ -137,6 +144,7 @@ namespace TLoZ.Items.Weapons.MasterSword
 
             Main.playerDrawData.Add(sheathData);
         });
+
         public static readonly PlayerLayer masterSwordSheathBelt = new PlayerLayer("TLoZ", "SheathBeltLayer", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)
         {
             if (drawInfo.shadow != 0f)

@@ -37,9 +37,11 @@ namespace TLoZ.Players
 
         public int itemUseDelay;
 
+        public bool isNearBomb;
+
         public override void SetupStartInventory(IList<Item> items, bool mediumcoreDeath)
         {
-            if (TLoZClientConfig.shouldSpawnWithClothes)
+            if (TLoZ.loZClientConfig.spawnWithClothes)
             {
                 Item hat = new Item();
                 hat.SetDefaults(ItemID.HerosHat);
@@ -115,6 +117,8 @@ namespace TLoZ.Players
                 if (upDrafted)
                     player.velocity.Y = -20f;
             }
+
+            isNearBomb = false;
         }
 
         public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)
@@ -293,6 +297,8 @@ namespace TLoZ.Players
                 );
             Main.playerDrawData.Add(sheathData);
         });
+
+        // Properties
 
         private bool HasMasterSword { get; set; }
         public bool UsingMasterSword { get; private set; }

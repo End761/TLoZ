@@ -58,8 +58,15 @@ namespace TLoZ.Projectiles.Runes
                     TLoZPlayer.HasBomb = false;
                 }
             }
+
             if (projectile.ai[1] >= 1)
                 projectile.velocity.Y += 0.3f;
+
+            if (projectile.wet)
+            {
+                projectile.velocity.X *= 0.98f;
+                projectile.velocity.Y *= 0.7f;
+            }
 
             if (projectile.timeLeft == 2)
             {
@@ -70,14 +77,18 @@ namespace TLoZ.Projectiles.Runes
                 Main.PlaySound(SoundID.Item14);
             }
 
-            if (Main.myPlayer == Owner.whoAmI && Owner.controlUseTile)
+            if (Main.myPlayer == Owner.whoAmI)
             {
-                if (projectile.Hitbox.Contains(Main.MouseWorld.ToPoint()) && Vector2.Distance(projectile.Center, Owner.Center) <= 16 * 5)
+                if (Vector2.Distance(projectile.Center, Owner.Center) <= 16 * 5)
                 {
-                    projectile.ai[0] = 0;
-                    projectile.ai[1] = 0;
+                    TLoZPlayer.isNearBomb = true;
+                    if (projectile.Hitbox.Contains(Main.MouseWorld.ToPoint()) && Owner.controlUseTile)
+                    {
+                        projectile.ai[0] = 0;
+                        projectile.ai[1] = 0;
+                    }
                 }
-                else if(Vector2.Distance(projectile.Center, Owner.Center) > 16 * 5 && RequiredRune)
+                else if (Vector2.Distance(projectile.Center, Owner.Center) > 16 * 5 && RequiredRune && Owner.controlUseTile)
                 {
                     projectile.damage = 200;
                     projectile.ai[0] = 1;
