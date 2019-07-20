@@ -30,7 +30,7 @@ namespace TLoZ.Tiles.Misc
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
             if (!_pulledMasterSword && Main.tile[i, j].frameX == 0)
-                spriteBatch.Draw(mod.GetTexture("Items/Weapons/MasterSword/MasterSword"), new Vector2(i * 16f, j * 16f)  + new Vector2(208, 210)- Main.screenPosition, null, Lighting.GetColor(i, j), -((float)Math.PI / 2 + (float)Math.PI / 4), Vector2.Zero, 1f, SpriteEffects.FlipHorizontally, 1f);
+                spriteBatch.Draw(mod.GetTexture("Items/Weapons/MasterSword/MasterByLiz"), new Vector2(i * 16f, j * 16f)  + new Vector2(208, 210)- Main.screenPosition, null, Lighting.GetColor(i, j), -((float)Math.PI / 2 + (float)Math.PI / 4), Vector2.Zero, 1f, SpriteEffects.FlipHorizontally, 1f);
             return true;
         }
         public override void RightClick(int i, int j)

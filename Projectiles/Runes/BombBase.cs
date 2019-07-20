@@ -35,10 +35,13 @@ namespace TLoZ.Projectiles.Runes
             if (_existanceTimer < 15)
                 _existanceTimer++;
 
-            int dusto = Dust.NewDust(projectile.Center - new Vector2(2, 18).RotatedBy(projectile.rotation), 0, 0, DustID.AncientLight, 0, 0, 0, default(Color), 2f);
+            /*int dusto = Dust.NewDust(projectile.Center - new Vector2(2, 18).RotatedBy(projectile.rotation), 0, 0, DustID.AncientLight, 0, 0, 0, default(Color), 2f);
 
             Main.dust[dusto].noGravity = true;
             Main.dust[dusto].velocity *= 0;
+            */
+
+            Helpers.CreateGeneralUseDust(4, projectile.Center - new Vector2(-3, 16).RotatedBy(projectile.rotation), Color.Cyan);
 
             if ((!Owner.active || Owner.dead) && projectile.ai[0] == 0)
                 projectile.Kill();

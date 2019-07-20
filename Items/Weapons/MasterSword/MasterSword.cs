@@ -20,10 +20,12 @@ namespace TLoZ.Items.Weapons.MasterSword
 
         }
 
+        public override string Texture => "TLoZ/Items/Weapons/MasterSword/MasterByLiz";
+
         public override void SetDefaults()
         {
             base.SetDefaults();
-            _nearBossGlow = new GlowMaskData("Items/Weapons/MasterSword/MasterSword_Glow", "TLoZ", 48, 48);
+            _nearBossGlow = new GlowMaskData("Items/Weapons/MasterSword/MasterGlowByLiz", "TLoZ", 48, 48);
             item.melee = true;
             item.knockBack = 3f;
             item.useTime = 20;
@@ -87,7 +89,7 @@ namespace TLoZ.Items.Weapons.MasterSword
         {
             spriteBatch.Draw
                 (
-                    mod.GetTexture("Items/Weapons/MasterSword/MasterSwordDroppedInWorld"),
+                    mod.GetTexture("Items/Weapons/MasterSword/MasterDroppedByLiz"),
                     item.Center - Main.screenPosition,
                     null,
                     lightColor,
@@ -128,7 +130,7 @@ namespace TLoZ.Items.Weapons.MasterSword
 
             DrawData swordData = new DrawData
             (
-                ModContent.GetTexture("TLoZ/Items/Weapons/MasterSword/MasterSwordSheathed"),
+                ModContent.GetTexture("TLoZ/Items/Weapons/MasterSword/MasterSheathedByLiz"),
                 new Vector2((int)drawPlayer.MountedCenter.X + 2 * drawPlayer.direction, (int)drawPlayer.MountedCenter.Y - 2) - Main.screenPosition,
                 null,
                 color,

@@ -28,6 +28,8 @@ namespace TLoZ.NPCs
         public Vector2[] randomStasisPositions;
         public float stasisChainsOpacity;
         public Color preStasisColor;
+        public float stasisDustTimer;
+        public Color stasisDustColor;
         #endregion
 
         #endregion
@@ -59,13 +61,17 @@ namespace TLoZ.NPCs
             preStasisColor = npc.color;
 
             if (stasisLaunchDirection * stasisLaunchSpeed != Vector2.Zero)
+            {
+                stasisDustTimer = 15f;
+                stasisDustColor = stasisLaunchSpeed > 14f ? Color.Red : stasisLaunchSpeed > 7f ? Color.Orange : Color.Yellow;
                 npc.velocity = stasisLaunchDirection * stasisLaunchSpeed;
-
+            }
             stasisLaunchSpeed = 0.0f;
             stasisLaunchDirection = Vector2.Zero;
 
             if (postStasisFlyTimer > 0.0f)
                 npc.noGravity = true;
+
             else if (npc.noGravity != noGravityDefault)
                 npc.noGravity = noGravityDefault;
 
@@ -93,6 +99,15 @@ namespace TLoZ.NPCs
 
         public override void ResetEffects(NPC npc)
         {
+            if (stasisDustTimer > 0.0f)
+            {
+                for (int i = 1; i < 5; i++)
+                {
+                    Helpers.CreateGeneralUseDust(2, npc.Center + npc.velocity / i, stasisDustColor);
+                }
+                stasisDustTimer -= 0.1f;
+            }
+
             if (postStasisFlyTimer > 0.0f)
                 postStasisFlyTimer -= 0.1f;
 

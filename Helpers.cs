@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using TLoZ.Dusts;
 
 namespace TLoZ
 {
@@ -52,6 +53,15 @@ namespace TLoZ
         {
             spriteBatch.Draw(TLoZTexxtures.UIMouseInput, position, new Rectangle(0, 72 * frame, 48, 72), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
             Utils.DrawBorderString(spriteBatch, description, position + new Vector2(50, 36), Color.Yellow);
+        }
+
+        public static void CreateGeneralUseDust(int count, Vector2 position, Color color = new Color())
+        {
+            for (int i = 0; i < count + 1; i++)
+            {
+                int dust = Dust.NewDust(position, 0, 0, TLoZ.Instance.DustType<GeneralUseDust>());
+                Main.dust[dust].color = color == new Color() ? Color.White : color;
+            }
         }
     }
 }

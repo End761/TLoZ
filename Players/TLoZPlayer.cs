@@ -201,8 +201,8 @@ namespace TLoZ.Players
 
             if (usesParaglider)
             {
-                player.bodyFrame.Y = 5 * 56;
-                layers.Add(paraglider);
+                player.bodyFrame.Y = 2 * 56;
+                layers.Insert(layers.FindIndex(x => x.Name.Equals("Arms")), paraglider);
             }
 
             ModifyGlowPlayerDrawLayers(layers);
@@ -285,8 +285,8 @@ namespace TLoZ.Players
             Color color = Lighting.GetColor((int)drawPlayer.Center.X / 16, (int)drawPlayer.Center.Y / 16);
             DrawData sheathData = new DrawData
             (
-                ModContent.GetTexture("TLoZ/Items/Tools/Paraglider"),
-                new Vector2((int)drawPlayer.MountedCenter.X, (int)drawPlayer.MountedCenter.Y - 24) - Main.screenPosition,
+                ModContent.GetTexture("TLoZ/Items/Tools/ParaByLiz"),
+                new Vector2((int)drawPlayer.MountedCenter.X, (int)drawPlayer.MountedCenter.Y - 22) - Main.screenPosition,
                 null,
                 color,
                 0,

@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
+using TLoZ.Dusts;
 using TLoZ.Items.Tools;
 using TLoZ.NPCs;
 using TLoZ.Players;
@@ -22,6 +23,8 @@ namespace TLoZ.Projectiles
         public float postStasisLaunchTimer;
         public Vector2[] randomStasisPositions;
         public float stasisChainsOpacity;
+        public float stasisDustTimer;
+        public Color stasisDustColor;
 
         public int cantGetHitTimer;
         private bool _isHostile;
@@ -41,7 +44,8 @@ namespace TLoZ.Projectiles
         }
         public override bool PreAI(Projectile projectile)
         {
-            if(Stasised && !lastStasisedState)
+
+            if (Stasised && !lastStasisedState)
             {
                 stasisChainsOpacity = 2.0f;
                 for (int i = 0; i < 4; i++)
@@ -63,7 +67,9 @@ namespace TLoZ.Projectiles
                 cantGetHitTimer--;
 
             if (postStasisLaunchTimer > 0.0f)
-                postStasisLaunchTimer -= 0.1f; 
+            {
+                postStasisLaunchTimer -= 0.1f;
+            }
 
             if(Stasised)
             {
@@ -89,8 +95,24 @@ namespace TLoZ.Projectiles
                 }
                 return false;
             } 
-            if (projectile.hostile != _isHostile) projectile.hostile = _isHostile;
-            if (stasisLaunchDirection * stasisLaunchSpeed != Vector2.Zero) projectile.velocity = stasisLaunchDirection * stasisLaunchSpeed;
+            if (projectile.hostile != _isHostile)
+                projectile.hostile = _isHostile;
+
+            if (stasisLaunchDirection * stasisLaunchSpeed != Vector2.Zero)
+            {
+                stasisDustColor = stasisLaunchSpeed > 14f ? Color.Red : stasisLaunchSpeed > 7f ? Color.Orange : Color.Yellow;
+                stasisDustTimer = 15f;
+                projectile.velocity = stasisLaunchDirection * stasisLaunchSpeed;
+            }
+
+            if (stasisDustTimer > 0.0f)
+            {
+                for (int i = 1; i < 5; i++)
+                {
+                    Helpers.CreateGeneralUseDust(2, projectile.Center + projectile.velocity / i, Color.Red);
+                }
+                stasisDustTimer -= 0.1f;
+            }
             stasisLaunchDirection = Vector2.Zero;
             stasisLaunchSpeed = 0.0f;
             return base.PreAI(projectile);
