@@ -45,13 +45,13 @@ namespace TLoZ
 
         public static void DrawInputButtonKeyboard(string buttonName, SpriteBatch spriteBatch, Vector2 position, string description = "")
         {
-            spriteBatch.Draw(TLoZTexxtures.UIKeyboardInput, position, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
+            spriteBatch.Draw(TLoZTextures.UIKeyboardInput, position, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
             Utils.DrawBorderString(spriteBatch, buttonName, position + new Vector2(16, 6), Color.Yellow, 1.5f);
             Utils.DrawBorderString(spriteBatch, description, position + new Vector2(50, 10), Color.Yellow);
         }
         public static void DrawInputButtonMouse(SpriteBatch spriteBatch, Vector2 position, int frame = 0, string description = "")
         {
-            spriteBatch.Draw(TLoZTexxtures.UIMouseInput, position, new Rectangle(0, 72 * frame, 48, 72), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
+            spriteBatch.Draw(TLoZTextures.UIMouseInput, position, new Rectangle(0, 72 * frame, 48, 72), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
             Utils.DrawBorderString(spriteBatch, description, position + new Vector2(50, 36), Color.Yellow);
         }
 

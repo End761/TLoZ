@@ -21,7 +21,7 @@ namespace TLoZ
             if (!Main.dedServ)
             {
                 TLoZInput.Load(Instance);
-                TLoZTexxtures.Load();
+                TLoZTextures.Load();
                 UIManager.Load();
                 StasisableProjectiles.Load();
                 TLoZDialogues.Load();
@@ -37,7 +37,7 @@ namespace TLoZ
         {
             StasisableProjectiles.Unload();
             TLoZInput.Unload();
-            TLoZTexxtures.Unload();
+            TLoZTextures.Unload();
             TLoZDialogues.Unload();
             Instance = null;
             loZClientConfig = null;

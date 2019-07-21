@@ -152,9 +152,9 @@ namespace TLoZ.Projectiles
                 // Draw the start
                 float rotation = stasisLaunchDirection.ToRotation() - (float)Math.PI / 2;
                 Color color = stasisLaunchSpeed > 14f ? Color.Red : stasisLaunchSpeed > 7f ? Color.Orange : Color.Yellow;
-                spriteBatch.Draw(TLoZTexxtures.MiscStasisArrow, projectile.Center + (stasisLaunchDirection * stasisLaunchSpeed) - Main.screenPosition, new Rectangle(0, 0, 16, 10), color, rotation, new Vector2(8, 5), projectile.scale, SpriteEffects.None, 1f);
-                spriteBatch.Draw(TLoZTexxtures.MiscStasisArrowMiddle, projectile.Center + (stasisLaunchDirection) - Main.screenPosition, new Rectangle(0, 0, 16, (int)(2 * stasisLaunchSpeed * 5)), color, rotation, new Vector2(8, 5), projectile.scale, SpriteEffects.None, 1f);
-                spriteBatch.Draw(TLoZTexxtures.MiscStasisArrow, projectile.Center + (stasisLaunchDirection) + new Vector2(0, (2 * stasisLaunchSpeed * 4.95f) * projectile.scale).RotatedBy(rotation) - Main.screenPosition, new Rectangle(0, 8, 16, 12), color, rotation, new Vector2(8, 5), projectile.scale, SpriteEffects.None, 1f);
+                spriteBatch.Draw(TLoZTextures.MiscStasisArrow, projectile.Center + (stasisLaunchDirection * stasisLaunchSpeed) - Main.screenPosition, new Rectangle(0, 0, 16, 10), color, rotation, new Vector2(8, 5), projectile.scale, SpriteEffects.None, 1f);
+                spriteBatch.Draw(TLoZTextures.MiscStasisArrowMiddle, projectile.Center + (stasisLaunchDirection) - Main.screenPosition, new Rectangle(0, 0, 16, (int)(2 * stasisLaunchSpeed * 5)), color, rotation, new Vector2(8, 5), projectile.scale, SpriteEffects.None, 1f);
+                spriteBatch.Draw(TLoZTextures.MiscStasisArrow, projectile.Center + (stasisLaunchDirection) + new Vector2(0, (2 * stasisLaunchSpeed * 4.95f) * projectile.scale).RotatedBy(rotation) - Main.screenPosition, new Rectangle(0, 8, 16, 12), color, rotation, new Vector2(8, 5), projectile.scale, SpriteEffects.None, 1f);
             }
             return true;
         }

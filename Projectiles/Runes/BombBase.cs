@@ -35,11 +35,6 @@ namespace TLoZ.Projectiles.Runes
             if (_existanceTimer < 15)
                 _existanceTimer++;
 
-            /*int dusto = Dust.NewDust(projectile.Center - new Vector2(2, 18).RotatedBy(projectile.rotation), 0, 0, DustID.AncientLight, 0, 0, 0, default(Color), 2f);
-
-            Main.dust[dusto].noGravity = true;
-            Main.dust[dusto].velocity *= 0;
-            */
 
             Helpers.CreateGeneralUseDust(4, projectile.Center - new Vector2(-3, 16).RotatedBy(projectile.rotation), Color.Cyan);
 
@@ -159,9 +154,6 @@ namespace TLoZ.Projectiles.Runes
         {
             return projectile.ai[0] == 1 && Vector2.Distance(projHitbox.Center(), targetHitbox.Center()) <= 16 * 9.5f;
         }
-
-        public Player Owner => Main.player[projectile.owner];
-        public TLoZPlayer TLoZPlayer => TLoZPlayer.Get(Owner);
         public virtual bool RequiredRune => TLoZPlayer.SelectedRune is BombRoundRune;
     }
 }

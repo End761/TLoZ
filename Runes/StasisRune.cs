@@ -8,7 +8,7 @@ namespace TLoZ.Runes
 {
     public sealed class StasisRune : Rune
     {
-        public StasisRune() : base("stasisRune", "Stasis", TLoZTexxtures.UIStasisRune)
+        public StasisRune() : base("stasisRune", "Stasis", TLoZTextures.UIStasisRune)
         {
         }
 

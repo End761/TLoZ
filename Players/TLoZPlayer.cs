@@ -7,6 +7,7 @@ using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using TLoZ.Items.Tools;
 using TLoZ.Items.Weapons.MasterSword;
 using TLoZ.NPCs;
 using TLoZ.Projectiles;
@@ -19,8 +20,6 @@ namespace TLoZ.Players
         public int responseIndex;
 
         public static TLoZPlayer Get(Player player) => player.GetModPlayer<TLoZPlayer>();
-
-        public bool Holds(int type) => player.HeldItem.type == type;
 
         public Vector2 stasisLaunchVelocity;
         public float postStasisLaunchTimer;
@@ -211,7 +210,7 @@ namespace TLoZ.Players
         {
             ProcessRuneSelectionTriggers(triggersSet);
 
-            if (TLoZInput.equipParaglider.JustPressed)
+            if (HasParaglider && TLoZInput.equipParaglider.JustPressed)
                 usesParaglider = !usesParaglider;
         }
         public override void SetControls()
@@ -306,5 +305,9 @@ namespace TLoZ.Players
         public bool HasBomb { get; set; }
 
         public NPC LastChatFromNPC { get; internal set; }
+
+        private bool HasParaglider => player.HasItem(mod.ItemType<ParagliderItem>());
+
+        public bool Holds(int type) => player.HeldItem.type == type;
     }
 }

@@ -4,7 +4,7 @@ using TLoZ.Runes;
 
 namespace TLoZ
 {
-    public static class TLoZTexxtures
+    public static class TLoZTextures
     {
         public static void Load()
         {

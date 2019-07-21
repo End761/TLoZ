@@ -160,9 +160,9 @@ namespace TLoZ.NPCs
                 float rotation = stasisLaunchDirection.ToRotation() - (float)Math.PI / 2;
                 Color color = stasisLaunchSpeed > 14f ? Color.Red : stasisLaunchSpeed > 7f ? Color.Orange : Color.Yellow;
 
-                spriteBatch.Draw(TLoZTexxtures.MiscStasisArrow, npc.Center + (stasisLaunchDirection * stasisLaunchSpeed) - Main.screenPosition, new Rectangle(0, 0, 16, 10), color, rotation, new Vector2(8, 5), npc.scale, SpriteEffects.None, 1f);
-                spriteBatch.Draw(TLoZTexxtures.MiscStasisArrowMiddle, npc.Center + (stasisLaunchDirection) - Main.screenPosition, new Rectangle(0, 0, 16, (int)(2 * stasisLaunchSpeed * 5)), color, rotation, new Vector2(8, 5), npc.scale, SpriteEffects.None, 1f);
-                spriteBatch.Draw(TLoZTexxtures.MiscStasisArrow, npc.Center + (stasisLaunchDirection) + new Vector2(0, (2 * stasisLaunchSpeed * 4.95f) * npc.scale).RotatedBy(rotation) - Main.screenPosition, new Rectangle(0, 8, 16, 12), color, rotation, new Vector2(8, 5), npc.scale, SpriteEffects.None, 1f);
+                spriteBatch.Draw(TLoZTextures.MiscStasisArrow, npc.Center + (stasisLaunchDirection * stasisLaunchSpeed) - Main.screenPosition, new Rectangle(0, 0, 16, 10), color, rotation, new Vector2(8, 5), npc.scale, SpriteEffects.None, 1f);
+                spriteBatch.Draw(TLoZTextures.MiscStasisArrowMiddle, npc.Center + (stasisLaunchDirection) - Main.screenPosition, new Rectangle(0, 0, 16, (int)(2 * stasisLaunchSpeed * 5)), color, rotation, new Vector2(8, 5), npc.scale, SpriteEffects.None, 1f);
+                spriteBatch.Draw(TLoZTextures.MiscStasisArrow, npc.Center + (stasisLaunchDirection) + new Vector2(0, (2 * stasisLaunchSpeed * 4.95f) * npc.scale).RotatedBy(rotation) - Main.screenPosition, new Rectangle(0, 8, 16, 12), color, rotation, new Vector2(8, 5), npc.scale, SpriteEffects.None, 1f);
 
             }
 
@@ -184,7 +184,7 @@ namespace TLoZ.NPCs
                 float multiplier = i >= length - 1 ? 19.8f : 20;
                 Vector2 offset = (endPosition - startPosition).SafeNormalize(-Vector2.UnitY) * i * multiplier;
 
-                spriteBatch.Draw(TLoZTexxtures.MiscStasisChain, startPosition + offset - Main.screenPosition, i >= length - 2 ? new Rectangle(0, 0, 16, 10) : new Rectangle(0, 12, 16, 20), Color.White * opacity, rotation, new Vector2(8, 10), 1f, i >= length - 1 ? SpriteEffects.FlipVertically : SpriteEffects.None, 1f);
+                spriteBatch.Draw(TLoZTextures.MiscStasisChain, startPosition + offset - Main.screenPosition, i >= length - 2 ? new Rectangle(0, 0, 16, 10) : new Rectangle(0, 12, 16, 20), Color.White * opacity, rotation, new Vector2(8, 10), 1f, i >= length - 1 ? SpriteEffects.FlipVertically : SpriteEffects.None, 1f);
             }
         }
 

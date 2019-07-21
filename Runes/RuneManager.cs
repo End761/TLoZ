@@ -12,6 +12,8 @@ namespace TLoZ.Runes
 
             BombRound = Add(new BombRoundRune()) as BombRoundRune;
             BombSquare = Add(new BombSquareRune()) as BombSquareRune;
+
+            Magnesis = Add(new MagnesisRune() as MagnesisRune);
         }
 
         public Rune GetPrevious(Rune current)

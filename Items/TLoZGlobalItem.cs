@@ -11,11 +11,6 @@ namespace TLoZ.Items
     public class TLoZGlobalItem : GlobalItem
     {
         public GlowMaskData gmd;
-
-        public override void SetDefaults(Item item)
-        {
-            base.SetDefaults(item);
-        }
         
         public override bool HoldItemFrame(Item item, Player player) => false;
 
