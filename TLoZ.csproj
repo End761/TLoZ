@@ -8,11 +8,6 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Enums\**" />
-    <EmbeddedResource Remove="Enums\**" />
-    <None Remove="Enums\**" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="Buffs\StasisDebuff.png" />
     <None Remove="Items\Tools\Paraglider.png" />
     <None Remove="Items\Tools\SheikahSlate.png" />

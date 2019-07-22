@@ -1,77 +1,72 @@
 ﻿using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TLoZ.Projectiles.MagnesisStates;
+using System;
 
 namespace TLoZ.Projectiles.Runes
 {
     public class PickedUpTile : TLoZProjectile
     {
-
         public override string Texture => "TLoZ/Textures/Misc/EmptyPixel";
-
         public override void SetDefaults()
         {
+            tileIDs = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+            tilePositions = new Vector2[16];
+            tileFrames = new Vector2[16];
             projectile.tileCollide = false;
             projectile.width = 16;
             projectile.height = 16;
-            tileFrame = new Vector2();
-        }
-        public override bool PreAI()
-        {
-            if(nextState == null)
-            {
-                if (projectile.ai[0] == 1)
-                    nextState = new CheckNearestTiles();
-                else
-                    nextState = new PickTileState();
-            }
-            return base.PreAI();
         }
         public override void AI()
         {
             if (_existanceTimer < 15)
                 _existanceTimer++;
-
-            if(Owner.controlUseTile && Owner.itemTime == 0 && _existanceTimer >= 15)
+            if(_existanceTimer >= 15 && Owner.controlUseTile)
             {
                 projectile.Kill();
             }
-            projectile.timeLeft = 2;
-            nextState.Execute(projectile);
-            projectile.velocity = Collision.TileCollision(projectile.position, projectile.velocity, 16, 16, false, false, 1);
-            foreach(Projectile proj in Main.projectile)
+            if(Owner.Hitbox.Bottom + 1 > projectile.Hitbox.Top && Math.Abs(Owner.Hitbox.X - projectile.Hitbox.X - projectile.width / 4) <= projectile.width /2 && projectile.position.Y > Owner.position.Y)
             {
-                if (!proj.active || proj.type != projectile.type)
-                    continue;
-                if (Collision.TileCollision(projectile.position, projectile.velocity, 16, 16, false, false, 1).X == 0)
-                    proj.velocity.X = 0;
-                if (Collision.TileCollision(projectile.position, projectile.velocity, 16, 16, false, false, 1).Y == 0)
-                    proj.velocity.Y = 0;
+                Owner.velocity.Y = 0;
+                Owner.position.Y = projectile.Hitbox.Top - Owner.height;
             }
-
+            projectile.timeLeft = 2;
+            projectile.velocity = Helpers.DirectToMouse(projectile.position);
+            projectile.velocity = Collision.TileCollision(projectile.position, projectile.velocity, projectile.width - 1, projectile.height - 1, false, false, 1);
+        }
+        public override void Kill(int timeLeft)
+        {
+            for(int i = 0; i < 16; i++)
+            {
+                if(tileIDs[i] != -1)
+                WorldGen.PlaceTile((int)(projectile.position.X + tilePositions[i].X) / 16, (int)(projectile.position.Y + tilePositions[i].Y) / 16, tileIDs[i], true, true, -1, 0);
+            }
+            tileIDs = null;
+            tilePositions = null;
+            tileFrames = null;
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             return false;
         }
-        public override void Kill(int timeLeft)
-        {
-            int x = (int)projectile.position.X;
-            int y = (int)projectile.position.Y;
-            WorldGen.PlaceTile(x / 16, y / 16, tileTextureID, true, true, -1, 0);
-            Main.tile[x / 16, y / 16].frameX = (short)tileFrame.X;
-            Main.tile[x / 16, y / 16].frameY = (short)tileFrame.Y;
-        }
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            spriteBatch.Draw(Main.tileTexture[tileTextureID], projectile.position - Main.screenPosition, new Rectangle((int)tileFrame.X, (int)tileFrame.Y, 16, 16), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
+            if (!projectile.active || projectile.timeLeft <= 0)
+                return;
+
+            if (tileIDs != null && tilePositions != null && tileFrames != null)
+            {
+                for (int i = 0; i < 16; i++)
+                {
+                    if(tileIDs[i] != -1)
+                        spriteBatch.Draw(Main.tileTexture[tileIDs[i]], projectile.position + tilePositions[i] - Main.screenPosition, new Rectangle((int)tileFrames[i].X, (int)tileFrames[i].Y, 16, 16), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
+                }
+            }
         }
 
-        public int tileTextureID;
-        public Vector2 tileFrame;
+        public int[] tileIDs;
+        public Vector2[] tilePositions;
+        public Vector2[] tileFrames;
         private int _existanceTimer;
-
-        public MagnesisState nextState;
     }
 }
