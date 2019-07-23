@@ -8,5 +8,8 @@ namespace TLoZ.Projectiles
     {
         public Player Owner => Main.player[projectile.owner];
         public TLoZPlayer TLoZPlayer => TLoZPlayer.Get(Owner);
+
+        protected int PosX => (int)projectile.position.X;
+        protected int PosY => (int)projectile.position.Y;
     }
 }

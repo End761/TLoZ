@@ -50,7 +50,7 @@ namespace TLoZ.NPCs
             {
                 Color color = stasisLaunchSpeed > 14f ? Color.Red : stasisLaunchSpeed > 7f ? Color.Orange : Color.Yellow;
 
-                //npc.color = color;
+                npc.color = color;
                 npc.frameCounter = 0;
                 npc.noGravity = true;
                 npc.Center = preStasisPosition;

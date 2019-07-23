@@ -12,9 +12,14 @@ namespace TLoZ.Projectiles.Runes
         public override string Texture => "TLoZ/Textures/Misc/EmptyPixel";
         public override void SetDefaults()
         {
-            tileIDs = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
-            tilePositions = new Vector2[16];
-            tileFrames = new Vector2[16];
+            projectile.ignoreWater = true;
+            tileIDs = new int[totalTileCount];
+            for(int i = 0; i < totalTileCount; i++)
+            {
+                tileIDs[i] = -1;
+            }
+            tilePositions = new Vector2[totalTileCount];
+            tileFrames = new Vector2[totalTileCount];
             projectile.tileCollide = false;
             projectile.width = 16;
             projectile.height = 16;
@@ -33,8 +38,8 @@ namespace TLoZ.Projectiles.Runes
                 Owner.position.Y = projectile.Hitbox.Top - Owner.height;
             }
             projectile.timeLeft = 2;
-            projectile.velocity = Helpers.DirectToMouse(projectile.position, 2);
-            for (int i = 0; i < 16; i++)
+            projectile.velocity = Helpers.DirectToMouse(projectile.position + mousePosOffset, 2);
+            for (int i = 0; i < totalTileCount; i++)
             {
                 if (tileIDs != null)
                     if (tileIDs[i] != -1)
@@ -43,7 +48,7 @@ namespace TLoZ.Projectiles.Runes
         }
         public override void Kill(int timeLeft)
         {
-            for(int i = 0; i < 16; i++)
+            for(int i = 0; i < totalTileCount; i++)
             {
                 if(tileIDs[i] != -1)
                 WorldGen.PlaceTile((int)(projectile.position.X + tilePositions[i].X) / 16, (int)(projectile.position.Y + tilePositions[i].Y) / 16, tileIDs[i], true, true, -1, 0);
@@ -65,7 +70,7 @@ namespace TLoZ.Projectiles.Runes
 
             if (tileIDs != null && tilePositions != null && tileFrames != null)
             {
-                for (int i = 0; i < 16; i++)
+                for (int i = 0; i < totalTileCount; i++)
                 {
                     if(tileIDs[i] != -1)
                         spriteBatch.Draw(Main.tileTexture[tileIDs[i]], projectile.position + tilePositions[i] - Main.screenPosition, new Rectangle((int)tileFrames[i].X, (int)tileFrames[i].Y, 16, 16), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
@@ -77,6 +82,9 @@ namespace TLoZ.Projectiles.Runes
         public int[] tileIDs;
         public Vector2[] tilePositions;
         public Vector2[] tileFrames;
+        public Vector2 mousePosOffset;
         private int _existanceTimer;
+
+        public const int totalTileCount = 25;
     }
 }

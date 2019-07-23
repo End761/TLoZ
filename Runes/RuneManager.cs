@@ -14,6 +14,8 @@ namespace TLoZ.Runes
             BombSquare = Add(new BombSquareRune()) as BombSquareRune;
 
             Magnesis = Add(new MagnesisRune() as MagnesisRune);
+
+            Cryonis = Add(new CryonisRune() as CryonisRune);
         }
 
         internal void Unload() => Clear();

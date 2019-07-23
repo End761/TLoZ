@@ -23,48 +23,46 @@ namespace TLoZ.Runes
 
             if (WorldGen.SolidTile(Main.tile[x, y]) && player.ownedProjectileCounts[proj] <= 0 && magnesisWhiteList.Contains(Main.tile[x, y].type))
             {
+                int startX = x;
+                int startY = y;
                 List<Vector2> tilesToKill = new List<Vector2>();
                 int projectile = Projectile.NewProjectile(new Vector2(x * 16, y * 16), Vector2.Zero, proj, 0, 0, player.whoAmI, 1);
                 PickedUpTile upTile = (PickedUpTile)Main.projectile[projectile].modProjectile;
 
-                for (int i = 0; i < 4; i++)
-                    for (int j = 0; j < 4; j++)
-                        if (WorldGen.SolidTile(Main.tile[x + j, y + i]) && magnesisWhiteList.Contains(Main.tile[x + j, y + i].type))
+                for(int i = 0; i < totalHeight; i++)
+                    for(int j = 0; j < totalWidth; j++)
+                        if(WorldGen.SolidTile(Main.tile[x - j, y - i]) && magnesisWhiteList.Contains(Main.tile[x - j, y - i].type))
                         {
-                            upTile.tileIDs[i * 4 + j] = Main.tile[x + j, y + i].type;
-                            upTile.tilePositions[i * 4 + j] = new Vector2(j, i) * 16;
-                            upTile.tileFrames[i * 4 + j] = new Vector2(Main.tile[x + j, y + i].frameX, Main.tile[x + j, y + i].frameY);
-
-                            tilesToKill.Add(new Vector2(x + j, y + i));
+                            startX = x - j;
+                            startY = y - i;
                         }
 
-                int width = 16;
-                int height = 16;
+                for (int i = 0; i < totalHeight; i++)
+                    for (int j = 0; j < totalWidth; j++)
+                        if (WorldGen.SolidTile(Main.tile[startX + j, startY + i]) && magnesisWhiteList.Contains(Main.tile[startX + j, startY + i].type))
+                        {
+                            upTile.tileIDs[i * totalWidth + j] = Main.tile[startX + j, startY + i].type;
+                            upTile.tilePositions[i * totalWidth + j] = new Vector2(j, i) * 16;
+                            upTile.tileFrames[i * totalWidth + j] = new Vector2(Main.tile[startX + j, startY + i].frameX, Main.tile[startX + j, startY + i].frameY);
 
-                for (int i = 0; i < 16; i++)
-                {
-                    if (upTile.tileIDs[i] != -1)
-                    {
-                        if (i < 4)
-                            width = 16 + (i) * 16;
-                        else
-                            height = 16 + ((i - 1) / 4 * 16);
+                            tilesToKill.Add(new Vector2(startX + j, startY + i));
+                        }
 
-                    }
-                }
-
-                Main.projectile[projectile].width = width;
-                Main.projectile[projectile].height = height;
+                Main.projectile[projectile].position = new Vector2(startX, startY) * 16;
 
                 foreach (Vector2 vector in tilesToKill)
                     WorldGen.KillTile((int)vector.X, (int)vector.Y, false, false, true);
 
                 tilesToKill.Clear();
+                upTile.mousePosOffset = -new Vector2(startX - x, startY - y) * 16;
             }
             else
                 return false;
 
             return true;
         }
+
+        private const int totalWidth = 5;
+        private const int totalHeight = 5;
     }
 }
