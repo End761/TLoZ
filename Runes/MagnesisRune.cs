@@ -18,7 +18,7 @@ namespace TLoZ.Runes
             int x = (int)(Main.MouseWorld.X / 16);
             int y = (int)(Main.MouseWorld.Y / 16);
             int proj = TLoZ.Instance.ProjectileType<PickedUpTile>();
-            if (WorldGen.SolidTile(Main.tile[x, y]) && player.ownedProjectileCounts[proj] <= 0)
+            if (WorldGen.SolidTile(Main.tile[x, y]) && player.ownedProjectileCounts[proj] <= 0 && TLoZ.Instance.MagnesisWhiteList.Contains(Main.tile[x, y].type))
             {
                 List<Vector2> tilesToKill = new List<Vector2>();
                 int projectile = Projectile.NewProjectile(new Vector2(x * 16, y * 16), Vector2.Zero, proj, 0, 0, player.whoAmI, 1);
@@ -27,7 +27,7 @@ namespace TLoZ.Runes
                 {
                     for (int j = 0; j < 4; j++)
                     {
-                        if (WorldGen.SolidTile(Main.tile[x + j, y + i]))
+                        if (WorldGen.SolidTile(Main.tile[x + j, y + i]) && TLoZ.Instance.MagnesisWhiteList.Contains(Main.tile[x + j, y + i].type))
                         {
                             upTile.tileIDs[i * 4 + j] = Main.tile[x + j, y + i].type;
                             upTile.tilePositions[i * 4 + j] = new Vector2(j, i) * 16;

@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using Terraria.Graphics.Shaders;
+using Terraria.ID;
 
 namespace TLoZ.Projectiles.Runes
 {
@@ -21,18 +23,23 @@ namespace TLoZ.Projectiles.Runes
         {
             if (_existanceTimer < 15)
                 _existanceTimer++;
-            if(_existanceTimer >= 15 && Owner.controlUseTile)
+            if (_existanceTimer >= 15 && Owner.controlUseTile)
             {
                 projectile.Kill();
             }
-            if(Owner.Hitbox.Bottom + 1 > projectile.Hitbox.Top && Math.Abs(Owner.Hitbox.X - projectile.Hitbox.X - projectile.width / 4) <= projectile.width /2 && projectile.position.Y > Owner.position.Y)
+            if (Owner.Hitbox.Bottom + 1 > projectile.Hitbox.Top && Math.Abs(Owner.Hitbox.X - projectile.Hitbox.X - projectile.width / 4) <= projectile.width / 2 && projectile.position.Y > Owner.position.Y)
             {
                 Owner.velocity.Y = 0;
                 Owner.position.Y = projectile.Hitbox.Top - Owner.height;
             }
             projectile.timeLeft = 2;
-            projectile.velocity = Helpers.DirectToMouse(projectile.position);
-            projectile.velocity = Collision.TileCollision(projectile.position, projectile.velocity, projectile.width - 1, projectile.height - 1, false, false, 1);
+            projectile.velocity = Helpers.DirectToMouse(projectile.position, 2);
+            for (int i = 0; i < 16; i++)
+            {
+                if (tileIDs != null)
+                    if (tileIDs[i] != -1)
+                        projectile.velocity = Collision.TileCollision(projectile.position + tilePositions[i], projectile.velocity, 15, 15, false, false, 1);
+            }
         }
         public override void Kill(int timeLeft)
         {
@@ -47,6 +54,8 @@ namespace TLoZ.Projectiles.Runes
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {
+            Helpers.StartShader(spriteBatch);
+            GameShaders.Armor.Apply(GameShaders.Armor.GetShaderIdFromItemId(ItemID.PixieDye), projectile);
             return false;
         }
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
@@ -62,6 +71,7 @@ namespace TLoZ.Projectiles.Runes
                         spriteBatch.Draw(Main.tileTexture[tileIDs[i]], projectile.position + tilePositions[i] - Main.screenPosition, new Rectangle((int)tileFrames[i].X, (int)tileFrames[i].Y, 16, 16), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
                 }
             }
+            Helpers.EndShader(spriteBatch);
         }
 
         public int[] tileIDs;
