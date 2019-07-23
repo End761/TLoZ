@@ -14,8 +14,9 @@ namespace TLoZ.Tiles
     {
         public override void PostDraw(int i, int j, int type, SpriteBatch spriteBatch)
         {
-            TLoZPlayer loZPlayer = TLoZPlayer.Get(Main.LocalPlayer);
-            if (loZPlayer.Holds(TLoZ.Instance.ItemType("SheikahSlate")) && loZPlayer.SelectedRune is MagnesisRune && TLoZ.Instance.MagnesisWhiteList.Contains(type))
+            TLoZPlayer tloZPlayer = TLoZPlayer.Get(Main.LocalPlayer);
+
+            if (tloZPlayer.Holds(TLoZ.Instance.ItemType("SheikahSlate")) && tloZPlayer.SelectedRune is MagnesisRune && MagnesisRune.magnesisWhiteList.Contains(type))
             {
                 spriteBatch.Draw(Main.tileTexture[type], new Vector2(i, j) * 16f + new Vector2(192) - Main.screenPosition, new Rectangle(Main.tile[i, j].frameX, Main.tile[i, j].frameY, 16, 16), Color.Yellow, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
             }

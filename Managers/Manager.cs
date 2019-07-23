@@ -54,6 +54,8 @@ namespace TLoZ.Managers
         {
             byIndex.Clear();
             byNames.Clear();
+
+            Initialized = false;
         }
 
         public IEnumerator<KeyValuePair<string, T>> GetEnumerator() => byNames.GetEnumerator();

@@ -12,11 +12,12 @@ namespace TLoZ
     public class TLoZ : Mod
     {
         internal static TLoZClientConfig loZClientConfig;
+
         public TLoZ()
         {
             Instance = this;
         }
-        public List<int> MagnesisWhiteList;
+        
         public override void Load()
         {
             FillMagnesisList();
@@ -37,12 +38,17 @@ namespace TLoZ
 
         public override void Unload()
         {
-            MagnesisWhiteList.Clear();
+            MagnesisRune.magnesisWhiteList.Clear();
+
+            RuneManager.Instance.Unload();
+
             StasisableProjectiles.Unload();
             TLoZInput.Unload();
             TLoZTextures.Unload();
             TLoZDialogues.Unload();
-            MagnesisWhiteList = null;
+
+            MagnesisRune.magnesisWhiteList = null;
+
             Instance = null;
             loZClientConfig = null;
         }
@@ -52,9 +58,10 @@ namespace TLoZ
             layers.Insert(0, new RuneSelectionLayer(UIManager.RuneSelectionUI));
             layers.Insert(1, new MiscInputsLayer(UIManager.MiscInputsUI));
         }
+
         public void FillMagnesisList()
         {
-            MagnesisWhiteList = new List<int>()
+            MagnesisRune.magnesisWhiteList = new List<int>()
             {
                 TileID.Lead,
                 TileID.Iron,
@@ -64,6 +71,7 @@ namespace TLoZ
                 TileID.Tungsten
             };
         }
+
         public static TLoZ Instance { get; private set; }
     }
 }

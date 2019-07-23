@@ -16,6 +16,8 @@ namespace TLoZ.Runes
             Magnesis = Add(new MagnesisRune() as MagnesisRune);
         }
 
+        internal void Unload() => Clear();
+
         public Rune GetPrevious(Rune current)
         {
             int index = GetIndex(current);

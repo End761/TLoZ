@@ -20,6 +20,8 @@
 x64/
 x86/
 bld/
+bin/
+obj/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
@@ -329,4 +331,4 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 libs/
-DBT.csproj.DotSettings
+*.db
