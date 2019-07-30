@@ -16,8 +16,8 @@ namespace TLoZ.Projectiles.Runes
             _existanceTimer = 0;
             projectile.hostile = true;
             projectile.friendly = true;
-            projectile.width = 20;
-            projectile.height = 20;
+            projectile.width = 22;
+            projectile.height = 22;
             projectile.penetrate = -1;
             projectile.tileCollide = false;
         }
@@ -47,7 +47,7 @@ namespace TLoZ.Projectiles.Runes
                 Owner.heldProj = projectile.whoAmI;
                 TLoZPlayer.HasBomb = true;
                 TLoZPlayer.itemUseDelay = 15;
-                projectile.Center = new Vector2((int)Owner.position.X, (int)Owner.position.Y) + new Vector2(10, -8);
+                projectile.Center = new Vector2((int)Owner.position.X, (int)Owner.position.Y) + new Vector2(10, -4);
 
                 if (Owner.controlUseItem && Owner.itemAnimation == 0 && _existanceTimer >= 15)
                 {
@@ -148,7 +148,7 @@ namespace TLoZ.Projectiles.Runes
 
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            spriteBatch.Draw(Main.projectileTexture[projectile.type], projectile.Center - Main.screenPosition, null, Color.White, projectile.rotation, new Vector2(12, 22), 1f, SpriteEffects.None, 1f);
+            spriteBatch.Draw(Main.projectileTexture[projectile.type], projectile.Center - Main.screenPosition, null, Color.White, projectile.rotation, new Vector2(14, 24), 1f, SpriteEffects.None, 1f);
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

@@ -20,6 +20,14 @@ namespace TLoZ
 
             UIKeyboardInput = ModContent.GetTexture("TLoZ/Textures/UI/KeyboardInput");
             UIMouseInput = ModContent.GetTexture("TLoZ/Textures/UI/MouseInput");
+
+            UITargeting = ModContent.GetTexture("TLoZ/Textures/UI/Targeting");
+
+            UIStaminaBackground = ModContent.GetTexture("TLoZ/Textures/UI/StaminaBG");
+            UIStaminaBar = ModContent.GetTexture("TLoZ/Textures/UI/StaminaBar");
+
+            UIStaminaWheel = ModContent.GetTexture("TLoZ/Textures/UI/StaminaWheel");
+            UIStaminaOuterWheel = ModContent.GetTexture("TLoZ/Textures/UI/StaminaWheelOuter");
         }
 
         public static void Unload()
@@ -36,6 +44,14 @@ namespace TLoZ
 
             UIMouseInput = null;
             UIKeyboardInput = null;
+
+            UITargeting = null;
+
+            UIStaminaBackground = null;
+            UIStaminaBar = null;
+
+            UIStaminaWheel = null;
+            UIStaminaOuterWheel = null;
         }
 
         public static Texture2D MiscStasisArrow { get; private set; }
@@ -46,9 +62,16 @@ namespace TLoZ
         public static Texture2D UIBombRoundRune { get; private set; }
         public static Texture2D UIMagnesisRune { get; private set; }
         public static Texture2D UIStasisRune { get; private set; }
-        public static Texture2D UICryonisRune { get; private  set; }
+        public static Texture2D UICryonisRune { get; private set; }
 
+        public static Texture2D UIStaminaBackground { get; private set; }
+        public static Texture2D UIStaminaBar { get; private set; }
+        public static Texture2D UIStaminaWheel { get; private set; }
+        public static Texture2D UIStaminaOuterWheel { get; private set; }
         public static Texture2D UIKeyboardInput { get; private set; }
         public static Texture2D UIMouseInput { get; private set; }
+
+
+        public static Texture2D UITargeting { get; private set; }
     }
 }

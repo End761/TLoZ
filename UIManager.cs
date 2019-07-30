@@ -16,21 +16,22 @@ namespace TLoZ
 
             MiscInputsUI = new MiscInputsUIState();
             MiscInputsUI.Activate();
+
+            StaminaUI = new StaminaUIState();
+            StaminaUI.Activate();
         }
 
         public static void UpdateUIs(GameTime gameTime)
         {
             RuneSelectionUI?.Update(gameTime);
             MiscInputsUI?.Update(gameTime);
-        }
-
-        public static void Unload()
-        {
-
+            StaminaUI?.Update(gameTime);
         }
 
         public static UserInterface RuneInterface { get; private set; }
         public static RuneSelectionUI RuneSelectionUI { get; private set; }
         public static MiscInputsUIState MiscInputsUI { get; private set; }
+
+        public static StaminaUIState StaminaUI { get; private set; }
     }
 }

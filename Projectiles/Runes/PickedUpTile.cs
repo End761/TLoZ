@@ -21,8 +21,10 @@ namespace TLoZ.Projectiles.Runes
             tilePositions = new Vector2[totalTileCount];
             tileFrames = new Vector2[totalTileCount];
             projectile.tileCollide = false;
-            projectile.width = 16;
-            projectile.height = 16;
+            projectile.width = 0;
+            projectile.height = 0;
+            projectile.hostile = true;
+            projectile.friendly = true;
         }
         public override void AI()
         {
@@ -32,19 +34,38 @@ namespace TLoZ.Projectiles.Runes
             {
                 projectile.Kill();
             }
-            if (Owner.Hitbox.Bottom + 1 > projectile.Hitbox.Top && Math.Abs(Owner.Hitbox.X - projectile.Hitbox.X - projectile.width / 4) <= projectile.width / 2 && projectile.position.Y > Owner.position.Y)
-            {
-                Owner.velocity.Y = 0;
-                Owner.position.Y = projectile.Hitbox.Top - Owner.height;
-            }
             projectile.timeLeft = 2;
             projectile.velocity = Helpers.DirectToMouse(projectile.position + mousePosOffset, 2);
             for (int i = 0; i < totalTileCount; i++)
             {
                 if (tileIDs != null)
+                {
                     if (tileIDs[i] != -1)
                         projectile.velocity = Collision.TileCollision(projectile.position + tilePositions[i], projectile.velocity, 15, 15, false, false, 1);
+                }
             }
+        }
+        public override bool CanHitPlayer(Player target)
+        {
+            for(int i = 0; i < totalTileCount; i++)
+            {
+                if (tileIDs != null)
+                {
+                    bool hadCollision = false;
+                    if (Collision.CheckAABBvAABBCollision(target.position + target.velocity, target.Hitbox.Size(), Tilesize(i), new Vector2(16)))
+                    {
+                        hadCollision = true;
+                        target.velocity = Vector2.Zero;
+                    }
+                    if (Collision.CheckAABBvAABBCollision(Tilesize(i) + projectile.velocity, new Vector2(16), target.position, target.Hitbox.Size()))
+                    {
+                        hadCollision = true;
+                        target.velocity = projectile.velocity * 2;
+                    }
+                    if (hadCollision) return false;
+                }
+            }
+            return false;
         }
         public override void Kill(int timeLeft)
         {
@@ -78,6 +99,8 @@ namespace TLoZ.Projectiles.Runes
             }
             Helpers.EndShader(spriteBatch);
         }
+
+        private Vector2 Tilesize(int index) => projectile.position + tilePositions[index];
 
         public int[] tileIDs;
         public Vector2[] tilePositions;

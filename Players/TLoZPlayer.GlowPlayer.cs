@@ -30,7 +30,7 @@ namespace TLoZ.Players
             {
                 GlowMaskData m = item.GetGlobalItem<TLoZGlobalItem>().gmd;
 
-                if (m != null) // Change WeaponName to your moditem's classname
+                if (m != null)
                 {
                     Mod mod = ModLoader.GetMod(m.mod);
                     Rectangle sourceRect = new Rectangle(0, frame * m.width, m.width, m.height);
@@ -49,14 +49,14 @@ namespace TLoZ.Players
                     ItemSlot.GetItemLight(ref color, drawPlayer.HeldItem, false);
                     origin = new Vector2(drawPlayer.direction == -1 ? m.width : 0, drawPlayer.gravDir == -1 ? 0 : m.height);
                     DrawData drawData = new DrawData(weaponTexture, position, sourceRect, drawPlayer.HeldItem.GetAlpha(color), drawPlayer.itemRotation, origin, drawPlayer.HeldItem.scale, drawInfo.spriteEffects, 0);
-                    if (drawPlayer.HeldItem.color != default(Color))
+                    if (drawPlayer.HeldItem.color != default)
                         drawData = new DrawData(weaponTexture, position, sourceRect, drawPlayer.HeldItem.GetColor(color), drawPlayer.itemRotation, origin, drawPlayer.HeldItem.scale, drawInfo.spriteEffects, 0);
                     Main.playerDrawData.Add(drawData);
                 }
             }
         });
 
-        public override void PreUpdate()
+        public void PreGlowMaskUpdate()
         {
             if (player.releaseUseItem)
                 ticks = 0;

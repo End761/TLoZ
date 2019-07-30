@@ -6,27 +6,27 @@ using System.Collections.Generic;
 using TLoZ.UIs;
 using TLoZ.Runes;
 using Terraria.ID;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.Graphics.Shaders;
 
 namespace TLoZ
 {
     public class TLoZ : Mod
     {
         internal static TLoZClientConfig loZClientConfig;
-
         public TLoZ()
         {
             Instance = this;
         }
-        
         public override void Load()
         {
             FillMagnesisList();
+            StasisableProjectiles.Load();
             if (!Main.dedServ)
             {
                 TLoZInput.Load(Instance);
                 TLoZTextures.Load();
                 UIManager.Load();
-                StasisableProjectiles.Load();
                 TLoZDialogues.Load();
             }
         }
@@ -57,6 +57,7 @@ namespace TLoZ
         {
             layers.Insert(0, new RuneSelectionLayer(UIManager.RuneSelectionUI));
             layers.Insert(1, new MiscInputsLayer(UIManager.MiscInputsUI));
+            layers.Add(new StaminaLayer(UIManager.StaminaUI));
         }
 
         public void FillMagnesisList()

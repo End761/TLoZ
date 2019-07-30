@@ -12,10 +12,11 @@ namespace TLoZ.UIs
     {
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (TLoZ.loZClientConfig.disableTips)
-                return;
             Player player = Main.LocalPlayer;
             TLoZPlayer loZPlayer = TLoZPlayer.Get(player);
+
+            if (TLoZ.loZClientConfig.disableTips)
+                return;
 
             if (loZPlayer.IsSelectingRune)
                 return;
@@ -48,6 +49,6 @@ namespace TLoZ.UIs
                         Helpers.DrawInputButtonMouse(spriteBatch, position, 2, "Pick up Bomb(Hover over it with mouse)");
                 }
             }
-        }
+        } 
     }
 }

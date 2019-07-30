@@ -8,6 +8,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using TLoZ.Items.Tools;
+using TLoZ.Items.Weapons;
 using TLoZ.Items.Weapons.MasterSword;
 using TLoZ.NPCs;
 using TLoZ.Projectiles;
@@ -58,6 +59,7 @@ namespace TLoZ.Players
         public override void Initialize()
         {
             InitializeRunes();
+            InitializeStamina();
         }
 
         public override void ResetEffects()
@@ -72,6 +74,7 @@ namespace TLoZ.Players
                 HasBomb = false;
 
             HasMasterSword = player.HasItem(mod.ItemType<MasterSword>());
+
             UsingMasterSword = !(player.itemAnimation <= 0 && Holds(mod.ItemType<MasterSword>()));
 
             if (LastChatFromNPC != null && LastChatFromNPC.active)
@@ -84,8 +87,11 @@ namespace TLoZ.Players
                 stasisLaunchVelocity = Vector2.Zero;
             }
 
-            if (postStasisLaunchTimer > 0.0f) postStasisLaunchTimer -= 0.1f;
-            if (inputLag > 0) inputLag--;
+            if (postStasisLaunchTimer > 0.0f)
+                postStasisLaunchTimer -= 0.1f;
+
+            if (inputLag > 0)
+                inputLag--;
 
             if (_paragliderNoFallDamageTimer > 0)
             {
@@ -118,6 +124,10 @@ namespace TLoZ.Players
             }
 
             isNearBomb = false;
+
+            ResetTargetingEffects();
+            ResetStaminaEffects();
+            ResetTwoHandedEffects();
         }
 
         public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)
@@ -158,9 +168,13 @@ namespace TLoZ.Players
             HasBomb = false;
             stasisLaunchVelocity = Vector2.Zero;
             postStasisLaunchTimer = 0;
+            _sprinting = false;
             inputLag = 0;
         }
-
+        public override void PostUpdateRunSpeeds()
+        {
+            UpdateStaminaRunSpeeds();
+        }
         public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
         {
             LoZnpCs tlozTarget = LoZnpCs.GetFor(target);
@@ -189,34 +203,51 @@ namespace TLoZ.Players
         }
         public override void ModifyDrawLayers(List<PlayerLayer> layers)
         {
+            int armIndex = layers.FindIndex(x => x.Name.Equals("Arms"));
             if (HasBomb)
                 player.bodyFrame.Y = 5 * 56;
 
             if (HasMasterSword)
             {
-                layers.Insert(layers.FindIndex(x => x.Name.Equals("Arms")), MasterSword.masterSwordSheathBelt);
-                layers.Insert(0, MasterSword.masterSwordSheath);
+                layers.Insert(armIndex, TLoZDrawLayers.Instance.masterSwordSheathBelt);
+                layers.Insert(0, TLoZDrawLayers.Instance.masterSwordSheath);
             }
 
             if (usesParaglider)
             {
+                _exhaustedTimer = 30;
                 player.bodyFrame.Y = 2 * 56;
-                layers.Insert(layers.FindIndex(x => x.Name.Equals("Arms")), paraglider);
+                layers.Insert(armIndex, TLoZDrawLayers.Instance.paragliderLayer);
             }
-
+            ModifyTwoHandedLayers(layers);
             ModifyGlowPlayerDrawLayers(layers);
         }
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             ProcessRuneSelectionTriggers(triggersSet);
 
-            if (HasParaglider && TLoZInput.equipParaglider.JustPressed)
+            if (HasParaglider && TLoZInput.equipParaglider.JustPressed && !exhausted)
+            {
+                player.mount?.Dismount(player);
                 usesParaglider = !usesParaglider;
+            }
+        }
+        public override void PostUpdate()
+        {
+            if (myTarget != null)
+                player.direction = myTarget.Center.X > player.Center.X ? 1 : -1;
+        }
+        public override void PreUpdate()
+        {
+            PreGlowMaskUpdate();
         }
         public override void SetControls()
         {
-            if (postStasisLaunchTimer > 0.0f) BlockInputs();
-            if (IsSelectingRune) BlockInputs(true, false, false, false);
+            if (postStasisLaunchTimer > 0.0f)
+                BlockInputs();
+
+            if (IsSelectingRune)
+                BlockInputs(true, false, false, false);
         }
         //Custom Methods:
 
@@ -236,6 +267,7 @@ namespace TLoZ.Players
             TagCompound tag = new TagCompound();
 
             SaveRunes(tag);
+            SaveStamina(tag);
 
             return tag;
         }
@@ -243,6 +275,7 @@ namespace TLoZ.Players
         public override void Load(TagCompound tag)
         {
             LoadRunes(tag);
+            LoadStamina(tag);
 
             base.Load(tag);
         }
@@ -271,31 +304,6 @@ namespace TLoZ.Players
                 player.controlHook = false;
             }
         }
-
-        public static readonly PlayerLayer paraglider = new PlayerLayer("TLoZ", "Paraglider", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)
-        {
-            if (drawInfo.shadow != 0f)
-                return;
-
-            Player drawPlayer = drawInfo.drawPlayer;
-
-            if (drawPlayer.dead) // If the player can't use the item, don't draw it.
-                return;
-            Color color = Lighting.GetColor((int)drawPlayer.Center.X / 16, (int)drawPlayer.Center.Y / 16);
-            DrawData sheathData = new DrawData
-            (
-                ModContent.GetTexture("TLoZ/Items/Tools/ParaByLiz"),
-                new Vector2((int)drawPlayer.MountedCenter.X, (int)drawPlayer.MountedCenter.Y - 22) - Main.screenPosition,
-                null,
-                color,
-                0,
-                new Vector2(19, 12),
-                1f,
-                drawPlayer.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally,
-                1
-                );
-            Main.playerDrawData.Add(sheathData);
-        });
 
         // Properties
 

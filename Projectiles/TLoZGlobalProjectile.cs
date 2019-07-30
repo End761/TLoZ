@@ -28,7 +28,8 @@ namespace TLoZ.Projectiles
 
         public int cantGetHitTimer;
         private bool _isHostile;
-        public bool canBeStasised; 
+        public bool canBeStasised;
+
         public override void SetDefaults(Projectile projectile)
         {
             randomStasisPositions = new[] { Vector2.Zero, Vector2.Zero, Vector2.Zero, Vector2.Zero };
@@ -44,7 +45,6 @@ namespace TLoZ.Projectiles
         }
         public override bool PreAI(Projectile projectile)
         {
-
             if (Stasised && !lastStasisedState)
             {
                 stasisChainsOpacity = 2.0f;

@@ -165,12 +165,19 @@ namespace TLoZ.NPCs
                 spriteBatch.Draw(TLoZTextures.MiscStasisArrow, npc.Center + (stasisLaunchDirection) + new Vector2(0, (2 * stasisLaunchSpeed * 4.95f) * npc.scale).RotatedBy(rotation) - Main.screenPosition, new Rectangle(0, 8, 16, 12), color, rotation, new Vector2(8, 5), npc.scale, SpriteEffects.None, 1f);
 
             }
-
             return base.PreDraw(npc, spriteBatch, drawColor);
         }
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
         {
             Helpers.EndShader(spriteBatch);
+
+            TLoZPlayer tlozPlayer = TLoZPlayer.Get(Main.LocalPlayer);
+
+            if(tlozPlayer.myTarget != null && tlozPlayer.myTarget == npc)
+            {
+                spriteBatch.Draw(TLoZTextures.UITargeting, npc.Center - new Vector2(0, npc.height + 18) - Main.screenPosition, new Rectangle(0, 0, 16, 36), TLoZ.loZClientConfig.targetBorderColor, 0f, new Vector2(8, 16), 1f, SpriteEffects.None, 1f);
+                spriteBatch.Draw(TLoZTextures.UITargeting, npc.Center - new Vector2(0, npc.height + 18) - Main.screenPosition, new Rectangle(0, 36, 16, 36), TLoZ.loZClientConfig.targetCoreColor, 0f, new Vector2(8, 16), 1f, SpriteEffects.None, 1f);
+            }
         }
 
         public static void DrawStasisChains(SpriteBatch spriteBatch, Vector2 startPosition, Vector2 endPosition, float opacity = 1f)

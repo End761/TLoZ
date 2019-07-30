@@ -16,6 +16,9 @@ namespace TLoZ
         /// <returns></returns>
         public static Vector2 DirectToMouse(Vector2 start, float speed = 1.0f) => (Main.MouseWorld - start).SafeNormalize(-Vector2.UnitY) * speed;
 
+
+        public static Vector2 DirectToPosition(Vector2 start, Vector2 end, float speed = 1.0f) => (end - start).SafeNormalize(-Vector2.UnitY) * speed;
+
         public static float GetPercent(int currentValue, int maxValue, int output) => (currentValue * output) / maxValue;
 
         public static void CircleDust(Vector2 pos, Vector2 vel, int dustID, float width = 2, float height = 8, float scale = 1.55f, float count = 25.0f)
@@ -31,10 +34,10 @@ namespace TLoZ
             }
         }
 
-        public static void StartShader(SpriteBatch spriteBatch)
+        public static void StartShader(SpriteBatch spriteBatch, Effect shader = null)
         {
             spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, shader, Main.GameViewMatrix.ZoomMatrix);
         }
 
         public static void EndShader(SpriteBatch spriteBatch)
