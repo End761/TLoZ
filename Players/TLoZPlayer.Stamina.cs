@@ -1,4 +1,5 @@
-﻿using Terraria.ModLoader;
+﻿using Terraria;
+using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
 namespace TLoZ.Players
@@ -71,9 +72,11 @@ namespace TLoZ.Players
                     Stamina += _staminaReplenishRate * 0.5;
             }
 
-            UIManager.StaminaUI.rate = spendRate;
-            UIManager.StaminaUI.haltRegen = haltStaminaRegen;
-
+            if (player.whoAmI == Main.myPlayer)
+            {
+                UIManager.StaminaUI.rate = spendRate;
+                UIManager.StaminaUI.haltRegen = haltStaminaRegen;
+            }
 
             if (Stamina <= 0.0 && !exhausted)
             {

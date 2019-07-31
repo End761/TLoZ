@@ -7,6 +7,7 @@ using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using TLoZ.Enums;
 using TLoZ.Items.Tools;
 using TLoZ.Items.Weapons;
 using TLoZ.Items.Weapons.MasterSword;
@@ -230,6 +231,14 @@ namespace TLoZ.Players
             {
                 player.mount?.Dismount(player);
                 usesParaglider = !usesParaglider;
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    ModPacket gliderPacket = mod.GetPacket();
+                    gliderPacket.Write((int)MessageType.Paraglider);
+                    gliderPacket.Write((int)player.whoAmI);
+                    gliderPacket.Write((bool)usesParaglider);
+                    gliderPacket.Send();
+                }
             }
         }
         public override void PostUpdate()

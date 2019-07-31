@@ -8,6 +8,9 @@ using TLoZ.Runes;
 using Terraria.ID;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Shaders;
+using System.IO;
+using TLoZ.Enums;
+using TLoZ.Players;
 
 namespace TLoZ
 {
@@ -17,6 +20,17 @@ namespace TLoZ
         public TLoZ()
         {
             Instance = this;
+        }
+        public override void HandlePacket(BinaryReader reader, int whoAmI)
+        {
+            int type = reader.ReadInt32();
+            switch(type)
+            {
+                case (int)MessageType.Paraglider:
+                    Player player = Main.player[(int)reader.ReadInt32()];
+                    TLoZPlayer.Get(player).usesParaglider = reader.ReadBoolean();
+                    break;
+            }
         }
         public override void Load()
         {
