@@ -11,6 +11,8 @@ namespace TLoZ
     public class TLoZDrawLayers
     {
         private static TLoZDrawLayers _instance;
+        public float Rotation { get; private set; }
+        public Vector2 Position { get; private set; }
         public static TLoZDrawLayers Instance
         {
             get
@@ -32,19 +34,27 @@ namespace TLoZ
                 return;
             int itemType = drawPlayer.HeldItem.type;
             Texture2D itemTexture = Main.itemTexture[itemType];
+            int dir = drawPlayer.direction;
+
             Color color = Lighting.GetColor((int)drawPlayer.Center.X / 16, (int)drawPlayer.Center.Y / 16);
-            float rotation = drawPlayer.direction == -1 ? (MathHelper.Pi / 3) : MathHelper.Pi + MathHelper.Pi * .66f;
-            Vector2 posOffset = tlozPlayer.swingRotation > 0.0f ? new Vector2(8 * drawPlayer.direction, 2) * tlozPlayer.swingRotation : Vector2.Zero;
+            Instance.Rotation = (tlozPlayer.isSlashReversed ? MathHelper.Pi : dir == -1 ? (MathHelper.Pi / 3) : MathHelper.Pi + MathHelper.Pi * .66f) - (tlozPlayer.swingRotation) * dir;
+
+            Vector2 posOffset = tlozPlayer.swingRotation > 0.0f ? new Vector2(8 * dir, 2) * tlozPlayer.swingRotation : Vector2.Zero;
+
+            SpriteEffects spriteEffects = tlozPlayer.isSlashReversed ? dir == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally : dir == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+
+            Vector2 origin = tlozPlayer.isSlashReversed ? new Vector2(dir == 1 ? 0 : itemTexture.Width, itemTexture.Height) : new Vector2(dir == -1 ? 0 : itemTexture.Width, itemTexture.Height);
+            Instance.Position = new Vector2((int)drawPlayer.MountedCenter.X, (int)drawPlayer.MountedCenter.Y) + new Vector2(22 * dir, 6) - posOffset;
             DrawData weaponData = new DrawData
             (
                 itemTexture,
-                new Vector2((int)drawPlayer.MountedCenter.X, (int)drawPlayer.MountedCenter.Y) + new Vector2(22 * drawPlayer.direction, 6) - posOffset - Main.screenPosition,
+                Instance.Position - Main.screenPosition,
                 null,
                 color,
-                rotation - (tlozPlayer.swingRotation) * drawPlayer.direction,
-                new Vector2(drawPlayer.direction == -1 ? 0 : itemTexture.Width , itemTexture.Height),
+                Instance.Rotation,
+                origin,
                 1.4f,
-                drawPlayer.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
+                spriteEffects,
                 1
                 );
 

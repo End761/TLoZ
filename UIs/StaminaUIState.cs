@@ -15,6 +15,7 @@ namespace TLoZ.UIs
 
         private float _lerpAmount;
         private bool _fullLerp;
+        private Color _lerpedColor;
 
         private double _lastBonusStamina;
         public override void Draw(SpriteBatch spriteBatch)
@@ -41,7 +42,7 @@ namespace TLoZ.UIs
                 if (_lerpAmount <= 0.0f)
                     _fullLerp = false;
             }
-            Color lerpedColor = Color.Lerp(Color.Orange, Color.Red, _lerpAmount);
+            _lerpedColor = Color.Lerp(Color.Orange, Color.Red, _lerpAmount);
 
             Vector2 position = new Vector2((int)player.Center.X, (int)player.Center.Y)- Main.screenPosition - new Vector2(60, 60);
             Effect mainBar = TLoZ.Instance.GetEffect("Effects/ProgressBar");
@@ -49,14 +50,14 @@ namespace TLoZ.UIs
             Effect thirdBar = TLoZ.Instance.GetEffect("Effects/ProgressBar");
             Texture2D mainWheel = TLoZTextures.UIStaminaWheel;
             Texture2D outerWheel = TLoZTextures.UIStaminaOuterWheel;
-            DrawBar(spriteBatch, mainWheel, (float)(tlozPlayer.Stamina / 50), position, tlozPlayer.exhausted ? lerpedColor : Color.Green * _opacity, 0.6f, mainBar, tlozPlayer.BonusStamina <= 0);
+            DrawBar(spriteBatch, mainWheel, (float)(tlozPlayer.Stamina / 50), position, tlozPlayer.exhausted ? _lerpedColor : Color.Green * _opacity, 0.6f, mainBar, tlozPlayer.BonusStamina <= 0);
 
-            DrawBar(spriteBatch, outerWheel, (float)(tlozPlayer.Stamina / 50 - 1), position - new Vector2(6f, 6f) / Main.GameZoomTarget, tlozPlayer.exhausted ? lerpedColor : Color.Green * _opacity, 0.6f, mainBar, tlozPlayer.BonusStamina <= 0, (float)(tlozPlayer.maxStamina / 50 - 1));
+            DrawBar(spriteBatch, outerWheel, (float)(tlozPlayer.Stamina / 50 - 1), position - new Vector2(6f, 6f) / Main.GameZoomTarget, tlozPlayer.exhausted ? _lerpedColor : Color.Green * _opacity, 0.6f, mainBar, tlozPlayer.BonusStamina <= 0, (float)(tlozPlayer.maxStamina / 50 - 1));
             if (tlozPlayer.BonusStamina > 0)
-                DrawBar(spriteBatch, mainWheel, (float)(tlozPlayer.BonusStamina / tlozPlayer.maxStamina), position -  new Vector2(40, -3), tlozPlayer.exhausted ? lerpedColor : Color.Yellow * _opacity, 0.5f, secondBar);
+                DrawBar(spriteBatch, mainWheel, (float)(tlozPlayer.BonusStamina / tlozPlayer.maxStamina), position -  new Vector2(40, -3), tlozPlayer.exhausted ? _lerpedColor : Color.Yellow * _opacity, 0.5f, secondBar);
 
             if(tlozPlayer.BonusStamina > tlozPlayer.maxStamina)
-                DrawBar(spriteBatch, mainWheel, (float)(tlozPlayer.BonusStamina / tlozPlayer.maxStamina - 1), position - new Vector2(80, -3), tlozPlayer.exhausted ? lerpedColor : Color.Yellow * _opacity, 0.5f, thirdBar);
+                DrawBar(spriteBatch, mainWheel, (float)(tlozPlayer.BonusStamina / tlozPlayer.maxStamina - 1), position - new Vector2(80, -3), tlozPlayer.exhausted ? _lerpedColor : Color.Yellow * _opacity, 0.5f, thirdBar);
 
             _lastBonusStamina = tlozPlayer.BonusStamina;
         }
@@ -79,7 +80,7 @@ namespace TLoZ.UIs
                     barOffset = (float)rate / 2;
                 shader.Parameters["uSaturation"].SetValue(amount);
                 shader.CurrentTechnique.Passes[0].Apply();
-                spriteBatch.Draw(texture, position, null, Color.Red * _opacity, 0f, Vector2.Zero, scale / Main.GameZoomTarget, SpriteEffects.None, 1f);
+                spriteBatch.Draw(texture, position, null, _lerpedColor * 0.95f, 0f, Vector2.Zero, scale / Main.GameZoomTarget, SpriteEffects.None, 1f);
             }
             shader.Parameters["uSaturation"].SetValue(amount - barOffset);
             shader.CurrentTechnique.Passes[0].Apply();

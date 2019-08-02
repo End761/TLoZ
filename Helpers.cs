@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
 using TLoZ.Dusts;
 
@@ -15,7 +16,6 @@ namespace TLoZ
         /// <param name="speed">Acts as "offset" or the speed at which Vector2 will move towards Mouse</param>
         /// <returns></returns>
         public static Vector2 DirectToMouse(Vector2 start, float speed = 1.0f) => (Main.MouseWorld - start).SafeNormalize(-Vector2.UnitY) * speed;
-
 
         public static Vector2 DirectToPosition(Vector2 start, Vector2 end, float speed = 1.0f) => (end - start).SafeNormalize(-Vector2.UnitY) * speed;
 
@@ -65,6 +65,13 @@ namespace TLoZ
                 int dust = Dust.NewDust(position, 0, 0, TLoZ.Instance.DustType<GeneralUseDust>());
                 Main.dust[dust].color = color == new Color() ? Color.White : color;
             }
+        }
+
+        public static Vector2 PivotPoint(Vector2 position, float offset_x, float offset_y, float angle)
+        {
+            float new_x = position.X + (float)Math.Cos(angle) * offset_x + (float)Math.Cos(angle + (float)Math.PI / 2) * offset_y;
+            float new_y = position.Y + (float)Math.Sin(angle) * offset_x + (float)Math.Sin(angle + (float)Math.PI / 2) * offset_y;
+            return new Vector2(new_x, new_y);
         }
     }
 }

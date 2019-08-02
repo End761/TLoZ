@@ -20,10 +20,27 @@ namespace TLoZ.Items.Weapons
         }
         public override bool CanUseItem(Player player)
         {
-            TLoZPlayer.Get(player).isSwinging = TLoZPlayer.Get(player).swingRotation == 0.0f ? true : TLoZPlayer.Get(player).isSwinging;
+            TLoZPlayer zPlayer = TLoZPlayer.Get(player);
+            if (!zPlayer.isSwinging && !zPlayer.downwardsSlash)
+            {
+                zPlayer.isSwinging = zPlayer.swingRotation == 0.0f ? true : zPlayer.isSwinging;
 
-            return base.CanUseItem(player);
+                zPlayer.windedBack = zPlayer.swingRotation >= 4.35f? false : zPlayer.windedBack;
+                zPlayer.downwardsSlash = zPlayer.swingRotation >= 4.35f ? true : zPlayer.downwardsSlash;
+            }
+            return false;
         }
+        public virtual void OnHitEffects(NPC target, Player player)
+        {
 
+        }
+        public virtual void HitboxEffects(Projectile projectile, Player player)
+        {
+
+        }
+        public virtual void DrawEffects(Player player)
+        {
+
+        }
     }
 }

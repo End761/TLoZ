@@ -12,12 +12,16 @@ namespace TLoZ.Players
         public float swingRotation;
         public bool isSwinging;
         public bool windedBack;
+        public bool downwardsSlash;
+        private float _waitTimer;
+        public bool isSlashReversed;
+        public bool hasIgnitedStick;
         public void ResetTwoHandedEffects()
         {
-            if (swingRotation > 4.5f)
-                swingRotation = 4.5f;
             if (isSwinging && swingRotation < 4.5f)
             {
+                if (swingRotation > 4.5f)
+                    swingRotation = 4.5f;
                 if (!windedBack)
                 {
                     if (swingRotation > -0.4f)
@@ -25,7 +29,7 @@ namespace TLoZ.Players
                     else
                         windedBack = true;
                 }
-                else if(swingRotation < 0.2f)
+                else if (swingRotation < 0.2f)
                 {
                     swingRotation += 0.05f;
                 }
@@ -35,17 +39,40 @@ namespace TLoZ.Players
                 }
                 if (swingRotation > 3.0f)
                 {
-                    Projectile.NewProjectile(player.Center, Helpers.DirectToMouse(player.Center), mod.ProjectileType<TwoHandedWeaponHitbox>(), player.HeldItem.damage, player.HeldItem.knockBack * 2f, player.whoAmI);
+                    Projectile.NewProjectile(player.Center, new Vector2(0.5f * player.direction, -0.5f), mod.ProjectileType<TwoHandedWeaponHitbox>(), player.HeldItem.damage, player.HeldItem.knockBack * 2f, player.whoAmI);
                     Main.PlaySound(2, (int)player.position.X, (int)player.position.Y, 71);
                 }
             }
-            else
+            else if (downwardsSlash && swingRotation > 2.0f)
             {
+                isSlashReversed = true;
+                _waitTimer = 2.4f;
+                if (!windedBack)
+                {
+                    if (swingRotation < 4.68f)
+                        swingRotation += 0.01f;
+                    else
+                        windedBack = true;
+                }
+                else
+                {
+                    swingRotation *= 0.875f;
+                    if (swingRotation <= 2.0f)
+                    {
+                        Projectile.NewProjectile(player.Center, new Vector2(1 * player.direction, -0.5f), mod.ProjectileType<TwoHandedWeaponHitbox>(), player.HeldItem.damage, player.HeldItem.knockBack * 1.5f, player.whoAmI);
+                        Main.PlaySound(2, (int)player.position.X, (int)player.position.Y, 71);
+                    }
+                }
+            }
+            else if (_waitTimer <= 0.0f)
+            {
+                isSlashReversed = false;
+                downwardsSlash = false;
                 windedBack = false;
                 isSwinging = false;
                 if (swingRotation > 0.2f)
                 {
-                    if (swingRotation > 4.35f)
+                    if (swingRotation > 4.45f)
                         swingRotation *= 0.999f;
                     else
                         swingRotation *= 0.95f;
@@ -53,11 +80,27 @@ namespace TLoZ.Players
                 else
                     swingRotation = 0.0f;
             }
-            if(!HoldsTwoHander)
+            if (!HoldsTwoHander)
             {
+                hasIgnitedStick = false;
+                isSlashReversed = false;
+                downwardsSlash = false;
                 windedBack = false;
                 isSwinging = false;
                 swingRotation = 0.0f;
+            }
+            if (_waitTimer > 0.0f)
+            {
+                if (_waitTimer < 2.4f)
+                    downwardsSlash = false;
+                _waitTimer -= 0.1f;
+            }
+            if(HoldsTwoHander)
+            {
+                TwoHandedWeapon weapon = player.HeldItem.modItem as TwoHandedWeapon;
+
+                if(Main.myPlayer == player.whoAmI)
+                    weapon?.DrawEffects(player);
             }
         }
 
