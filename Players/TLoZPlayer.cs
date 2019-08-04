@@ -133,7 +133,7 @@ namespace TLoZ.Players
 
         public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)
         {
-            LoZnpCs tlozTarget = LoZnpCs.GetFor(npc);
+            TLoZGlobalNPC tlozTarget = TLoZGlobalNPC.GetFor(npc);
 
             if (tlozTarget.stasised)
                 return false;
@@ -143,7 +143,7 @@ namespace TLoZ.Players
 
         public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
         {
-            LoZnpCs tlozTarget = LoZnpCs.GetFor(npc);
+            TLoZGlobalNPC tlozTarget = TLoZGlobalNPC.GetFor(npc);
 
             if (tlozTarget.postStasisFlyTimer > 0.0f)
             {
@@ -178,7 +178,7 @@ namespace TLoZ.Players
         }
         public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
         {
-            LoZnpCs tlozTarget = LoZnpCs.GetFor(target);
+            TLoZGlobalNPC tlozTarget = TLoZGlobalNPC.GetFor(target);
             if (tlozTarget.stasised)
             {
                 crit = false;
@@ -192,13 +192,13 @@ namespace TLoZ.Players
         {
             if (item.type == mod.ItemType<MasterSword>() && (target.type == NPCID.Clothier || target.type == NPCID.OldMan))
                 return true;
-            if (LoZnpCs.GetFor(target).stasised)
+            if (TLoZGlobalNPC.GetFor(target).stasised)
                 return true;
             return base.CanHitNPC(item, target);
         }
         public override bool? CanHitNPCWithProj(Projectile proj, NPC target)
         {
-            if (LoZnpCs.GetFor(target).stasised)
+            if (TLoZGlobalNPC.GetFor(target).stasised)
                 return true;
             return base.CanHitNPCWithProj(proj, target);
         }

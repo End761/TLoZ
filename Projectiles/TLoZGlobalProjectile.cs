@@ -140,7 +140,7 @@ namespace TLoZ.Projectiles
             {
                 for (int i = 0; i < randomStasisPositions.Length; i++)
                 {
-                    LoZnpCs.DrawStasisChains(spriteBatch, projectile.Center, randomStasisPositions[i], stasisChainsOpacity);
+                    TLoZGlobalNPC.DrawStasisChains(spriteBatch, projectile.Center, randomStasisPositions[i], stasisChainsOpacity);
                 }
             }
             if (Stasised)

@@ -11,8 +11,8 @@ namespace TLoZ
     public class TLoZDrawLayers
     {
         private static TLoZDrawLayers _instance;
-        public float Rotation { get; private set; }
-        public Vector2 Position { get; private set; }
+        public float TwoHanderRotation { get; private set; }
+        public Vector2 TwoHanderVFX { get; private set; }
         public static TLoZDrawLayers Instance
         {
             get
@@ -37,21 +37,21 @@ namespace TLoZ
             int dir = drawPlayer.direction;
 
             Color color = Lighting.GetColor((int)drawPlayer.Center.X / 16, (int)drawPlayer.Center.Y / 16);
-            Instance.Rotation = (tlozPlayer.isSlashReversed ? MathHelper.Pi : dir == -1 ? (MathHelper.Pi / 3) : MathHelper.Pi + MathHelper.Pi * .66f) - (tlozPlayer.swingRotation) * dir;
+            Instance.TwoHanderRotation = (tlozPlayer.isSlashReversed ? MathHelper.Pi : dir == -1 ? (MathHelper.Pi / 3) : MathHelper.Pi + MathHelper.Pi * .66f) - (tlozPlayer.swingRotation) * dir;
 
             Vector2 posOffset = tlozPlayer.swingRotation > 0.0f ? new Vector2(8 * dir, 2) * tlozPlayer.swingRotation : Vector2.Zero;
 
             SpriteEffects spriteEffects = tlozPlayer.isSlashReversed ? dir == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally : dir == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             Vector2 origin = tlozPlayer.isSlashReversed ? new Vector2(dir == 1 ? 0 : itemTexture.Width, itemTexture.Height) : new Vector2(dir == -1 ? 0 : itemTexture.Width, itemTexture.Height);
-            Instance.Position = new Vector2((int)drawPlayer.MountedCenter.X, (int)drawPlayer.MountedCenter.Y) + new Vector2(22 * dir, 6) - posOffset;
+            Instance.TwoHanderVFX = new Vector2((int)drawPlayer.MountedCenter.X, (int)drawPlayer.MountedCenter.Y + drawPlayer.gfxOffY) + new Vector2(22 * dir, 6) - posOffset;
             DrawData weaponData = new DrawData
             (
                 itemTexture,
-                Instance.Position - Main.screenPosition,
+                Instance.TwoHanderVFX - Main.screenPosition,
                 null,
                 color,
-                Instance.Rotation,
+                Instance.TwoHanderRotation,
                 origin,
                 1.4f,
                 spriteEffects,
@@ -75,7 +75,7 @@ namespace TLoZ
             DrawData sheathData = new DrawData
             (
                 ModContent.GetTexture("TLoZ/Items/Tools/ParaByLiz"),
-                new Vector2((int)drawPlayer.MountedCenter.X, (int)drawPlayer.MountedCenter.Y - 22) - Main.screenPosition,
+                new Vector2((int)drawPlayer.MountedCenter.X, (int)drawPlayer.MountedCenter.Y - 22 + drawPlayer.gfxOffY) - Main.screenPosition,
                 null,
                 color,
                 0,
@@ -106,7 +106,7 @@ namespace TLoZ
             DrawData sheathData = new DrawData
             (
                 ModContent.GetTexture("TLoZ/Items/Weapons/MasterSword/MasterSwordSheath"),
-                new Vector2((int)drawPlayer.MountedCenter.X - offsetX, (int)drawPlayer.MountedCenter.Y + offsetY) - Main.screenPosition,
+                new Vector2((int)drawPlayer.MountedCenter.X - offsetX, (int)drawPlayer.MountedCenter.Y + offsetY + drawPlayer.gfxOffY) - Main.screenPosition,
                 null,
                 color,
                 0,
@@ -119,7 +119,7 @@ namespace TLoZ
             DrawData swordData = new DrawData
             (
                 ModContent.GetTexture("TLoZ/Items/Weapons/MasterSword/MasterSheathedByLiz"),
-                new Vector2((int)drawPlayer.MountedCenter.X + 2 * drawPlayer.direction, (int)drawPlayer.MountedCenter.Y - 2) - Main.screenPosition,
+                new Vector2((int)drawPlayer.MountedCenter.X + 2 * drawPlayer.direction, (int)drawPlayer.MountedCenter.Y - 2 + drawPlayer.gfxOffY) - Main.screenPosition,
                 null,
                 color,
                 0,
@@ -148,7 +148,7 @@ namespace TLoZ
             DrawData sheathData = new DrawData
             (
                 ModContent.GetTexture("TLoZ/Items/Weapons/MasterSword/Buckle_Body"),
-                new Vector2((int)drawPlayer.MountedCenter.X, (int)drawPlayer.MountedCenter.Y - 3) - Main.screenPosition,
+                new Vector2((int)drawPlayer.MountedCenter.X, (int)drawPlayer.MountedCenter.Y - 3 + drawPlayer.gfxOffY) - Main.screenPosition,
                 drawPlayer.bodyFrame,
                 color,
                 0,

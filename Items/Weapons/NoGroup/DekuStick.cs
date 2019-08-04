@@ -28,7 +28,7 @@ namespace TLoZ.Items.Weapons.NoGroup
             if (TLoZPlayer.Get(player).hasIgnitedStick)
             {
                 float bonusOffset = (TLoZPlayer.Get(player).isSlashReversed ? player.direction == 1 ? (float)MathHelper.Pi * 0.5f : (float)MathHelper.Pi * 1.5f : 0f) + player.fullRotation;
-                int dust = Dust.NewDust(Helpers.PivotPoint(TLoZDrawLayers.Instance.Position, 50 * player.direction * -1, -56, TLoZDrawLayers.Instance.Rotation + bonusOffset), 0, 0, DustID.Fire);
+                int dust = Dust.NewDust(Helpers.PivotPoint(TLoZDrawLayers.Instance.TwoHanderVFX, 50 * player.direction * -1, -56, TLoZDrawLayers.Instance.TwoHanderRotation + bonusOffset), 0, 0, DustID.Fire);
                 Main.dust[dust].scale = 2f;
                 Main.dust[dust].noGravity = true;
             }

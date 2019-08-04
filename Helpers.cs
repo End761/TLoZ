@@ -73,5 +73,17 @@ namespace TLoZ
             float new_y = position.Y + (float)Math.Sin(angle) * offset_x + (float)Math.Sin(angle + (float)Math.PI / 2) * offset_y;
             return new Vector2(new_x, new_y);
         }
+
+        public static void DrawLine(Vector2 A, Vector2 B, Texture2D middle, Texture2D end, SpriteBatch spriteBatch, Color color)
+        {
+            Vector2 tangent = B - A;
+            float rotation = (float)Math.Atan2(tangent.Y, tangent.X);
+
+            Vector2 capOrigin = new Vector2(end.Width / 2, end.Height / 2f);
+            Vector2 middleOrigin = new Vector2(0, middle.Height / 2f);
+            Vector2 middleScale = new Vector2(tangent.Length(), 4f);
+            spriteBatch.Draw(middle, A - Main.screenPosition, null, color, rotation, middleOrigin, middleScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(end, B - Main.screenPosition, null, color, rotation + MathHelper.Pi, capOrigin, 1f, SpriteEffects.None, 0f);
+        }
     }
 }

@@ -12,9 +12,9 @@ using TLoZ.Runes;
 
 namespace TLoZ.NPCs
 {
-    public class LoZnpCs : GlobalNPC
+    public class TLoZGlobalNPC : GlobalNPC
     {
-        public static LoZnpCs GetFor(NPC npc) => npc.GetGlobalNPC<LoZnpCs>();
+        public static TLoZGlobalNPC GetFor(NPC npc) => npc.GetGlobalNPC<TLoZGlobalNPC>();
 
         #region Rune variables
 

@@ -19,8 +19,8 @@ namespace TLoZ.Buffs
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            LoZnpCs.GetFor(npc).stasised = true;
-            LoZnpCs.GetFor(npc).postStasisFlyTimer = 3;
+            TLoZGlobalNPC.GetFor(npc).stasised = true;
+            TLoZGlobalNPC.GetFor(npc).postStasisFlyTimer = 3;
         }
     }
 }

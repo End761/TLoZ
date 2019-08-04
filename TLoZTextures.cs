@@ -28,6 +28,10 @@ namespace TLoZ
 
             UIStaminaWheel = ModContent.GetTexture("TLoZ/Textures/UI/StaminaWheel");
             UIStaminaOuterWheel = ModContent.GetTexture("TLoZ/Textures/UI/StaminaWheelOuter");
+
+
+            NPCFXGuardianGlow = ModContent.GetTexture("TLoZ/NPCs/Minibosses/Guardian/Guardian_Glow");
+            NPCFXGuardianEye = ModContent.GetTexture("TLoZ/NPCs/Minibosses/Guardian/Guardian_Eye");
         }
 
         public static void Unload()
@@ -52,6 +56,9 @@ namespace TLoZ
 
             UIStaminaWheel = null;
             UIStaminaOuterWheel = null;
+
+            NPCFXGuardianEye = null;
+            NPCFXGuardianGlow = null;
         }
 
         public static Texture2D MiscStasisArrow { get; private set; }
@@ -73,5 +80,8 @@ namespace TLoZ
 
 
         public static Texture2D UITargeting { get; private set; }
+
+        public static Texture2D NPCFXGuardianGlow { get; private set; }
+        public static Texture2D NPCFXGuardianEye { get; private set; }
     }
 }

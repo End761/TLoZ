@@ -47,7 +47,7 @@ namespace TLoZ.Projectiles.Runes
                 Owner.heldProj = projectile.whoAmI;
                 TLoZPlayer.HasBomb = true;
                 TLoZPlayer.itemUseDelay = 15;
-                projectile.Center = new Vector2((int)Owner.position.X, (int)Owner.position.Y) + new Vector2(10, -4);
+                projectile.Center = new Vector2((int)Owner.position.X, (int)Owner.position.Y + Owner.gfxOffY) + new Vector2(10, -4);
 
                 if (Owner.controlUseItem && Owner.itemAnimation == 0 && _existanceTimer >= 15)
                 {

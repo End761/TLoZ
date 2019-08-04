@@ -44,7 +44,7 @@ namespace TLoZ.UIs
             }
             _lerpedColor = Color.Lerp(Color.Orange, Color.Red, _lerpAmount);
 
-            Vector2 position = new Vector2((int)player.Center.X, (int)player.Center.Y)- Main.screenPosition - new Vector2(60, 60);
+            Vector2 position = new Vector2((int)player.Center.X, (int)player.Center.Y + player.gfxOffY)- Main.screenPosition - new Vector2(60, 60);
             Effect mainBar = TLoZ.Instance.GetEffect("Effects/ProgressBar");
             Effect secondBar = TLoZ.Instance.GetEffect("Effects/ProgressBar");
             Effect thirdBar = TLoZ.Instance.GetEffect("Effects/ProgressBar");
