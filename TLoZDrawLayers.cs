@@ -40,7 +40,7 @@ namespace TLoZ
             Instance.TwoHanderRotation = (tlozPlayer.isSlashReversed ? MathHelper.Pi : dir == -1 ? (MathHelper.Pi / 3) : MathHelper.Pi + MathHelper.Pi * .66f) - (tlozPlayer.swingRotation) * dir;
 
             Vector2 posOffset = tlozPlayer.swingRotation > 0.0f ? new Vector2(8 * dir, 2) * tlozPlayer.swingRotation : Vector2.Zero;
-
+            posOffset = tlozPlayer.twoHanderChargeAttack ? new Vector2(12 * drawPlayer.direction, 0) : posOffset;
             SpriteEffects spriteEffects = tlozPlayer.isSlashReversed ? dir == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally : dir == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             Vector2 origin = tlozPlayer.isSlashReversed ? new Vector2(dir == 1 ? 0 : itemTexture.Width, itemTexture.Height) : new Vector2(dir == -1 ? 0 : itemTexture.Width, itemTexture.Height);

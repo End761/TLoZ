@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using TLoZ.Players;
 using TLoZ.Runes;
+using Terraria.ModLoader;
 
 namespace TLoZ.Projectiles.Runes
 {
@@ -73,7 +74,7 @@ namespace TLoZ.Projectiles.Runes
                 projectile.width = 200;
                 projectile.height = 200;
                 projectile.Center -= new Vector2(100, 100);
-                Main.PlaySound(SoundID.Item14);
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Custom/SheikahExplosion"));
             }
 
             if (Main.myPlayer == Owner.whoAmI)

@@ -11,7 +11,7 @@ namespace TLoZ
     {
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
         {
-            tasks.Add(new PassLegacy("SwordPedestal",
+            /*tasks.Add(new PassLegacy("SwordPedestal",
                 delegate (GenerationProgress generationProgress)
                 {
                     for (int i = 0; i < Main.maxTilesX; i++)
@@ -30,7 +30,7 @@ namespace TLoZ
                     }
                 }
                 )
-                );
+                );*/
         }
     }
 }

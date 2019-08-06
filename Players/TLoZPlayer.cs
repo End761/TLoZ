@@ -174,6 +174,7 @@ namespace TLoZ.Players
         }
         public override void PostUpdateRunSpeeds()
         {
+            PostUpdateTHWRunSpeeds();
             UpdateStaminaRunSpeeds();
         }
         public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)

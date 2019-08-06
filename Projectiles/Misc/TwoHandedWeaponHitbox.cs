@@ -34,22 +34,32 @@ namespace TLoZ.Projectiles.Misc
             Texture2D texture = Main.itemTexture[Owner.HeldItem.type];
 
             projectile.timeLeft = 2;
+            projectile.velocity = Owner.direction == -1 ? new Vector2(-0.5f, -0.5f) : new Vector2(0.5f, -0.5f);
 
-            if (!TLoZPlayer.isSwinging && !TLoZPlayer.downwardsSlash)
+            if (!TLoZPlayer.isSwinging && !TLoZPlayer.downwardsSlash && !TLoZPlayer.twoHanderChargeAttack)
                 projectile.Kill();
 
-            projectile.width = (int)((texture.Width * 0.5f + texture.Height * 0.5f) * 2f);
+            if (TLoZPlayer.twoHanderChargeAttack)
+            {
+                projectile.width = (int)(texture.Width * 0.75f + texture.Height * 0.75f);
+                projectile.height = (int)(texture.Width * 0.75f + texture.Height * 0.75f);
+            }
+            else
+                projectile.width = (int)((texture.Width * 0.5f + texture.Height * 0.5f) * 2f);
 
-            projectile.Center = Owner.Center + new Vector2(texture.Width * .75f * Owner.direction, TLoZPlayer.downwardsSlash ? 0 : -20);
+            if (TLoZPlayer.twoHanderChargeAttack)
+                projectile.Center = Owner.Center - new Vector2(45, -14 * Owner.direction * -1).RotatedBy((TLoZPlayer.swingRotation + (Owner.direction == -1 ? MathHelper.Pi * 1.33f : MathHelper.Pi * 0.33f)) * Owner.direction * -1);
+            else
+                projectile.Center = Owner.Center + new Vector2(texture.Width * .75f * Owner.direction, TLoZPlayer.downwardsSlash ? 0 : -20);
 
             if (TLoZPlayer.downwardsSlash)
                 projectile.height = 140;
-
             Weapon?.HitboxEffects(projectile, Owner);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
+            target.immune[projectile.owner] = TLoZPlayer.leftClickTimer >= 160 ? 7 : 24;
             Weapon?.OnHitEffects(target, Owner);
         }
     }

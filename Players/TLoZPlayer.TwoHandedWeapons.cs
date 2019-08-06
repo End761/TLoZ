@@ -16,8 +16,36 @@ namespace TLoZ.Players
         private float _waitTimer;
         public bool isSlashReversed;
         public bool hasIgnitedStick;
+        public bool twoHanderChargeAttack;
+        public int leftClickTimer;
+        public void PostUpdateTHWRunSpeeds()
+        {
+            if(twoHanderChargeAttack)
+            {
+                player.moveSpeed *= (leftClickTimer * 0.01f - 0.75f);
+                player.maxRunSpeed *= (leftClickTimer * 0.01f - 0.75f);
+                player.runAcceleration *= (leftClickTimer * 0.01f - 0.75f);
+            }
+        }
         public void ResetTwoHandedEffects()
         {
+            if (player.controlUseItem)
+            {
+                if (leftClickTimer < 240)
+                    leftClickTimer++;
+            }
+            else
+            {
+                twoHanderChargeAttack = false;
+                leftClickTimer = 0;
+            }
+            if (isSwinging && leftClickTimer >= 20 && !windedBack)
+            {
+                windedBack = false;
+                twoHanderChargeAttack = true;
+                isSwinging = false;
+                downwardsSlash = false;
+            }
             if (isSwinging && swingRotation < 4.5f)
             {
                 if (swingRotation > 4.5f)
@@ -64,7 +92,7 @@ namespace TLoZ.Players
                     }
                 }
             }
-            else if (_waitTimer <= 0.0f)
+            else if (_waitTimer <= 0.0f && !twoHanderChargeAttack)
             {
                 isSlashReversed = false;
                 downwardsSlash = false;
@@ -102,37 +130,58 @@ namespace TLoZ.Players
                 if(Main.myPlayer == player.whoAmI)
                     weapon?.DrawEffects(player);
             }
+            if (twoHanderChargeAttack)
+            {
+                if(leftClickTimer == 20)
+                    Projectile.NewProjectile(player.Center, new Vector2(1 * player.direction, -0.5f), mod.ProjectileType<TwoHandedWeaponHitbox>(), player.HeldItem.damage, player.HeldItem.knockBack * 1.5f, Main.myPlayer);
+                if (swingRotation <= -6.28)
+                    swingRotation = 0.0f;
+                swingRotation -= leftClickTimer * 0.001f;
+                _exhaustedTimer = 30;
+                spendRate += 0.18f;
+                isSlashReversed = true;
+            }
+            if (exhausted)
+                twoHanderChargeAttack = false;
         }
-
         public void ModifyTwoHandedLayers(List<PlayerLayer> layers)
         {
             int armIndex = layers.FindIndex(x => x.Name.Equals("Arms"));
             if (HoldsTwoHander)
             {
                 layers.Insert(armIndex, TLoZDrawLayers.Instance.twoHandedWeaponLayer);
-                if (swingRotation < 0.7f)
-                {
-                    player.hairFrame.Y =
-                        player.headFrame.Y =
-                            player.bodyFrame.Y = 4 * 56;
-                }
-                else if (swingRotation < 2.4f)
+                if (twoHanderChargeAttack)
                 {
                     player.hairFrame.Y =
                         player.headFrame.Y =
                         player.bodyFrame.Y = 3 * 56;
                 }
-                else if (swingRotation < 4.0f)
-                {
-                    player.hairFrame.Y =
-                        player.headFrame.Y =
-                    player.bodyFrame.Y = 2 * 56;
-                }
                 else
                 {
-                    player.hairFrame.Y =
-                        player.headFrame.Y =
-                    player.bodyFrame.Y = 1 * 56;
+                    if (swingRotation < 0.7f)
+                    {
+                        player.hairFrame.Y =
+                            player.headFrame.Y =
+                                player.bodyFrame.Y = 4 * 56;
+                    }
+                    else if (swingRotation < 2.4f)
+                    {
+                        player.hairFrame.Y =
+                            player.headFrame.Y =
+                            player.bodyFrame.Y = 3 * 56;
+                    }
+                    else if (swingRotation < 4.0f)
+                    {
+                        player.hairFrame.Y =
+                            player.headFrame.Y =
+                        player.bodyFrame.Y = 2 * 56;
+                    }
+                    else
+                    {
+                        player.hairFrame.Y =
+                            player.headFrame.Y =
+                        player.bodyFrame.Y = 1 * 56;
+                    }
                 }
             }
         }

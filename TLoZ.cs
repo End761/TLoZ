@@ -11,6 +11,7 @@ using Terraria.Graphics.Shaders;
 using System.IO;
 using TLoZ.Enums;
 using TLoZ.Players;
+using TLoZ.NPCs.Minibosses.Guardian;
 
 namespace TLoZ
 {
@@ -48,6 +49,25 @@ namespace TLoZ
         public override void UpdateUI(GameTime gameTime)
         {
             UIManager.UpdateUIs(gameTime);
+        }
+
+        public override void UpdateMusic(ref int music, ref MusicPriority priority)
+        {
+            if (Main.myPlayer == -1 || Main.gameMenu || !Main.LocalPlayer.active)
+            {
+                return;
+            }
+            foreach (NPC npc in Main.npc)
+            {
+                if (npc.type != NPCType<Guardian>() || !npc.active)
+                    continue;
+                Guardian guardian = npc.modNPC as Guardian;
+                if (guardian != null && guardian.isActive)
+                {
+                    music = GetSoundSlot(SoundType.Music, "Sounds/Music/GuardianTheme");
+                    priority = MusicPriority.BossHigh;
+                }
+            }
         }
 
         public override void Unload()

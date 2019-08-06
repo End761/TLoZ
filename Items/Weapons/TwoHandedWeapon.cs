@@ -21,12 +21,12 @@ namespace TLoZ.Items.Weapons
         public override bool CanUseItem(Player player)
         {
             TLoZPlayer zPlayer = TLoZPlayer.Get(player);
-            if (!zPlayer.isSwinging && !zPlayer.downwardsSlash)
+            if (!zPlayer.isSwinging && !zPlayer.downwardsSlash && !zPlayer.twoHanderChargeAttack)
             {
                 zPlayer.isSwinging = zPlayer.swingRotation == 0.0f ? true : zPlayer.isSwinging;
 
-                zPlayer.windedBack = zPlayer.swingRotation >= 4.35f? false : zPlayer.windedBack;
-                zPlayer.downwardsSlash = zPlayer.swingRotation >= 4.35f ? true : zPlayer.downwardsSlash;
+                zPlayer.windedBack = zPlayer.swingRotation >= 4.25f? false : zPlayer.windedBack;
+                zPlayer.downwardsSlash = zPlayer.swingRotation >= 4.25f ? true : zPlayer.downwardsSlash;
             }
             return false;
         }

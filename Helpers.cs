@@ -74,14 +74,14 @@ namespace TLoZ
             return new Vector2(new_x, new_y);
         }
 
-        public static void DrawLine(Vector2 A, Vector2 B, Texture2D middle, Texture2D end, SpriteBatch spriteBatch, Color color)
+        public static void DrawLine(Vector2 A, Vector2 B, Texture2D middle, Texture2D end, SpriteBatch spriteBatch, Color color, float lineThickness = 4)
         {
             Vector2 tangent = B - A;
             float rotation = (float)Math.Atan2(tangent.Y, tangent.X);
 
             Vector2 capOrigin = new Vector2(end.Width / 2, end.Height / 2f);
             Vector2 middleOrigin = new Vector2(0, middle.Height / 2f);
-            Vector2 middleScale = new Vector2(tangent.Length(), 4f);
+            Vector2 middleScale = new Vector2(tangent.Length(), lineThickness);
             spriteBatch.Draw(middle, A - Main.screenPosition, null, color, rotation, middleOrigin, middleScale, SpriteEffects.None, 0f);
             spriteBatch.Draw(end, B - Main.screenPosition, null, color, rotation + MathHelper.Pi, capOrigin, 1f, SpriteEffects.None, 0f);
         }

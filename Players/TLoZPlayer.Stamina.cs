@@ -60,7 +60,7 @@ namespace TLoZ.Players
             if (spendRate > 0.0)
             {
                 if (BonusStamina <= 0.0)
-                    Stamina -= spendRate;
+                    Stamina -= Stamina <= maxStamina * 0.25f ? spendRate * 0.5f : Stamina <= maxStamina * 0.5f ? spendRate * 0.75 : spendRate;
                 else
                     BonusStamina -= spendRate;
             }
