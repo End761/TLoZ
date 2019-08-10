@@ -128,9 +128,12 @@ namespace TLoZ.Players
 
             isNearBomb = false;
 
-            ResetTargetingEffects();
-            ResetStaminaEffects();
-            ResetTwoHandedEffects();
+            if (!Main.dedServ)
+            {
+                ResetTargetingEffects();
+                ResetStaminaEffects();
+                ResetTwoHandedEffects();
+            }
         }
 
         public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)
@@ -169,8 +172,10 @@ namespace TLoZ.Players
         {
             Paragliding = false;
             HasBomb = false;
+
             stasisLaunchVelocity = Vector2.Zero;
             postStasisLaunchTimer = 0;
+
             _sprinting = false;
             inputLag = 0;
         }
@@ -337,9 +342,10 @@ namespace TLoZ.Players
             get => _paragliding;
             set
             {
-                _paragliding = value; 
+                if (_paragliding == value) return;
 
-                NetworkPacketManager.Instance.SendPacketToServerIfLocal<PlayerParagliderStatePacket>(this.player, _paragliding);
+                _paragliding = value;
+                NetworkPacketManager.Instance.SendPacketToServerIfLocal<PlayerParagliderStatePacket>(this.player, player.whoAmI, _paragliding);
             }
         }
 

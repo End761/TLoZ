@@ -85,6 +85,7 @@ namespace TLoZ.Players
                 _exhaustedTimer = 60;
                 Paragliding = false;
             }
+
             if(Stamina >= maxStamina)
             {
                 exhausted = false;
@@ -97,6 +98,7 @@ namespace TLoZ.Players
             spendRate = 0.0f;
             haltStaminaRegen = false;
         }
+
         private void InitializeStamina()
         {
             _staminaReplenishRate = 0.2;
@@ -104,6 +106,7 @@ namespace TLoZ.Players
             maxStamina = 50.0;
             _stamina = maxStamina;
         }
+
         public void UpdateStaminaRunSpeeds()
         {
             if (_sprinting)
@@ -112,6 +115,7 @@ namespace TLoZ.Players
                 player.maxRunSpeed *= 1.75f;
                 player.runAcceleration *= 1.75f;
             }
+
             if(exhausted)
             {
                 player.moveSpeed *= 0.5f;
@@ -119,15 +123,18 @@ namespace TLoZ.Players
                 player.runAcceleration *= 0.5f;
             }
         }
+
         private void SaveStamina(TagCompound tag)
         {
             tag.Add("maxStamina", maxStamina);
         }
+
         private void LoadStamina(TagCompound tag)
         {
             if(tag.GetDouble("maxStamina") != 0)
                 maxStamina = tag.GetDouble("maxStamina");
         }
+
         public double BonusStamina
         {
             get { return bonusStamina; }
@@ -140,6 +147,7 @@ namespace TLoZ.Players
                     bonusStamina = maxStamina * 2;
             }
         }
+
         public double Stamina
         {
             get { return _stamina; }

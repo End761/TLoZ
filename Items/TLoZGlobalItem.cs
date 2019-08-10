@@ -19,9 +19,11 @@ namespace TLoZ.Items
         {
             _defaultUseTurn = item.useTurn;
         }
+
         public override bool CanUseItem(Item item, Player player)
         {
             TLoZPlayer tlozPlayer = TLoZPlayer.Get(player);
+
             if (tlozPlayer.myTarget != null && item.useStyle == 1 && item.melee && !item.noUseGraphic)
             {
                 player.velocity += Helpers.DirectToPosition(player.Center, tlozPlayer.myTarget.Center, 4f);
@@ -32,8 +34,6 @@ namespace TLoZ.Items
 
             if (tlozPlayer.HasBomb || tlozPlayer.itemUseDelay > 0) return false;
 
-            if (tlozPlayer.Paragliding)
-                tlozPlayer.Paragliding = false;
             return base.CanUseItem(item, player);
         }
         public override bool UseItem(Item item, Player player)
