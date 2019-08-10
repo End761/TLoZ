@@ -332,3 +332,6 @@ ASALocalRun/
 .mfractor/
 libs/
 *.db
+obj/Debug/net45/TLoZ.AssemblyInfoInputs.cache
+obj/Debug/net45/TLoZ.csproj.CopyComplete
+obj/TLoZ.csproj.nuget.g.targets
