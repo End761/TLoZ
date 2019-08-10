@@ -19,7 +19,7 @@ namespace TLoZ.Runes
         {
             int x = (int)(Main.MouseWorld.X / 16);
             int y = (int)(Main.MouseWorld.Y / 16);
-            int proj = TLoZ.Instance.ProjectileType<PickedUpTile>();
+            int proj = TLoZMod.Instance.ProjectileType<PickedUpTile>();
 
             if (WorldGen.SolidTile(Main.tile[x, y]) && player.ownedProjectileCounts[proj] <= 0 && magnesisWhiteList.Contains(Main.tile[x, y].type))
             {

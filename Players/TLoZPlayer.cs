@@ -11,6 +11,8 @@ using TLoZ.Enums;
 using TLoZ.Items.Tools;
 using TLoZ.Items.Weapons;
 using TLoZ.Items.Weapons.MasterSword;
+using TLoZ.Network;
+using TLoZ.Network.Packets;
 using TLoZ.NPCs;
 using TLoZ.Projectiles;
 using TLoZ.Projectiles.Runes;
@@ -26,7 +28,7 @@ namespace TLoZ.Players
         public Vector2 stasisLaunchVelocity;
         public float postStasisLaunchTimer;
 
-        public bool usesParaglider;
+        private bool _paragliding;
         private int _paragliderNoFallDamageTimer;
 
         #region Rune Selection UI variables
@@ -42,7 +44,7 @@ namespace TLoZ.Players
 
         public override void SetupStartInventory(IList<Item> items, bool mediumcoreDeath)
         {
-            if (TLoZ.loZClientConfig.spawnWithClothes)
+            if (TLoZMod.loZClientConfig.spawnWithClothes)
             {
                 Item hat = new Item();
                 hat.SetDefaults(ItemID.HerosHat);
@@ -100,7 +102,7 @@ namespace TLoZ.Players
                 _paragliderNoFallDamageTimer--;
             }
 
-            if (usesParaglider)
+            if (Paragliding)
             {
                 _paragliderNoFallDamageTimer = 60;
                 player.maxFallSpeed *= 0.05f;
@@ -165,18 +167,20 @@ namespace TLoZ.Players
 
         public override void UpdateDead()
         {
-            usesParaglider = false;
+            Paragliding = false;
             HasBomb = false;
             stasisLaunchVelocity = Vector2.Zero;
             postStasisLaunchTimer = 0;
             _sprinting = false;
             inputLag = 0;
         }
+
         public override void PostUpdateRunSpeeds()
         {
             PostUpdateTHWRunSpeeds();
             UpdateStaminaRunSpeeds();
         }
+
         public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
         {
             TLoZGlobalNPC tlozTarget = TLoZGlobalNPC.GetFor(target);
@@ -189,12 +193,15 @@ namespace TLoZ.Players
                 tlozTarget.stasisLaunchSpeed += item.knockBack * 0.5f;
             }
         }
+
         public override bool? CanHitNPC(Item item, NPC target)
         {
             if (item.type == mod.ItemType<MasterSword>() && (target.type == NPCID.Clothier || target.type == NPCID.OldMan))
                 return true;
+
             if (TLoZGlobalNPC.GetFor(target).stasised)
                 return true;
+
             return base.CanHitNPC(item, target);
         }
         public override bool? CanHitNPCWithProj(Projectile proj, NPC target)
@@ -215,15 +222,17 @@ namespace TLoZ.Players
                 layers.Insert(0, TLoZDrawLayers.Instance.masterSwordSheath);
             }
 
-            if (usesParaglider)
+            if (Paragliding)
             {
                 _exhaustedTimer = 30;
                 player.bodyFrame.Y = 2 * 56;
                 layers.Insert(armIndex, TLoZDrawLayers.Instance.paragliderLayer);
             }
+
             ModifyTwoHandedLayers(layers);
             ModifyGlowPlayerDrawLayers(layers);
         }
+
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             ProcessRuneSelectionTriggers(triggersSet);
@@ -231,26 +240,21 @@ namespace TLoZ.Players
             if (HasParaglider && TLoZInput.equipParaglider.JustPressed && !exhausted)
             {
                 player.mount?.Dismount(player);
-                usesParaglider = !usesParaglider;
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
-                    ModPacket gliderPacket = mod.GetPacket();
-                    gliderPacket.Write((int)MessageType.Paraglider);
-                    gliderPacket.Write((int)player.whoAmI);
-                    gliderPacket.Write((bool)usesParaglider);
-                    gliderPacket.Send();
-                }
+                Paragliding = !Paragliding;
             }
         }
+
         public override void PostUpdate()
         {
             if (myTarget != null)
                 player.direction = myTarget.Center.X > player.Center.X ? 1 : -1;
         }
+
         public override void PreUpdate()
         {
             PreGlowMaskUpdate();
         }
+
         public override void SetControls()
         {
             if (postStasisLaunchTimer > 0.0f)
@@ -299,6 +303,7 @@ namespace TLoZ.Players
                 player.controlLeft = false;
                 player.controlRight = false;
             }
+
             if (blockJumps)
                 player.controlJump = false;
 
@@ -307,6 +312,7 @@ namespace TLoZ.Players
                 player.controlUseItem = false;
                 player.controlUseTile = false;
             }
+
             if (blockOther)
             {
                 player.controlThrow = false;
@@ -325,6 +331,17 @@ namespace TLoZ.Players
         public NPC LastChatFromNPC { get; internal set; }
 
         private bool HasParaglider => player.HasItem(mod.ItemType<ParagliderItem>());
+
+        public bool Paragliding
+        {
+            get => _paragliding;
+            set
+            {
+                _paragliding = value; 
+
+                NetworkPacketManager.Instance.SendPacketToServerIfLocal<PlayerParagliderStatePacket>(this.player, _paragliding);
+            }
+        }
 
         public bool Holds(int type) => player.HeldItem.type == type;
     }

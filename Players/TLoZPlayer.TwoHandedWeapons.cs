@@ -190,7 +190,7 @@ namespace TLoZ.Players
         {
             get
             {
-                if (player.HeldItem.modItem == null || usesParaglider || HasBomb)
+                if (player.HeldItem.modItem == null || Paragliding || HasBomb)
                     return false;
 
                 return player.HeldItem.modItem.GetType().IsSubclassOf(typeof(TwoHandedWeapon));

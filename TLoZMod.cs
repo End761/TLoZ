@@ -10,63 +10,40 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Shaders;
 using System.IO;
 using TLoZ.Enums;
+using TLoZ.Network;
 using TLoZ.Players;
 using TLoZ.NPCs.Minibosses.Guardian;
 
 namespace TLoZ
 {
-    public class TLoZ : Mod
+    public class TLoZMod : Mod
     {
         internal static TLoZClientConfig loZClientConfig;
-        public TLoZ()
+
+        public TLoZMod()
         {
             Instance = this;
         }
+
+
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
-            int type = reader.ReadInt32();
-            switch(type)
-            {
-                case (int)MessageType.Paraglider:
-                    Player player = Main.player[(int)reader.ReadInt32()];
-                    TLoZPlayer.Get(player).usesParaglider = reader.ReadBoolean();
-                    break;
-            }
+            NetworkPacketManager.Instance.HandlePacket(reader, whoAmI);
         }
+
+
         public override void Load()
         {
             FillMagnesisList();
+
             StasisableProjectiles.Load();
+
             if (!Main.dedServ)
             {
                 TLoZInput.Load(Instance);
                 TLoZTextures.Load();
                 UIManager.Load();
                 TLoZDialogues.Load();
-            }
-        }
-
-        public override void UpdateUI(GameTime gameTime)
-        {
-            UIManager.UpdateUIs(gameTime);
-        }
-
-        public override void UpdateMusic(ref int music, ref MusicPriority priority)
-        {
-            if (Main.myPlayer == -1 || Main.gameMenu || !Main.LocalPlayer.active)
-            {
-                return;
-            }
-            foreach (NPC npc in Main.npc)
-            {
-                if (npc.type != NPCType<Guardian>() || !npc.active)
-                    continue;
-                Guardian guardian = npc.modNPC as Guardian;
-                if (guardian != null && guardian.isActive)
-                {
-                    music = GetSoundSlot(SoundType.Music, "Sounds/Music/GuardianTheme");
-                    priority = MusicPriority.BossHigh;
-                }
             }
         }
 
@@ -87,12 +64,40 @@ namespace TLoZ
             loZClientConfig = null;
         }
 
+
+        public override void UpdateUI(GameTime gameTime)
+        {
+            UIManager.UpdateUIs(gameTime);
+        }
+
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             layers.Insert(0, new RuneSelectionLayer(UIManager.RuneSelectionUI));
             layers.Insert(1, new MiscInputsLayer(UIManager.MiscInputsUI));
+
             layers.Add(new StaminaLayer(UIManager.StaminaUI));
         }
+
+
+        public override void UpdateMusic(ref int music, ref MusicPriority priority)
+        {
+            if (Main.myPlayer == -1 || Main.gameMenu || !Main.LocalPlayer.active)
+            {
+                return;
+            }
+            foreach (NPC npc in Main.npc)
+            {
+                if (npc.type != NPCType<Guardian>() || !npc.active)
+                    continue;
+                Guardian guardian = npc.modNPC as Guardian;
+                if (guardian != null && guardian.isActive)
+                {
+                    music = GetSoundSlot(SoundType.Music, "Sounds/Music/GuardianTheme");
+                    priority = MusicPriority.BossHigh;
+                }
+            }
+        }
+
 
         public void FillMagnesisList()
         {
@@ -107,6 +112,6 @@ namespace TLoZ
             };
         }
 
-        public static TLoZ Instance { get; private set; }
+        public static TLoZMod Instance { get; private set; }
     }
 }

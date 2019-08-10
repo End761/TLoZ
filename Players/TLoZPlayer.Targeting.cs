@@ -15,7 +15,7 @@ namespace TLoZ.Players
                 if (Vector2.Distance(player.Center, myTarget.Center) >= 35 * 16 || !myTarget.active)
                     myTarget = null;
             }
-            if (TLoZ.loZClientConfig.switchTarget)
+            if (TLoZMod.loZClientConfig.switchTarget)
                 if (TLoZInput.zTarget.JustPressed)
                 {
                     if (myTarget == null)
@@ -41,7 +41,7 @@ namespace TLoZ.Players
                 }
 
 
-            if (!TLoZ.loZClientConfig.switchTarget)
+            if (!TLoZMod.loZClientConfig.switchTarget)
                 if (TLoZInput.zTarget.Current)
                 {
                     bool setInitialTarget = false;

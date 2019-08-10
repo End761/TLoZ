@@ -29,7 +29,7 @@ namespace TLoZ
 
         public override void OnLoaded()
         {
-            TLoZ.loZClientConfig = this;
+            TLoZMod.loZClientConfig = this;
         }
 
         public override ConfigScope Mode => ConfigScope.ClientSide;

@@ -46,9 +46,9 @@ namespace TLoZ.UIs
             _lerpedColor = Color.Lerp(Color.Orange, Color.Red, _lerpAmount);
 
             Vector2 position = new Vector2((int)player.Center.X, (int)player.Center.Y + player.gfxOffY)- Main.screenPosition - new Vector2(60, 60);
-            Effect mainBar = TLoZ.Instance.GetEffect("Effects/ProgressBar");
-            Effect secondBar = TLoZ.Instance.GetEffect("Effects/ProgressBar");
-            Effect thirdBar = TLoZ.Instance.GetEffect("Effects/ProgressBar");
+            Effect mainBar = TLoZMod.Instance.GetEffect("Effects/ProgressBar");
+            Effect secondBar = TLoZMod.Instance.GetEffect("Effects/ProgressBar");
+            Effect thirdBar = TLoZMod.Instance.GetEffect("Effects/ProgressBar");
             Texture2D mainWheel = TLoZTextures.UIStaminaWheel;
             Texture2D outerWheel = TLoZTextures.UIStaminaOuterWheel;
             _spendRate = MathHelper.Lerp(_spendRate, (float)rate, 0.1f);

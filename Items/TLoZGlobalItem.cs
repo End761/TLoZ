@@ -32,8 +32,8 @@ namespace TLoZ.Items
 
             if (tlozPlayer.HasBomb || tlozPlayer.itemUseDelay > 0) return false;
 
-            if (tlozPlayer.usesParaglider)
-                tlozPlayer.usesParaglider = false;
+            if (tlozPlayer.Paragliding)
+                tlozPlayer.Paragliding = false;
             return base.CanUseItem(item, player);
         }
         public override bool UseItem(Item item, Player player)

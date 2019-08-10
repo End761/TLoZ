@@ -62,7 +62,7 @@ namespace TLoZ
         {
             for (int i = 0; i < count + 1; i++)
             {
-                int dust = Dust.NewDust(position, 0, 0, TLoZ.Instance.DustType<GeneralUseDust>());
+                int dust = Dust.NewDust(position, 0, 0, TLoZMod.Instance.DustType<GeneralUseDust>());
                 Main.dust[dust].color = color == new Color() ? Color.White : color;
             }
         }

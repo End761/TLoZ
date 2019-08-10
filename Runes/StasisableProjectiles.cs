@@ -14,8 +14,8 @@ namespace TLoZ.Runes
         public static void Load()
         {
             SuitableProjectiles = new List<int>();
-            SuitableProjectiles.Add(TLoZ.Instance.ProjectileType<BombRound>());
-            SuitableProjectiles.Add(TLoZ.Instance.ProjectileType<BombSquare>());
+            SuitableProjectiles.Add(TLoZMod.Instance.ProjectileType<BombRound>());
+            SuitableProjectiles.Add(TLoZMod.Instance.ProjectileType<BombSquare>());
             SuitableProjectiles.Add(ProjectileID.Boulder);
         }
         public static void Unload()

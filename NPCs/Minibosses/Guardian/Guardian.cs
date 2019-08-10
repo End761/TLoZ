@@ -211,7 +211,7 @@ namespace TLoZ.NPCs.Minibosses.Guardian
             Texture2D baseTexture = Main.npcTexture[npc.type];
             Texture2D glowTexture = TLoZTextures.NPCFXGuardianGlow;
             Texture2D eyeTexture = TLoZTextures.NPCFXGuardianEye;
-            Effect deathEffect = TLoZ.Instance.GetEffect("Effects/GuardianDeath");
+            Effect deathEffect = TLoZMod.Instance.GetEffect("Effects/GuardianDeath");
             deathEffect.Parameters["uColor"].SetValue(new Vector4(npc.ai[3], npc.ai[3], npc.ai[3], 0.8f));
             if (_died)
                 Helpers.StartShader(spriteBatch, deathEffect);

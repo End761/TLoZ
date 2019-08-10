@@ -15,7 +15,7 @@ namespace TLoZ.UIs
             Player player = Main.LocalPlayer;
             TLoZPlayer loZPlayer = TLoZPlayer.Get(player);
 
-            if (TLoZ.loZClientConfig.disableTips)
+            if (TLoZMod.loZClientConfig.disableTips)
                 return;
 
             if (loZPlayer.IsSelectingRune)
@@ -23,7 +23,7 @@ namespace TLoZ.UIs
 
             Vector2 position = new Vector2(Main.screenWidth / 2 - 90, Main.screenHeight - 300);
 
-            if(player.HeldItem.type == TLoZ.Instance.ItemType("SheikahSlate") && loZPlayer.SelectedRune is StasisRune)
+            if(player.HeldItem.type == TLoZMod.Instance.ItemType("SheikahSlate") && loZPlayer.SelectedRune is StasisRune)
             {
                 Helpers.DrawInputButtonMouse(spriteBatch, position, 1, "Put to stasis. (Hover mouse over target)");
             }
@@ -39,10 +39,10 @@ namespace TLoZ.UIs
 
                 if (!loZPlayer.HasBomb )
                 {
-                    if (!loZPlayer.isNearBomb && loZPlayer.SelectedRune is BombRoundRune && player.ownedProjectileCounts[TLoZ.Instance.ProjectileType<BombRound>()] > 0)
+                    if (!loZPlayer.isNearBomb && loZPlayer.SelectedRune is BombRoundRune && player.ownedProjectileCounts[TLoZMod.Instance.ProjectileType<BombRound>()] > 0)
                         Helpers.DrawInputButtonMouse(spriteBatch, position, 2, "Detonate Bomb( Round ).");
 
-                    else if(!loZPlayer.isNearBomb && loZPlayer.SelectedRune is BombSquareRune && player.ownedProjectileCounts[TLoZ.Instance.ProjectileType<BombSquare>()] > 0)
+                    else if(!loZPlayer.isNearBomb && loZPlayer.SelectedRune is BombSquareRune && player.ownedProjectileCounts[TLoZMod.Instance.ProjectileType<BombSquare>()] > 0)
                         Helpers.DrawInputButtonMouse(spriteBatch, position, 2, "Detonate Bomb( Square ).");
 
                     else if(loZPlayer.isNearBomb)

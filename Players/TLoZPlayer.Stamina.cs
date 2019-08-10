@@ -48,7 +48,7 @@ namespace TLoZ.Players
                 spendRate += 0.12;
             }
 
-            if (usesParaglider)
+            if (Paragliding)
             {
                 _sprinting = false;
                 if (player.velocity.Y > 0)
@@ -83,7 +83,7 @@ namespace TLoZ.Players
                 _sprinting = false;
                 exhausted = true;
                 _exhaustedTimer = 60;
-                usesParaglider = false;
+                Paragliding = false;
             }
             if(Stamina >= maxStamina)
             {

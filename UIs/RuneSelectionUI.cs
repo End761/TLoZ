@@ -15,7 +15,7 @@ namespace TLoZ.UIs
         {
             TLoZPlayer tlozPlayer = TLoZPlayer.Get(Main.LocalPlayer);
 
-            if (Main.LocalPlayer.HeldItem.type == TLoZ.Instance.ItemType<SheikahSlate>() && tlozPlayer.SelectedRune is StasisRune)
+            if (Main.LocalPlayer.HeldItem.type == TLoZMod.Instance.ItemType<SheikahSlate>() && tlozPlayer.SelectedRune is StasisRune)
             {
                 spriteBatch.Draw(Main.magicPixel, Vector2.Zero, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Yellow * 0.17f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
             }
@@ -40,7 +40,7 @@ namespace TLoZ.UIs
 
             if (tlozPlayer.UnlockedRunes.Count > 1)
             {
-                if (!TLoZ.loZClientConfig.disableTips)
+                if (!TLoZMod.loZClientConfig.disableTips)
                 {
                     Helpers.DrawInputButtonMouse(spriteBatch, position + new Vector2(-20, 60), 4, "Next rune");
                     Helpers.DrawInputButtonMouse(spriteBatch, position + new Vector2(-20, 140), 5, "Previous rune");
