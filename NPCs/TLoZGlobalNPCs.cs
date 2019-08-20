@@ -173,7 +173,7 @@ namespace TLoZ.NPCs
 
             TLoZPlayer tlozPlayer = TLoZPlayer.Get(Main.LocalPlayer);
 
-            if(tlozPlayer.myTarget != null && tlozPlayer.myTarget == npc)
+            if(tlozPlayer.MyTarget != null && tlozPlayer.MyTarget == npc)
             {
                 spriteBatch.Draw(TLoZTextures.UITargeting, npc.Center - new Vector2(0, npc.height + 18) - Main.screenPosition, new Rectangle(0, 0, 16, 36), TLoZMod.loZClientConfig.targetBorderColor, 0f, new Vector2(8, 16), 1f, SpriteEffects.None, 1f);
                 spriteBatch.Draw(TLoZTextures.UITargeting, npc.Center - new Vector2(0, npc.height + 18) - Main.screenPosition, new Rectangle(0, 36, 16, 36), TLoZMod.loZClientConfig.targetCoreColor, 0f, new Vector2(8, 16), 1f, SpriteEffects.None, 1f);

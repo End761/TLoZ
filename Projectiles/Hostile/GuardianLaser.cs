@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.ModLoader;
 using TLoZ.NPCs.Minibosses.Guardian;
+using TLoZ.Players;
+using TLoZ.Projectiles.Misc;
 
 namespace TLoZ.Projectiles.Hostile
 {
@@ -36,14 +38,30 @@ namespace TLoZ.Projectiles.Hostile
         }
         public override void OnHitPlayer(Player target, int damage, bool crit)
         {
-            projectile.damage = 0;
-            projectile.velocity = Vector2.Zero;
-            Projectile.NewProjectile(projectile.Center, Vector2.Zero, mod.ProjectileType<GuardianLaserExplosion>(), 60, 4f, Main.myPlayer);
+            TLoZPlayer zplayer = TLoZPlayer.Get(target);
+            if (zplayer.ParryRealTime <= 0)
+            {
+                projectile.damage = 0;
+                projectile.Center += projectile.velocity;
+                projectile.velocity = Vector2.Zero;
+                Projectile.NewProjectile(projectile.Center, Vector2.Zero, mod.ProjectileType<GuardianLaserExplosion>(), 60, 4f, Main.myPlayer);
+            }
+            else
+            {
+                int proj = Projectile.NewProjectile(projectile.Center, Vector2.Zero, mod.ProjectileType<DeflectedLaser>(), 60, 4f, Main.myPlayer);
+                if (Owner.whoAmI == Main.myPlayer)
+                    Main.projectile[proj].velocity = Helpers.DirectToMouse(target.Center, 16f);
+
+                projectile.damage = 0;
+                projectile.Center -= projectile.velocity * 0.25f;
+                projectile.velocity = Vector2.Zero;
+            }
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             if(target.type != mod.NPCType<Guardian>())
             {
+                projectile.Center += projectile.velocity;
                 projectile.damage = 0;
                 projectile.velocity = Vector2.Zero;
                 Projectile.NewProjectile(projectile.Center, Vector2.Zero, mod.ProjectileType<GuardianLaserExplosion>(), 60, 4f, Main.myPlayer);
@@ -55,6 +73,7 @@ namespace TLoZ.Projectiles.Hostile
         }
         public override void AI()
         {
+            projectile.netUpdate = true;
             if(projectile.timeLeft >= 599)
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Custom/GuardianLaserSpawn"));
             Lighting.AddLight(projectile.position, Color.Cyan.ToVector3());

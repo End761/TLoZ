@@ -21,6 +21,7 @@ namespace TLoZ.Players
             _lastRightMovementState, _lastLeftMovementState, _sprinting;
 
         private int _sprintDirection;
+
         public void ResetStaminaEffects()
         {
             if (_exhaustedTimer > 0)

@@ -134,6 +134,8 @@ namespace TLoZ.Players
                 ResetStaminaEffects();
                 ResetTwoHandedEffects();
             }
+
+            ResetParryEffects();
         }
 
         public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)
@@ -165,7 +167,19 @@ namespace TLoZ.Players
                 postStasisLaunchTimer = 6.5f;
                 stasisLaunchVelocity = proj.velocity;
             }
+            ParryProj(proj);
+        }
 
+        public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
+        {
+            bool ignoreHit = false;
+            PreParryHurt(out ignoreHit);
+            return !ignoreHit;
+        }
+
+        public override void OnHitByNPC(NPC npc, int damage, bool crit)
+        {
+            ParryNPC(npc);
         }
 
         public override void UpdateDead()
@@ -209,15 +223,19 @@ namespace TLoZ.Players
 
             return base.CanHitNPC(item, target);
         }
+
         public override bool? CanHitNPCWithProj(Projectile proj, NPC target)
         {
             if (TLoZGlobalNPC.GetFor(target).stasised)
                 return true;
+
             return base.CanHitNPCWithProj(proj, target);
         }
+
         public override void ModifyDrawLayers(List<PlayerLayer> layers)
         {
             int armIndex = layers.FindIndex(x => x.Name.Equals("Arms"));
+
             if (HasBomb)
                 player.bodyFrame.Y = 5 * 56;
 
@@ -235,6 +253,7 @@ namespace TLoZ.Players
             }
 
             ModifyTwoHandedLayers(layers);
+            ModifyParryLayers(layers);
             ModifyGlowPlayerDrawLayers(layers);
         }
 
@@ -251,8 +270,8 @@ namespace TLoZ.Players
 
         public override void PostUpdate()
         {
-            if (myTarget != null)
-                player.direction = myTarget.Center.X > player.Center.X ? 1 : -1;
+            if (TargetDirection != -99)
+                player.direction = TargetDirection;
         }
 
         public override void PreUpdate()
@@ -267,6 +286,8 @@ namespace TLoZ.Players
 
             if (IsSelectingRune)
                 BlockInputs(true, false, false, false);
+
+            SetParryControls();
         }
         //Custom Methods:
 

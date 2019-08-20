@@ -13,6 +13,7 @@ namespace TLoZ
         private static TLoZDrawLayers _instance;
         public float TwoHanderRotation { get; private set; }
         public Vector2 TwoHanderVFX { get; private set; }
+
         public static TLoZDrawLayers Instance
         {
             get
@@ -22,6 +23,7 @@ namespace TLoZ
                 return _instance;
             }
         }
+
         public readonly PlayerLayer twoHandedWeaponLayer = new PlayerLayer("TLoZ", "twoHandedWeaponLayer", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)
         {
             if (drawInfo.shadow != 0f)
@@ -158,6 +160,35 @@ namespace TLoZ
                 1
                 );
             Main.playerDrawData.Add(sheathData);
+        });
+
+        public readonly PlayerLayer equipedShieldLayer = new PlayerLayer("TLoZ", "EquipedShieldLayer", PlayerLayer.Body, delegate (PlayerDrawInfo drawInfo)
+        {
+            if (drawInfo.shadow != 0f)
+                return;
+
+            Player drawPlayer = drawInfo.drawPlayer;
+            TLoZPlayer zPlayer = TLoZPlayer.Get(drawPlayer);
+
+            if (drawPlayer.dead) // If the player can't use the item, don't draw it.
+                return;
+
+            if (zPlayer.EquipedShield == null || drawPlayer.itemAnimation > 0)
+                return;
+            Color color = Lighting.GetColor((int)drawPlayer.Center.X / 16, (int)drawPlayer.Center.Y / 16);
+            DrawData shieldData = new DrawData
+            (
+                zPlayer.EquipedShield.EquipedTexture,
+                new Vector2((int)drawPlayer.MountedCenter.X, (int)drawPlayer.MountedCenter.Y + drawPlayer.gfxOffY) - Main.screenPosition,
+                new Rectangle(0, zPlayer.ParryVisualTime > 0? zPlayer.EquipedShield.EquipedTexture.Height / 2 : 0, zPlayer.EquipedShield.EquipedTexture.Width, zPlayer.EquipedShield.EquipedTexture.Height / 2),
+                color,
+                0,
+                new Vector2(zPlayer.EquipedShield.EquipedTexture.Width / 2, zPlayer.EquipedShield.EquipedTexture.Height / 4),
+                1f,
+                drawPlayer.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally,
+                1
+                );
+            Main.playerDrawData.Add(shieldData);
         });
     }
 }

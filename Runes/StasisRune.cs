@@ -19,9 +19,9 @@ namespace TLoZ.Runes
             {
                 if (!npc.active || npc.boss) continue;
 
-                if(tlozPlayer.myTarget != null && !tlozPlayer.myTarget.boss)
+                if(tlozPlayer.MyTarget != null && !tlozPlayer.MyTarget.boss)
                 {
-                    tlozPlayer.myTarget.AddBuff(item.mod.BuffType<StasisDebuff>(), 420);
+                    tlozPlayer.MyTarget.AddBuff(item.mod.BuffType<StasisDebuff>(), 420);
                     break;
                 }
 

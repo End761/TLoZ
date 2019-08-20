@@ -24,9 +24,9 @@ namespace TLoZ.Items
         {
             TLoZPlayer tlozPlayer = TLoZPlayer.Get(player);
 
-            if (tlozPlayer.myTarget != null && item.useStyle == 1 && item.melee && !item.noUseGraphic)
+            if (tlozPlayer.MyTarget != null && item.useStyle == 1 && item.melee && !item.noUseGraphic)
             {
-                player.velocity += Helpers.DirectToPosition(player.Center, tlozPlayer.myTarget.Center, 4f);
+                player.velocity += Helpers.DirectToPosition(player.Center, tlozPlayer.MyTarget.Center, 4f);
                 item.useTurn = false;
             }
             else
