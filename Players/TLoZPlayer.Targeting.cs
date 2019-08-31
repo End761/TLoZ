@@ -16,7 +16,7 @@ namespace TLoZ.Players
             }
 
             if (TLoZMod.loZClientConfig.switchTarget)
-                if (TLoZInput.zTarget.JustPressed)
+                if (TLoZInput.ZTarget.JustPressed)
                 {
                     if (MyTarget == null)
                     {
@@ -42,7 +42,7 @@ namespace TLoZ.Players
 
 
             if (!TLoZMod.loZClientConfig.switchTarget)
-                if (TLoZInput.zTarget.Current)
+                if (TLoZInput.ZTarget.Current)
                 {
                     bool setInitialTarget = false;
                     foreach (NPC npc in Main.npc)
@@ -57,7 +57,6 @@ namespace TLoZ.Players
                         }
                         else if (MyTarget != null && Vector2.Distance(player.Center, npc.Center) < Vector2.Distance(player.Center, MyTarget.Center))
                             MyTarget = npc;
-
                     }
                 }
                 else
@@ -67,7 +66,7 @@ namespace TLoZ.Players
             if (MyTarget != null)
                 TargetDirection = MyTarget.Center.X > player.Center.X ? 1 : -1;
 
-            else if (TLoZInput.zTarget.Current)
+            else if (TLoZInput.ZTarget.Current)
                 TargetDirection = player.direction;
 
             else
@@ -80,7 +79,7 @@ namespace TLoZ.Players
         {
             if(MyTarget != null)
             {
-                Vector2 positionOffset = (MyTarget.Center - player.Center).SafeNormalize(-Vector2.UnitY) * Vector2.Distance(player.Center, MyTarget.Center) / 3;
+                Vector2 positionOffset = (MyTarget.Center - player.Center).SafeNormalize(-Vector2.UnitY) * Vector2.Distance(player.Center, MyTarget.Center) * 0.5f;
                 Main.screenPosition = player.Center + positionOffset - new Vector2(Main.screenWidth, Main.screenHeight) / 2;
             }
         }

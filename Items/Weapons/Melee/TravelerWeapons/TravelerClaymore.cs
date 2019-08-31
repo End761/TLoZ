@@ -1,4 +1,4 @@
-﻿namespace TLoZ.Items.Weapons.TravelerWeapons
+﻿namespace TLoZ.Items.Weapons.Melee.TravelerWeapons
 {
     public class TravelerClaymore : TwoHandedWeapon
     {

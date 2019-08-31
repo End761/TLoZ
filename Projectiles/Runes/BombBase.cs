@@ -11,6 +11,7 @@ namespace TLoZ.Projectiles.Runes
     public abstract class BombBase : TLoZProjectile
     {
         private int _existanceTimer;
+
         public override void SetDefaults()
         {
             projectile.ignoreWater = true;
@@ -22,6 +23,7 @@ namespace TLoZ.Projectiles.Runes
             projectile.penetrate = -1;
             projectile.tileCollide = false;
         }
+
         public override bool PreAI()
         {
             if (projectile.ai[0] == 0)
@@ -29,6 +31,7 @@ namespace TLoZ.Projectiles.Runes
 
             return true;
         }
+
         public override void AI()
         {
             projectile.netUpdate = true;
@@ -47,7 +50,7 @@ namespace TLoZ.Projectiles.Runes
             {
                 Owner.heldProj = projectile.whoAmI;
                 TLoZPlayer.HasBomb = true;
-                TLoZPlayer.itemUseDelay = 15;
+                TLoZPlayer.ItemUseDelay = 15;
                 projectile.Center = new Vector2((int)Owner.position.X, (int)Owner.position.Y + Owner.gfxOffY) + new Vector2(10, -4);
 
                 if (Owner.controlUseItem && Owner.itemAnimation == 0 && _existanceTimer >= 15)
@@ -81,13 +84,15 @@ namespace TLoZ.Projectiles.Runes
             {
                 if (Vector2.Distance(projectile.Center, Owner.Center) <= 16 * 5)
                 {
-                    TLoZPlayer.isNearBomb = true;
+                    TLoZPlayer.IsNearBomb = true;
+
                     if (projectile.Hitbox.Contains(Main.MouseWorld.ToPoint()) && Owner.controlUseTile)
                     {
                         projectile.ai[0] = 0;
                         projectile.ai[1] = 0;
                     }
                 }
+
                 else if (Vector2.Distance(projectile.Center, Owner.Center) > 16 * 5 && RequiredRune && Owner.controlUseTile)
                 {
                     projectile.damage = 200;

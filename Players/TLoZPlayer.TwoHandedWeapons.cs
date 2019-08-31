@@ -3,125 +3,117 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using TLoZ.Items.Weapons;
+using TLoZ.Items.Weapons.Melee;
 using TLoZ.Projectiles.Misc;
 
 namespace TLoZ.Players
 {
     public partial class TLoZPlayer : ModPlayer
     {
-        public float swingRotation;
-        public bool isSwinging;
-        public bool windedBack;
-        public bool downwardsSlash;
-        private float _waitTimer;
-        public bool isSlashReversed;
-        public bool hasIgnitedStick;
-        public bool twoHanderChargeAttack;
-        public int leftClickTimer;
         public void PostUpdateTHWRunSpeeds()
         {
-            if(twoHanderChargeAttack)
+            if(TwoHanderChargeAttack)
             {
-                player.moveSpeed *= (leftClickTimer * 0.01f - 0.75f);
-                player.maxRunSpeed *= (leftClickTimer * 0.01f - 0.75f);
-                player.runAcceleration *= (leftClickTimer * 0.01f - 0.75f);
+                player.moveSpeed *= (LeftClickTimer * 0.01f - 0.75f);
+                player.maxRunSpeed *= (LeftClickTimer * 0.01f - 0.75f);
+                player.runAcceleration *= (LeftClickTimer * 0.01f - 0.75f);
             }
         }
         public void ResetTwoHandedEffects()
         {
             if (player.controlUseItem)
             {
-                if (leftClickTimer < 240)
-                    leftClickTimer++;
+                if (LeftClickTimer < 240)
+                    LeftClickTimer++;
             }
             else
             {
-                twoHanderChargeAttack = false;
-                leftClickTimer = 0;
+                TwoHanderChargeAttack = false;
+                LeftClickTimer = 0;
             }
-            if (isSwinging && leftClickTimer >= 20 && !windedBack)
+            if (IsSwinging && LeftClickTimer >= 20 && !WindedBack)
             {
-                windedBack = false;
-                twoHanderChargeAttack = true;
-                isSwinging = false;
-                downwardsSlash = false;
+                WindedBack = false;
+                TwoHanderChargeAttack = true;
+                IsSwinging = false;
+                DownwardsSlash = false;
             }
-            if (isSwinging && swingRotation < 4.5f)
+            if (IsSwinging && SwingRotation < 4.5f)
             {
-                if (swingRotation > 4.5f)
-                    swingRotation = 4.5f;
-                if (!windedBack)
+                if (SwingRotation > 4.5f)
+                    SwingRotation = 4.5f;
+                if (!WindedBack)
                 {
-                    if (swingRotation > -0.4f)
-                        swingRotation -= 0.02f;
+                    if (SwingRotation > -0.4f)
+                        SwingRotation -= 0.02f;
                     else
-                        windedBack = true;
+                        WindedBack = true;
                 }
-                else if (swingRotation < 0.2f)
+                else if (SwingRotation < 0.2f)
                 {
-                    swingRotation += 0.05f;
+                    SwingRotation += 0.05f;
                 }
                 else
                 {
-                    swingRotation *= 1.25f;
+                    SwingRotation *= 1.25f;
                 }
-                if (swingRotation > 3.0f)
+                if (SwingRotation > 3.0f)
                 {
                     Projectile.NewProjectile(player.Center, new Vector2(0.5f * player.direction, -0.5f), mod.ProjectileType<TwoHandedWeaponHitbox>(), player.HeldItem.damage, player.HeldItem.knockBack * 2f, player.whoAmI);
                     Main.PlaySound(2, (int)player.position.X, (int)player.position.Y, 71);
                 }
             }
-            else if (downwardsSlash && swingRotation > 2.0f)
+            else if (DownwardsSlash && SwingRotation > 2.0f)
             {
-                isSlashReversed = true;
-                _waitTimer = 2.4f;
-                if (!windedBack)
+                IsSlashReversed = true;
+                WaitTimer = 2.4f;
+                if (!WindedBack)
                 {
-                    if (swingRotation < 4.68f)
-                        swingRotation += 0.01f;
+                    if (SwingRotation < 4.68f)
+                        SwingRotation += 0.01f;
                     else
-                        windedBack = true;
+                        WindedBack = true;
                 }
                 else
                 {
-                    swingRotation *= 0.875f;
-                    if (swingRotation <= 2.0f)
+                    SwingRotation *= 0.875f;
+                    if (SwingRotation <= 2.0f)
                     {
                         Projectile.NewProjectile(player.Center, new Vector2(1 * player.direction, -0.5f), mod.ProjectileType<TwoHandedWeaponHitbox>(), player.HeldItem.damage, player.HeldItem.knockBack * 1.5f, player.whoAmI);
                         Main.PlaySound(2, (int)player.position.X, (int)player.position.Y, 71);
                     }
                 }
             }
-            else if (_waitTimer <= 0.0f && !twoHanderChargeAttack)
+            else if (WaitTimer <= 0.0f && !TwoHanderChargeAttack)
             {
-                isSlashReversed = false;
-                downwardsSlash = false;
-                windedBack = false;
-                isSwinging = false;
-                if (swingRotation > 0.2f)
+                IsSlashReversed = false;
+                DownwardsSlash = false;
+                WindedBack = false;
+                IsSwinging = false;
+                if (SwingRotation > 0.2f)
                 {
-                    if (swingRotation > 4.45f)
-                        swingRotation *= 0.999f;
+                    if (SwingRotation > 4.45f)
+                        SwingRotation *= 0.999f;
                     else
-                        swingRotation *= 0.95f;
+                        SwingRotation *= 0.95f;
                 }
                 else
-                    swingRotation = 0.0f;
+                    SwingRotation = 0.0f;
             }
             if (!HoldsTwoHander)
             {
-                hasIgnitedStick = false;
-                isSlashReversed = false;
-                downwardsSlash = false;
-                windedBack = false;
-                isSwinging = false;
-                swingRotation = 0.0f;
+                HasIgnitedStick = false;
+                IsSlashReversed = false;
+                DownwardsSlash = false;
+                WindedBack = false;
+                IsSwinging = false;
+                SwingRotation = 0.0f;
             }
-            if (_waitTimer > 0.0f)
+            if (WaitTimer > 0.0f)
             {
-                if (_waitTimer < 2.4f)
-                    downwardsSlash = false;
-                _waitTimer -= 0.1f;
+                if (WaitTimer < 2.4f)
+                    DownwardsSlash = false;
+                WaitTimer -= 0.1f;
             }
             if(HoldsTwoHander)
             {
@@ -130,19 +122,19 @@ namespace TLoZ.Players
                 if(Main.myPlayer == player.whoAmI)
                     weapon?.DrawEffects(player);
             }
-            if (twoHanderChargeAttack)
+            if (TwoHanderChargeAttack)
             {
-                if(leftClickTimer == 20)
+                if(LeftClickTimer == 20)
                     Projectile.NewProjectile(player.Center, new Vector2(1 * player.direction, -0.5f), mod.ProjectileType<TwoHandedWeaponHitbox>(), player.HeldItem.damage, player.HeldItem.knockBack * 1.5f, Main.myPlayer);
-                if (swingRotation <= -6.28)
-                    swingRotation = 0.0f;
-                swingRotation -= leftClickTimer * 0.001f;
+                if (SwingRotation <= -6.28)
+                    SwingRotation = 0.0f;
+                SwingRotation -= LeftClickTimer * 0.001f;
                 _exhaustedTimer = 30;
-                spendRate += 0.18f;
-                isSlashReversed = true;
+                SpendRate += 0.18f;
+                IsSlashReversed = true;
             }
-            if (exhausted)
-                twoHanderChargeAttack = false;
+            if (Exhausted)
+                TwoHanderChargeAttack = false;
         }
         public void ModifyTwoHandedLayers(List<PlayerLayer> layers)
         {
@@ -150,7 +142,7 @@ namespace TLoZ.Players
             if (HoldsTwoHander)
             {
                 layers.Insert(armIndex, TLoZDrawLayers.Instance.twoHandedWeaponLayer);
-                if (twoHanderChargeAttack)
+                if (TwoHanderChargeAttack)
                 {
                     player.hairFrame.Y =
                         player.headFrame.Y =
@@ -158,19 +150,19 @@ namespace TLoZ.Players
                 }
                 else
                 {
-                    if (swingRotation < 0.7f)
+                    if (SwingRotation < 0.7f)
                     {
                         player.hairFrame.Y =
                             player.headFrame.Y =
                                 player.bodyFrame.Y = 4 * 56;
                     }
-                    else if (swingRotation < 2.4f)
+                    else if (SwingRotation < 2.4f)
                     {
                         player.hairFrame.Y =
                             player.headFrame.Y =
                             player.bodyFrame.Y = 3 * 56;
                     }
-                    else if (swingRotation < 4.0f)
+                    else if (SwingRotation < 4.0f)
                     {
                         player.hairFrame.Y =
                             player.headFrame.Y =
@@ -196,5 +188,23 @@ namespace TLoZ.Players
                 return player.HeldItem.modItem.GetType().IsSubclassOf(typeof(TwoHandedWeapon));
             }
         }
+
+        public float SwingRotation { get;  set; }
+
+        public bool IsSwinging { get; set; }
+
+        public bool WindedBack { get; set; }
+
+        public bool DownwardsSlash { get; set; }
+
+        public float WaitTimer { get; private set; }
+
+        public bool IsSlashReversed { get; set; }
+
+        public bool HasIgnitedStick { get; set; }
+
+        public bool TwoHanderChargeAttack { get; set; }
+
+        public int LeftClickTimer { get; private set; }
     }
 }

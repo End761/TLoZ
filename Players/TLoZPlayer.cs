@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using TLoZ.Enums;
 using TLoZ.Items.Tools;
-using TLoZ.Items.Weapons;
-using TLoZ.Items.Weapons.MasterSword;
+using TLoZ.Items.Weapons.Melee.MasterSword;
 using TLoZ.Network;
 using TLoZ.Network.Packets;
 using TLoZ.NPCs;
@@ -21,26 +18,11 @@ namespace TLoZ.Players
 {
     public sealed partial class TLoZPlayer : ModPlayer
     {
-        public int responseIndex;
 
         public static TLoZPlayer Get(Player player) => player.GetModPlayer<TLoZPlayer>();
 
-        public Vector2 stasisLaunchVelocity;
-        public float postStasisLaunchTimer;
-
         private bool _paragliding;
         private int _paragliderNoFallDamageTimer;
-
-        #region Rune Selection UI variables
-        public float opacity;
-
-        public bool IsSelectingRune => TLoZInput.changeRune.Current;
-        public int inputLag;
-        #endregion
-
-        public int itemUseDelay;
-
-        public bool isNearBomb;
 
         public override void SetupStartInventory(IList<Item> items, bool mediumcoreDeath)
         {
@@ -70,8 +52,8 @@ namespace TLoZ.Players
             if (Main.gameMenu)
                 HasBomb = false;
 
-            if (itemUseDelay > 0)
-                itemUseDelay--;
+            if (ItemUseDelay > 0)
+                ItemUseDelay--;
 
             if (player.ownedProjectileCounts[mod.ProjectileType<BombRound>()] <= 0)
                 HasBomb = false;
@@ -83,18 +65,18 @@ namespace TLoZ.Players
             if (LastChatFromNPC != null && LastChatFromNPC.active)
                 HandleNPCChat(LastChatFromNPC);
 
-            if (stasisLaunchVelocity != Vector2.Zero)
+            if (StasisLaunchVelocity != Vector2.Zero)
             {
-                player.velocity = stasisLaunchVelocity * 2;
+                player.velocity = StasisLaunchVelocity * 2;
                 player.gravity = 0;
-                stasisLaunchVelocity = Vector2.Zero;
+                StasisLaunchVelocity = Vector2.Zero;
             }
 
-            if (postStasisLaunchTimer > 0.0f)
-                postStasisLaunchTimer -= 0.1f;
+            if (PostStasisLaunchTimer > 0.0f)
+                PostStasisLaunchTimer -= 0.1f;
 
-            if (inputLag > 0)
-                inputLag--;
+            if (InputDelay > 0)
+                InputDelay--;
 
             if (_paragliderNoFallDamageTimer > 0)
             {
@@ -126,7 +108,7 @@ namespace TLoZ.Players
                     player.velocity.Y = -20f;
             }
 
-            isNearBomb = false;
+            IsNearBomb = false;
 
             if (!Main.dedServ)
             {
@@ -142,7 +124,7 @@ namespace TLoZ.Players
         {
             TLoZGlobalNPC tlozTarget = TLoZGlobalNPC.GetFor(npc);
 
-            if (tlozTarget.stasised)
+            if (tlozTarget.Stasised)
                 return false;
 
             return base.CanBeHitByNPC(npc, ref cooldownSlot);
@@ -152,28 +134,28 @@ namespace TLoZ.Players
         {
             TLoZGlobalNPC tlozTarget = TLoZGlobalNPC.GetFor(npc);
 
-            if (tlozTarget.postStasisFlyTimer > 0.0f)
+            if (tlozTarget.PostStasisFlyTimer > 0.0f)
             {
-                postStasisLaunchTimer = 6.5f;
-                stasisLaunchVelocity = npc.velocity;
+                PostStasisLaunchTimer = 6.5f;
+                StasisLaunchVelocity = npc.velocity;
             }
         }
 
         public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
         {
             TLoZGlobalProjectile tlozProj = TLoZGlobalProjectile.GetFor(proj);
-            if (tlozProj.postStasisLaunchTimer > 0.0f)
+            if (tlozProj.PostStasisLaunchTimer > 0.0f)
             {
-                postStasisLaunchTimer = 6.5f;
-                stasisLaunchVelocity = proj.velocity;
+                PostStasisLaunchTimer = 6.5f;
+                StasisLaunchVelocity = proj.velocity;
             }
             ParryProj(proj);
         }
 
         public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
-            bool ignoreHit = false;
-            PreParryHurt(out ignoreHit);
+            PreParryHurt(out bool ignoreHit);
+
             return !ignoreHit;
         }
 
@@ -187,11 +169,11 @@ namespace TLoZ.Players
             Paragliding = false;
             HasBomb = false;
 
-            stasisLaunchVelocity = Vector2.Zero;
-            postStasisLaunchTimer = 0;
+            StasisLaunchVelocity = Vector2.Zero;
+            PostStasisLaunchTimer = 0;
 
             _sprinting = false;
-            inputLag = 0;
+            InputDelay = 0;
         }
 
         public override void PostUpdateRunSpeeds()
@@ -203,13 +185,13 @@ namespace TLoZ.Players
         public override void ModifyHitNPC(Item item, NPC target, ref int damage, ref float knockback, ref bool crit)
         {
             TLoZGlobalNPC tlozTarget = TLoZGlobalNPC.GetFor(target);
-            if (tlozTarget.stasised)
+            if (tlozTarget.Stasised)
             {
                 crit = false;
                 damage *= 0;
                 target.life += 1;
-                tlozTarget.stasisLaunchDirection = Helpers.DirectToMouse(target.Center, 1f);
-                tlozTarget.stasisLaunchSpeed += item.knockBack * 0.5f;
+                tlozTarget.StasisLaunchDirection = Helpers.DirectToMouse(target.Center, 1f);
+                tlozTarget.StasisLaunchSpeed += item.knockBack * 0.5f;
             }
         }
 
@@ -218,7 +200,7 @@ namespace TLoZ.Players
             if (item.type == mod.ItemType<MasterSword>() && (target.type == NPCID.Clothier || target.type == NPCID.OldMan))
                 return true;
 
-            if (TLoZGlobalNPC.GetFor(target).stasised)
+            if (TLoZGlobalNPC.GetFor(target).Stasised)
                 return true;
 
             return base.CanHitNPC(item, target);
@@ -226,7 +208,7 @@ namespace TLoZ.Players
 
         public override bool? CanHitNPCWithProj(Projectile proj, NPC target)
         {
-            if (TLoZGlobalNPC.GetFor(target).stasised)
+            if (TLoZGlobalNPC.GetFor(target).Stasised)
                 return true;
 
             return base.CanHitNPCWithProj(proj, target);
@@ -261,7 +243,7 @@ namespace TLoZ.Players
         {
             ProcessRuneSelectionTriggers(triggersSet);
 
-            if (HasParaglider && TLoZInput.equipParaglider.JustPressed && !exhausted)
+            if (HasParaglider && TLoZInput.EquipParaglider.JustPressed && !Exhausted)
             {
                 player.mount?.Dismount(player);
                 Paragliding = !Paragliding;
@@ -281,7 +263,7 @@ namespace TLoZ.Players
 
         public override void SetControls()
         {
-            if (postStasisLaunchTimer > 0.0f)
+            if (PostStasisLaunchTimer > 0.0f)
                 BlockInputs();
 
             if (IsSelectingRune)
@@ -297,7 +279,7 @@ namespace TLoZ.Players
             {
                 if (npc.type == NPCID.Clothier)
                 {
-                    Main.npcChatText = TLoZDialogues.clothierMasterSwordReactions[responseIndex];
+                    Main.npcChatText = TLoZDialogues.clothierMasterSwordReactions[ResponseIndex];
                 }
             }
         }
@@ -371,5 +353,19 @@ namespace TLoZ.Players
         }
 
         public bool Holds(int type) => player.HeldItem.type == type;
+
+        public bool IsSelectingRune => TLoZInput.ChangeRune.Current;
+
+        public float Opacity { get; set; }
+
+        public int InputDelay { get; set; }
+
+        public Vector2 StasisLaunchVelocity { get; set; }
+        public float PostStasisLaunchTimer { get; set; }
+
+        public bool IsNearBomb { get; set; }
+        public int ResponseIndex { get; set; }
+
+        public int ItemUseDelay { get; set; }
     }
 }

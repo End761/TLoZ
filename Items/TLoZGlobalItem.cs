@@ -32,7 +32,7 @@ namespace TLoZ.Items
             else
                 item.useTurn = _defaultUseTurn;
 
-            if (tlozPlayer.HasBomb || tlozPlayer.itemUseDelay > 0) return false;
+            if (tlozPlayer.HasBomb || tlozPlayer.ItemUseDelay > 0) return false;
 
             return base.CanUseItem(item, player);
         }
@@ -51,7 +51,7 @@ namespace TLoZ.Items
         }
         public override float UseTimeMultiplier(Item item, Player player)
         {
-            return TLoZPlayer.Get(player).exhausted ? 0.5f : 1f;
+            return TLoZPlayer.Get(player).Exhausted ? 0.5f : 1f;
         }
         public override void MeleeEffects(Item item, Player player, Rectangle hitbox)
         {
@@ -64,13 +64,13 @@ namespace TLoZ.Items
 
                 TLoZGlobalProjectile tlozPlayer = TLoZGlobalProjectile.GetFor(proj);
 
-                if (hitbox.Intersects(proj.Hitbox) && tlozPlayer.Stasised && tlozPlayer.cantGetHitTimer <= 0)
+                if (hitbox.Intersects(proj.Hitbox) && tlozPlayer.Stasised && tlozPlayer.CannottGetHitTimer <= 0)
                 {
                     Main.PlaySound(21);
 
-                    tlozPlayer.cantGetHitTimer = 20;
-                    tlozPlayer.stasisLaunchDirection = Helpers.DirectToMouse(proj.Center);
-                    tlozPlayer.stasisLaunchSpeed += item.knockBack * 0.5f;
+                    tlozPlayer.CannottGetHitTimer = 20;
+                    tlozPlayer.StasisLaunchDirection = Helpers.DirectToMouse(proj.Center);
+                    tlozPlayer.StasisLaunchSpeed += item.knockBack * 0.5f;
                 }
             }
         }

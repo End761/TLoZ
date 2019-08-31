@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using Terraria.ModLoader;
 using TLoZ.Items.Shields;
 using TLoZ.Items.Shields.Traveler;
+using System.Linq;
 using TLoZ.Projectiles.Hostile;
 
 namespace TLoZ.Players
 {
     public sealed partial class TLoZPlayer : ModPlayer
     {
-        private bool _hasResetRotation;
-
         public void ResetParryEffects()
         {
             if (ParryVisualTime > 0)
@@ -24,7 +23,7 @@ namespace TLoZ.Players
             {
                 player.fullRotationOrigin = new Vector2(player.width / 2, player.height / 2);
                 player.fullRotation = -BackflipRotation * player.direction;
-                _hasResetRotation = false;
+                HasResetRotation = false;
                 BackflipEnded = false;
 
                 BackflipTime--;
@@ -38,10 +37,10 @@ namespace TLoZ.Players
 
             if (BackflipEnded)
             {
-                if(!_hasResetRotation)
+                if(!HasResetRotation)
                 {
                     player.fullRotation = 0.0f;
-                    _hasResetRotation = true;
+                    HasResetRotation = true;
                 }
 
                 BackflipRotation = 0.0f;
@@ -53,22 +52,26 @@ namespace TLoZ.Players
                 BackflipTime = 45;
             }
 
-            if (TargetDirection != -99 && player.controlUseTile && !HoldsTwoHander)
+            if (EquipedShield != null)
             {
-                player.velocity.X = 2.5f * player.direction;
-                ParryVisualTime = 40;
-                ParryRealTime = 20;
+                if (TargetDirection != -99 && player.controlUseTile && !HoldsTwoHander)
+                {
+                    player.velocity.X = 2.5f * player.direction;
+                    ParryVisualTime = 40;
+                    ParryRealTime = 20;
+                }
             }
 
-            EquipedShield = new TravelerShield();
+            EquipedShield = FindShield();
         }
 
         public void ModifyParryLayers(List<PlayerLayer> layers)
         {
-            if (TargetDirection != -99 && !HoldsTwoHander)
+            if (TargetDirection != -99 && !HoldsTwoHander && EquipedShield != null)
             {
                 if(player.itemAnimation <= 0)
                     player.bodyFrame.Y = 3 * 56;
+
                 layers.Add(TLoZDrawLayers.Instance.equipedShieldLayer);
             }
         }
@@ -107,11 +110,23 @@ namespace TLoZ.Players
                 BlockInputs(true, true, true, true);
         }
 
+        private ShieldBase FindShield()
+        {
+            ShieldBase shield = null;
+
+            foreach (Item item in player.inventory.Where(t => t.modItem != null && t.modItem is ShieldBase))
+                shield = item.modItem as ShieldBase;
+            
+            return shield;
+        }
+
         public ShieldBase EquipedShield { get; set; }
 
         public int ParryVisualTime { get; set; }
 
         public int ParryRealTime { get; set; }
+
+        public bool HasResetRotation { get; private set; }
 
         private float _backflipRotation;
         public float BackflipRotation

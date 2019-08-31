@@ -1,7 +1,7 @@
 ﻿using Terraria;
 using Terraria.ID;
 
-namespace TLoZ.Items.Weapons.NoGroup
+namespace TLoZ.Items.Weapons.Melee.NoGroup
 {
     public class WoodcutterAxe : TwoHandedWeapon
     {

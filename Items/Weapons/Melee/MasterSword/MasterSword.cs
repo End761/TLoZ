@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 using TLoZ.GlowMasks;
 using TLoZ.Players;
 
-namespace TLoZ.Items.Weapons.MasterSword
+namespace TLoZ.Items.Weapons.Melee.MasterSword
 {
     public class MasterSword : TLoZItem
     {
@@ -20,12 +20,12 @@ namespace TLoZ.Items.Weapons.MasterSword
 
         }
 
-        public override string Texture => "TLoZ/Items/Weapons/MasterSword/MasterByLiz";
+        public override string Texture => "TLoZ/Items/Weapons/Melee/MasterSword/MasterByLiz";
 
         public override void SetDefaults()
         {
             base.SetDefaults();
-            _nearBossGlow = new GlowMaskData("Items/Weapons/MasterSword/MasterGlowByLiz", "TLoZ", 48, 48);
+            _nearBossGlow = new GlowMaskData("Items/Weapons/Melee/MasterSword/MasterGlowByLiz", "TLoZ", 48, 48);
             item.melee = true;
             item.knockBack = 3f;
             item.useTime = 20;
@@ -89,7 +89,7 @@ namespace TLoZ.Items.Weapons.MasterSword
         {
             spriteBatch.Draw
                 (
-                    mod.GetTexture("Items/Weapons/MasterSword/MasterDroppedByLiz"),
+                    mod.GetTexture("Items/Weapons/Melee/MasterSword/MasterDroppedByLiz"),
                     item.Center - Main.screenPosition,
                     null,
                     lightColor,

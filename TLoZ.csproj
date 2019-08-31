@@ -12,8 +12,8 @@
     <None Remove="Items\Tools\Paraglider.png" />
     <None Remove="Items\Tools\SheikahSlate.png" />
     <None Remove="Items\Tools\SheikahSlate2.png" />
-    <None Remove="Items\Weapons\MasterSword\Buckle_Body.png" />
-    <None Remove="Items\Weapons\MasterSword\MasterSwordSheathBelt.png" />
+    <None Remove="Items\Weapons\Melee\MasterSword\Buckle_Body.png" />
+    <None Remove="Items\Weapons\Melee\MasterSword\MasterSwordSheathBelt.png" />
     <None Remove="Projectiles\Runes\BombRound.png" />
     <None Remove="Projectiles\Runes\BombRound2.png" />
     <None Remove="Projectiles\Runes\BombSquare.png" />

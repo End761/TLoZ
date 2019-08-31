@@ -3,7 +3,7 @@ using Terraria;
 using TLoZ.Players;
 using TLoZ.Projectiles.Misc;
 
-namespace TLoZ.Items.Weapons
+namespace TLoZ.Items.Weapons.Melee
 {
     public abstract class TwoHandedWeapon : TLoZItem
     {
@@ -21,12 +21,12 @@ namespace TLoZ.Items.Weapons
         public override bool CanUseItem(Player player)
         {
             TLoZPlayer zPlayer = TLoZPlayer.Get(player);
-            if (!zPlayer.isSwinging && !zPlayer.downwardsSlash && !zPlayer.twoHanderChargeAttack)
+            if (!zPlayer.IsSwinging && !zPlayer.DownwardsSlash && !zPlayer.TwoHanderChargeAttack)
             {
-                zPlayer.isSwinging = zPlayer.swingRotation == 0.0f ? true : zPlayer.isSwinging;
+                zPlayer.IsSwinging = zPlayer.SwingRotation == 0.0f ? true : zPlayer.IsSwinging;
 
-                zPlayer.windedBack = zPlayer.swingRotation >= 4.25f? false : zPlayer.windedBack;
-                zPlayer.downwardsSlash = zPlayer.swingRotation >= 4.25f ? true : zPlayer.downwardsSlash;
+                zPlayer.WindedBack = zPlayer.SwingRotation >= 4.25f? false : zPlayer.WindedBack;
+                zPlayer.DownwardsSlash = zPlayer.SwingRotation >= 4.25f ? true : zPlayer.DownwardsSlash;
             }
             return false;
         }

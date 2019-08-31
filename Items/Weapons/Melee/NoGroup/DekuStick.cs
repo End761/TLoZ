@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.ID;
 using TLoZ.Players;
 
-namespace TLoZ.Items.Weapons.NoGroup
+namespace TLoZ.Items.Weapons.Melee.NoGroup
 {
     public class DekuStick : TwoHandedWeapon
     {
@@ -20,14 +20,14 @@ namespace TLoZ.Items.Weapons.NoGroup
         }
         public override void OnHitEffects(NPC target, Player player)
         {
-            if (TLoZPlayer.Get(player).hasIgnitedStick)
+            if (TLoZPlayer.Get(player).HasIgnitedStick)
                 target.AddBuff(BuffID.OnFire, 180);
         }
         public override void DrawEffects(Player player)
         {
-            if (TLoZPlayer.Get(player).hasIgnitedStick)
+            if (TLoZPlayer.Get(player).HasIgnitedStick)
             {
-                float bonusOffset = (TLoZPlayer.Get(player).isSlashReversed ? player.direction == 1 ? (float)MathHelper.Pi * 0.5f : (float)MathHelper.Pi * 1.5f : 0f) + player.fullRotation;
+                float bonusOffset = (TLoZPlayer.Get(player).IsSlashReversed ? player.direction == 1 ? (float)MathHelper.Pi * 0.5f : (float)MathHelper.Pi * 1.5f : 0f) + player.fullRotation;
                 int dust = Dust.NewDust(Helpers.PivotPoint(TLoZDrawLayers.Instance.TwoHanderVFX, 50 * player.direction * -1, -56, TLoZDrawLayers.Instance.TwoHanderRotation + bonusOffset), 0, 0, DustID.Fire);
                 Main.dust[dust].scale = 2f;
                 Main.dust[dust].noGravity = true;
@@ -40,7 +40,7 @@ namespace TLoZ.Items.Weapons.NoGroup
                 {
                     Tile tile = Main.tile[(int)(projectile.position.X + j) / 16, (int)(projectile.position.Y + i) / 16];
                     if (tile.type == TileID.Campfire)
-                        TLoZPlayer.Get(player).hasIgnitedStick = true;
+                        TLoZPlayer.Get(player).HasIgnitedStick = true;
                 }
         }
     }

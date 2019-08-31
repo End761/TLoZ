@@ -19,9 +19,9 @@ namespace TLoZ.Runes
             int x = (int)Main.MouseWorld.X;
             int y = (int)Main.MouseWorld.Y;
 
-            if (Main.tile[x / 16, y / 16].liquid != 0 && player.ownedProjectileCounts[TLoZMod.Instance.ProjectileType("CryonisBlock")] < 3 && tlozPlayer.itemUseDelay == 0)
+            if (Main.tile[x / 16, y / 16].liquid != 0 && player.ownedProjectileCounts[TLoZMod.Instance.ProjectileType("CryonisBlock")] < 3 && tlozPlayer.ItemUseDelay == 0)
             {
-                tlozPlayer.itemUseDelay = 20;
+                tlozPlayer.ItemUseDelay = 20;
                 for (int i = 0; i < 500; i++)
                 {
                     if (Main.tile[x / 16, y / 16 - i].liquid == 0)

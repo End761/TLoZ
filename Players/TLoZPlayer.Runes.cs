@@ -22,22 +22,22 @@ namespace TLoZ.Players
                 {
                     int newInputLag = 10;
 
-                    if (triggersSet.Left && inputLag <= 0)
+                    if (triggersSet.Left && InputDelay <= 0)
                     {
-                        inputLag = newInputLag;
+                        InputDelay = newInputLag;
                         SelectedRune = UnlockedRunes.Previous(SelectedRune);
                     }
 
-                    if (triggersSet.Right && inputLag <= 0)
+                    if (triggersSet.Right && InputDelay <= 0)
                     {
-                        inputLag = newInputLag;
+                        InputDelay = newInputLag;
                         SelectedRune = UnlockedRunes.Next(SelectedRune);
                     }
 
-                    if (PlayerInput.ScrollWheelDelta > 0 && this.inputLag <= 0)
+                    if (PlayerInput.ScrollWheelDelta > 0 && this.InputDelay <= 0)
                         SelectedRune = UnlockedRunes.Next(SelectedRune);
 
-                    if (PlayerInput.ScrollWheelDelta < 0 && this.inputLag <= 0)
+                    if (PlayerInput.ScrollWheelDelta < 0 && this.InputDelay <= 0)
                         SelectedRune = UnlockedRunes.Previous(SelectedRune);
                 }
                 PlayerInput.ScrollWheelDelta = 0;

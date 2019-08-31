@@ -6,21 +6,10 @@ namespace TLoZ.Players
 {
     public sealed partial class TLoZPlayer : ModPlayer
     {
-        public double maxStamina, bonusStamina;
-
-        private double _stamina;
-
-        private double _staminaReplenishRate;
-        public double spendRate;
-
-        public bool haltStaminaRegen, exhausted;
-
         private int _exhaustedTimer, _lastChangeTimer;
 
-        private bool 
+        private bool
             _lastRightMovementState, _lastLeftMovementState, _sprinting;
-
-        private int _sprintDirection;
 
         public void ResetStaminaEffects()
         {
@@ -30,9 +19,9 @@ namespace TLoZ.Players
             if (_lastChangeTimer > 0)
                 _lastChangeTimer--;
 
-            if (((player.controlRight && !_lastRightMovementState && _lastChangeTimer > 0) || (player.controlLeft && !_lastLeftMovementState && _lastChangeTimer > 0)) && !exhausted)
+            if (((player.controlRight && !_lastRightMovementState && _lastChangeTimer > 0) || (player.controlLeft && !_lastLeftMovementState && _lastChangeTimer > 0)) && !Exhausted)
             {
-                _sprintDirection = player.direction;
+                SprintDirection = player.direction;
                 _sprinting = true;
             }
 
@@ -40,72 +29,72 @@ namespace TLoZ.Players
             {
                 _lastChangeTimer = 15;
             }
-            if ((!player.controlLeft && !player.controlRight) || player.direction != _sprintDirection || exhausted)
+            if ((!player.controlLeft && !player.controlRight) || player.direction != SprintDirection || Exhausted)
                 _sprinting = false;
 
             if (_sprinting)
             {
                 _exhaustedTimer = 30;
-                spendRate += 0.12;
+                SpendRate += 0.12;
             }
 
             if (Paragliding)
             {
                 _sprinting = false;
                 if (player.velocity.Y > 0)
-                    spendRate += 0.12;
-                if(player.velocity.Y != 0)
-                    haltStaminaRegen = true;
+                    SpendRate += 0.12;
+                if (player.velocity.Y != 0)
+                    HaltStaminaRegen = true;
             }
 
-            if (spendRate > 0.0)
+            if (SpendRate > 0.0)
             {
                 if (BonusStamina <= 0.0)
-                    Stamina -= Stamina <= maxStamina * 0.25f ? spendRate * 0.5f : Stamina <= maxStamina * 0.5f ? spendRate * 0.75 : spendRate;
+                    Stamina -= Stamina <= MaxStamina * 0.25f ? SpendRate * 0.5f : Stamina <= MaxStamina * 0.5f ? SpendRate * 0.75 : SpendRate;
                 else
-                    BonusStamina -= spendRate;
+                    BonusStamina -= SpendRate;
             }
-            else if (!haltStaminaRegen && _exhaustedTimer <= 0)
+            else if (!HaltStaminaRegen && _exhaustedTimer <= 0)
             {
-                if (!exhausted)
-                    Stamina += _staminaReplenishRate;
+                if (!Exhausted)
+                    Stamina += StaminaReplenishRate;
                 else
-                    Stamina += _staminaReplenishRate * 0.5;
+                    Stamina += StaminaReplenishRate * 0.5;
             }
 
             if (player.whoAmI == Main.myPlayer)
             {
-                UIManager.StaminaUI.rate = spendRate;
-                UIManager.StaminaUI.haltRegen = haltStaminaRegen;
+                UIManager.StaminaUI.Rate = SpendRate;
+                UIManager.StaminaUI.HaltRegen = HaltStaminaRegen;
             }
 
-            if (Stamina <= 0.0 && !exhausted)
+            if (Stamina <= 0.0 && !Exhausted)
             {
                 _sprinting = false;
-                exhausted = true;
+                Exhausted = true;
                 _exhaustedTimer = 60;
                 Paragliding = false;
             }
 
-            if(Stamina >= maxStamina)
+            if (Stamina >= MaxStamina)
             {
-                exhausted = false;
+                Exhausted = false;
             }
 
             _lastLeftMovementState = player.controlLeft;
             _lastRightMovementState = player.controlRight;
 
 
-            spendRate = 0.0f;
-            haltStaminaRegen = false;
+            SpendRate = 0.0f;
+            HaltStaminaRegen = false;
         }
 
         private void InitializeStamina()
         {
-            _staminaReplenishRate = 0.2;
-            spendRate = 0.0;
-            maxStamina = 50.0;
-            _stamina = maxStamina;
+            StaminaReplenishRate = 0.2;
+            SpendRate = 0.0;
+            MaxStamina = 50.0;
+            _stamina = MaxStamina;
         }
 
         public void UpdateStaminaRunSpeeds()
@@ -117,7 +106,7 @@ namespace TLoZ.Players
                 player.runAcceleration *= 1.75f;
             }
 
-            if(exhausted)
+            if (Exhausted)
             {
                 player.moveSpeed *= 0.5f;
                 player.maxRunSpeed *= 0.5f;
@@ -127,39 +116,52 @@ namespace TLoZ.Players
 
         private void SaveStamina(TagCompound tag)
         {
-            tag.Add("maxStamina", maxStamina);
+            tag.Add("maxStamina", MaxStamina);
         }
 
         private void LoadStamina(TagCompound tag)
         {
-            if(tag.GetDouble("maxStamina") != 0)
-                maxStamina = tag.GetDouble("maxStamina");
+            if (tag.GetDouble("maxStamina") != 0)
+                MaxStamina = tag.GetDouble("maxStamina");
         }
 
+        private double _bonusStamina;
         public double BonusStamina
         {
-            get { return bonusStamina; }
+            get { return _bonusStamina; }
             set
             {
-                bonusStamina = value;
-                if (bonusStamina < 0.0)
-                    bonusStamina = 0.0;
-                if (bonusStamina > maxStamina * 2)
-                    bonusStamina = maxStamina * 2;
+                _bonusStamina = value;
+                if (_bonusStamina < 0.0)
+                    _bonusStamina = 0.0;
+                if (_bonusStamina > MaxStamina * 2)
+                    _bonusStamina = MaxStamina * 2;
             }
         }
 
+        private double _stamina;
         public double Stamina
         {
             get { return _stamina; }
             set
             {
                 _stamina = value;
-                if (_stamina > maxStamina)
-                    _stamina = maxStamina;
+                if (_stamina > MaxStamina)
+                    _stamina = MaxStamina;
                 else if (_stamina < 0.0)
                     _stamina = 0.0;
             }
         }
+
+        public double MaxStamina { get; set; }
+
+        public double SpendRate { get; set; }
+
+        public bool HaltStaminaRegen { get; set; }
+        public bool Exhausted { get; private set; }
+
+        public int SprintDirection { get; private set; }
+
+        public double StaminaReplenishRate { get; private set; }
     }
 }

@@ -39,13 +39,13 @@ namespace TLoZ.UIs
 
                 if (!loZPlayer.HasBomb )
                 {
-                    if (!loZPlayer.isNearBomb && loZPlayer.SelectedRune is BombRoundRune && player.ownedProjectileCounts[TLoZMod.Instance.ProjectileType<BombRound>()] > 0)
+                    if (!loZPlayer.IsNearBomb && loZPlayer.SelectedRune is BombRoundRune && player.ownedProjectileCounts[TLoZMod.Instance.ProjectileType<BombRound>()] > 0)
                         Helpers.DrawInputButtonMouse(spriteBatch, position, 2, "Detonate Bomb( Round ).");
 
-                    else if(!loZPlayer.isNearBomb && loZPlayer.SelectedRune is BombSquareRune && player.ownedProjectileCounts[TLoZMod.Instance.ProjectileType<BombSquare>()] > 0)
+                    else if(!loZPlayer.IsNearBomb && loZPlayer.SelectedRune is BombSquareRune && player.ownedProjectileCounts[TLoZMod.Instance.ProjectileType<BombSquare>()] > 0)
                         Helpers.DrawInputButtonMouse(spriteBatch, position, 2, "Detonate Bomb( Square ).");
 
-                    else if(loZPlayer.isNearBomb)
+                    else if(loZPlayer.IsNearBomb)
                         Helpers.DrawInputButtonMouse(spriteBatch, position, 2, "Pick up Bomb(Hover over it with mouse)");
                 }
             }

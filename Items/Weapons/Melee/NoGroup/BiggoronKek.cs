@@ -1,4 +1,4 @@
-﻿namespace TLoZ.Items.Weapons.NoGroup
+﻿namespace TLoZ.Items.Weapons.Melee.NoGroup
 {
     public class BiggoronKek : TwoHandedWeapon
     {

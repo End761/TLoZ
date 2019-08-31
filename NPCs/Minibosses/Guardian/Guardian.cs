@@ -10,16 +10,6 @@ namespace TLoZ.NPCs.Minibosses.Guardian
 {
     public class Guardian : TLoZNpc
     {
-        private float _noLaserTimer;
-
-        private Vector2 _shootPos;
-
-        private bool 
-            _died, _hasResetAI3;
-
-        private int 
-            _timeSinceLastActivation, _noStunTimer, _focusTimer;
-
         public Guardian() : base("Guardian", true, 1000, 100, 60, false, 10)
         {
         }
@@ -33,8 +23,8 @@ namespace TLoZ.NPCs.Minibosses.Guardian
             npc.knockBackResist = 0f;
             ScanTimer = 6.0f;
             npc.netAlways = true;
-            _hasResetAI3 = false;
-            _died = false;
+            HasResetAI3 = false;
+            Died = false;
             IsGuardianActive = false;
         }
         
@@ -46,7 +36,7 @@ namespace TLoZ.NPCs.Minibosses.Guardian
 
             npc.TargetClosest();
 
-            if (!_died)
+            if (!Died)
             {
                 if (Target.active && !Target.dead && Vector2.Distance(npc.Center, Target.Center) <= 400)
                     IsGuardianActive = true;
@@ -56,7 +46,7 @@ namespace TLoZ.NPCs.Minibosses.Guardian
 
                 if (IsGuardianActive)
                 {
-                    _timeSinceLastActivation = 0;
+                    TimeSinceLastActivation = 0;
 
                     if (BootUpTimer < 1.4f)
                         BootUpTimer += 0.02f;
@@ -76,7 +66,7 @@ namespace TLoZ.NPCs.Minibosses.Guardian
                 }
                 else
                 {
-                    _timeSinceLastActivation++;
+                    TimeSinceLastActivation++;
 
                     if (EyeBootUpTimer > 0.0f)
                         EyeBootUpTimer -= 0.02f;
@@ -87,6 +77,7 @@ namespace TLoZ.NPCs.Minibosses.Guardian
                     ShotPreparationTimer = 0;
                     ScanTimer = 9.0f;
                 }
+
                 if (ScanTimer <= 0.0f)
                 {
                     if(ShotPreparationTimer > 50 && ShotPreparationTimer < 52)
@@ -96,34 +87,38 @@ namespace TLoZ.NPCs.Minibosses.Guardian
                     {
                         Vector2 laserPos = npc.Center - new Vector2(-1, 48).RotatedBy(npc.rotation);
                         Helpers.CircleDust(laserPos, Vector2.Zero, DustID.AncientLight, 12, 12);
-                        int laser = Projectile.NewProjectile(laserPos, Helpers.DirectToPosition(laserPos, _shootPos, 16f), mod.ProjectileType<GuardianLaser>(), 60, 0f, Main.myPlayer);
+                        int laser = Projectile.NewProjectile(laserPos, Helpers.DirectToPosition(laserPos, ShootPos, 16f), mod.ProjectileType<GuardianLaser>(), 60, 0f, Main.myPlayer);
                         Main.projectile[laser].ai[0] = npc.whoAmI;
                         Main.projectile[laser].ai[1] = 1f;
                         ScanTimer = 9.6f;
                         ShotPreparationTimer = 0.0f;
-                        _noLaserTimer = 60f;
-                        _focusTimer = 0;
+                        NoLaserTimer = 60f;
+                        FocusTimer = 0;
                     }
                 }
 
                 if (ShotPreparationTimer < 45f)
-                    _shootPos = Target.Center + Target.velocity / 8f - new Vector2(0, 6);
+                    ShootPos = Target.Center + Target.velocity / 8f - new Vector2(0, 6);
 
-                if (_noLaserTimer > 0f)
-                    _noLaserTimer -= 1f;
+                if (NoLaserTimer > 0f)
+                    NoLaserTimer -= 1f;
             }
             else
             {
-                if (!_hasResetAI3)
+                if (!HasResetAI3)
                 {
                     ScanTimer = 0;
                     ShotPreparationTimer = 0f;
-                    _hasResetAI3 = true;
+                    HasResetAI3 = true;
                 }
+
                 if(++ScanTimer > 60f)
                     ShotPreparationTimer += 0.01f;
+
                 float[] chooseOne = new float[] { 0.001f, 0.001f, 0.5f, 0.5f };
+
                 BootUpTimer = Main.rand.Next(chooseOne);
+
                 if (ShotPreparationTimer >= 0.45f)
                 {
                     npc.life = 0;
@@ -133,7 +128,7 @@ namespace TLoZ.NPCs.Minibosses.Guardian
 
             int timeRequired = ScanTimer <= 2.0f ? 14 : 4;
 
-            if (_noLaserTimer <= 0 && ++_focusTimer >= timeRequired && EyeBootUpTimer >= 3.0f && ShotPreparationTimer < 45 && !_died)
+            if (NoLaserTimer <= 0 && ++FocusTimer >= timeRequired && EyeBootUpTimer >= 3.0f && ShotPreparationTimer < 45 && !Died)
             {
                 if (ScanTimer <= 2.0f)
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Custom/GuardianScan2"));
@@ -141,13 +136,13 @@ namespace TLoZ.NPCs.Minibosses.Guardian
                 else
                     Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Custom/GuardianScan1"));
 
-                _focusTimer = 0;
+                FocusTimer = 0;
             }
 
             if (ScanTimer > 2.0f && ScanTimer < 2.1f)
-                _focusTimer = 18;
+                FocusTimer = 18;
 
-            if (!_died)
+            if (!Died)
                 foreach (Projectile proj in Main.projectile)
                 {
                     if (!proj.ranged || !proj.active || !proj.friendly)
@@ -159,23 +154,23 @@ namespace TLoZ.NPCs.Minibosses.Guardian
                         {
                             if (!IsGuardianActive)
                             {
-                                _shootPos = Target.Center + Target.velocity / 8f - new Vector2(0, 6);
+                                ShootPos = Target.Center + Target.velocity / 8f - new Vector2(0, 6);
                                 Vector2 laserPos = npc.Center - new Vector2(-1, 48).RotatedBy(npc.rotation);
                                 Helpers.CircleDust(laserPos, Vector2.Zero, DustID.AncientLight, 12, 12);
-                                int laser = Projectile.NewProjectile(laserPos, Helpers.DirectToPosition(laserPos, _shootPos, 16f), mod.ProjectileType<GuardianLaser>(), 60, 0f, Main.myPlayer);
+                                int laser = Projectile.NewProjectile(laserPos, Helpers.DirectToPosition(laserPos, ShootPos, 16f), mod.ProjectileType<GuardianLaser>(), 60, 0f, Main.myPlayer);
                                 Main.projectile[laser].ai[0] = npc.whoAmI;
                                 Main.projectile[laser].ai[1] = 1f;
                             }
 
                             IsGuardianActive = true;
 
-                            if (_noStunTimer <= 0)
+                            if (NoStunTimer <= 0)
                             {
                                 ScanTimer = 14.6f;
                                 ShotPreparationTimer = 0.0f;
-                                _noLaserTimer = 120f;
-                                _focusTimer = 0;
-                                _noStunTimer = 560;
+                                NoLaserTimer = 120f;
+                                FocusTimer = 0;
+                                NoStunTimer = 560;
                             }
 
                             npc.StrikeNPC((int)(proj.damage * 1.25f), 0f, 0, false, false, true);
@@ -186,14 +181,15 @@ namespace TLoZ.NPCs.Minibosses.Guardian
                     }
                 }
 
-            if (_noStunTimer > 0)
-                _noStunTimer--;
+            if (NoStunTimer > 0)
+                NoStunTimer--;
         }
 
         public override bool CheckActive()
         {
-            if (_timeSinceLastActivation > 18000)
+            if (TimeSinceLastActivation > 18000)
                 return true;
+
             return false;
         }
 
@@ -227,14 +223,14 @@ namespace TLoZ.NPCs.Minibosses.Guardian
 
         public override bool CheckDead()
         {
-            if (!_died)
+            if (!Died)
             {
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Custom/GuardianDeath"));
 
                 npc.life = npc.lifeMax;
                 npc.dontTakeDamage = true;
 
-                _died = true;
+                Died = true;
 
                 return false;
             }
@@ -264,12 +260,12 @@ namespace TLoZ.NPCs.Minibosses.Guardian
 
             deathEffect.Parameters["uColor"].SetValue(new Vector4(ShotPreparationTimer, ShotPreparationTimer, ShotPreparationTimer, 0.8f));
 
-            if (_died)
+            if (Died)
                 Helpers.StartShader(spriteBatch, deathEffect);
 
             spriteBatch.Draw(baseTexture, npc.Center - new Vector2(0, 30) - Main.screenPosition, null, drawColor, npc.rotation, new Vector2(baseTexture.Width / 2, baseTexture.Height / 2), 1f, SpriteEffects.None, 1f);
 
-            if (_died && _hasResetAI3)
+            if (Died && HasResetAI3)
                 deathEffect.CurrentTechnique.Passes[0].Apply();
 
             deathEffect.Parameters["uColor"].SetValue(new Vector4(ShotPreparationTimer, ShotPreparationTimer, ShotPreparationTimer, BootUpTimer));
@@ -278,17 +274,17 @@ namespace TLoZ.NPCs.Minibosses.Guardian
 
             spriteBatch.Draw(eyeTexture, npc.Center - new Vector2(0, 30) - Main.screenPosition, null, Color.White * (EyeBootUpTimer >= 1.0f ? 1f : 0f), npc.rotation, new Vector2(baseTexture.Width / 2, baseTexture.Height / 2), 1f, SpriteEffects.None, 1f);
 
-            if (_died && _hasResetAI3)
+            if (Died && HasResetAI3)
                 deathEffect.CurrentTechnique.Passes[0].Apply();
 
             Helpers.EndShader(spriteBatch);
 
-            if (EyeBootUpTimer >= 3.0f && _noLaserTimer <= 0f && !_died && ShotPreparationTimer <= 45f)
+            if (EyeBootUpTimer >= 3.0f && NoLaserTimer <= 0f && !Died && ShotPreparationTimer <= 45f)
             {
                 float x = Main.rand.NextFloat(ScanTimer * -1, ScanTimer) * 4;
                 float y = Main.rand.NextFloat(ScanTimer * -1, ScanTimer) * 4;
 
-                Vector2 position = _shootPos - new Vector2(0, 6) + new Vector2(x, y);
+                Vector2 position = ShootPos - new Vector2(0, 6) + new Vector2(x, y);
 
                 Helpers.DrawLine(npc.Center - new Vector2(-1, 48).RotatedBy(npc.rotation), position, mod.GetTexture("Textures/Misc/Laser"), mod.GetTexture("Textures/Misc/LaserEnd"), spriteBatch, ScanTimer <= 2.0f ? Color.Red : Color.Crimson, ScanTimer <= 2.0f ? 2 : 4);
             }
@@ -332,28 +328,39 @@ namespace TLoZ.NPCs.Minibosses.Guardian
 
         public bool IsGuardianActive { get; set; }
 
-        private float BootUpTimer
+        public float BootUpTimer
         {
             get { return npc.ai[0]; }
-            set { npc.ai[0] = value; }
+            private set { npc.ai[0] = value; }
         }
 
-        private float EyeBootUpTimer
+        public float EyeBootUpTimer
         {
             get { return npc.ai[1]; }
-            set { npc.ai[1] = value; }
+            private set { npc.ai[1] = value; }
         }
 
-        private float ScanTimer
+        public float ScanTimer
         {
             get { return npc.ai[2]; }
-            set { npc.ai[2] = value; }
+            private set { npc.ai[2] = value; }
         }
 
-        private float ShotPreparationTimer
+        public float ShotPreparationTimer
         {
             get { return npc.ai[3]; }
-            set { npc.ai[3] = value; }
+            private set { npc.ai[3] = value; }
         }
+        
+        public float NoLaserTimer { get; private set; }
+
+        public Vector2 ShootPos { get; private set; }
+
+        public bool Died { get; private set; }
+        public bool HasResetAI3 { get; private set; }
+
+        public int TimeSinceLastActivation { get; private set; }
+        public int NoStunTimer { get; private set; }
+        public int FocusTimer { get; private set; }
     }
 }

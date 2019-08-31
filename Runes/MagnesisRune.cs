@@ -25,8 +25,11 @@ namespace TLoZ.Runes
             {
                 int startX = x;
                 int startY = y;
+
                 List<Vector2> tilesToKill = new List<Vector2>();
+
                 int projectile = Projectile.NewProjectile(new Vector2(x * 16, y * 16), Vector2.Zero, proj, 0, 0, player.whoAmI, 1);
+
                 PickedUpTile upTile = (PickedUpTile)Main.projectile[projectile].modProjectile;
 
                 for(int i = 0; i < totalHeight; i++)
@@ -41,9 +44,9 @@ namespace TLoZ.Runes
                     for (int j = 0; j < totalWidth; j++)
                         if (WorldGen.SolidTile(Main.tile[startX + j, startY + i]) && magnesisWhiteList.Contains(Main.tile[startX + j, startY + i].type))
                         {
-                            upTile.tileIDs[i * totalWidth + j] = Main.tile[startX + j, startY + i].type;
-                            upTile.tilePositions[i * totalWidth + j] = new Vector2(j, i) * 16;
-                            upTile.tileFrames[i * totalWidth + j] = new Vector2(Main.tile[startX + j, startY + i].frameX, Main.tile[startX + j, startY + i].frameY);
+                            upTile.TileIDs[i * totalWidth + j] = Main.tile[startX + j, startY + i].type;
+                            upTile.TilePositions[i * totalWidth + j] = new Vector2(j, i) * 16;
+                            upTile.TileFrames[i * totalWidth + j] = new Vector2(Main.tile[startX + j, startY + i].frameX, Main.tile[startX + j, startY + i].frameY);
 
                             tilesToKill.Add(new Vector2(startX + j, startY + i));
                         }
@@ -54,7 +57,7 @@ namespace TLoZ.Runes
                     WorldGen.KillTile((int)vector.X, (int)vector.Y, false, false, true);
 
                 tilesToKill.Clear();
-                upTile.mousePosOffset = -new Vector2(startX - x, startY - y) * 16;
+                upTile.MousePosOffset = -new Vector2(startX - x, startY - y) * 16;
             }
             else
                 return false;

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
-using TLoZ.Items.Weapons.MasterSword;
+using TLoZ.Items.Weapons.Melee.MasterSword;
 using TLoZ.Players;
 
 namespace TLoZ
@@ -11,8 +11,6 @@ namespace TLoZ
     public class TLoZDrawLayers
     {
         private static TLoZDrawLayers _instance;
-        public float TwoHanderRotation { get; private set; }
-        public Vector2 TwoHanderVFX { get; private set; }
 
         public static TLoZDrawLayers Instance
         {
@@ -39,13 +37,13 @@ namespace TLoZ
             int dir = drawPlayer.direction;
 
             Color color = Lighting.GetColor((int)drawPlayer.Center.X / 16, (int)drawPlayer.Center.Y / 16);
-            Instance.TwoHanderRotation = (tlozPlayer.isSlashReversed ? MathHelper.Pi : dir == -1 ? (MathHelper.Pi / 3) : MathHelper.Pi + MathHelper.Pi * .66f) - (tlozPlayer.swingRotation) * dir;
+            Instance.TwoHanderRotation = (tlozPlayer.IsSlashReversed ? MathHelper.Pi : dir == -1 ? (MathHelper.Pi / 3) : MathHelper.Pi + MathHelper.Pi * .66f) - (tlozPlayer.SwingRotation) * dir;
 
-            Vector2 posOffset = tlozPlayer.swingRotation > 0.0f ? new Vector2(8 * dir, 2) * tlozPlayer.swingRotation : Vector2.Zero;
-            posOffset = tlozPlayer.twoHanderChargeAttack ? new Vector2(12 * drawPlayer.direction, 0) : posOffset;
-            SpriteEffects spriteEffects = tlozPlayer.isSlashReversed ? dir == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally : dir == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            Vector2 posOffset = tlozPlayer.SwingRotation > 0.0f ? new Vector2(8 * dir, 2) * tlozPlayer.SwingRotation : Vector2.Zero;
+            posOffset = tlozPlayer.TwoHanderChargeAttack ? new Vector2(12 * drawPlayer.direction, 0) : posOffset;
+            SpriteEffects spriteEffects = tlozPlayer.IsSlashReversed ? dir == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally : dir == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-            Vector2 origin = tlozPlayer.isSlashReversed ? new Vector2(dir == 1 ? 0 : itemTexture.Width, itemTexture.Height) : new Vector2(dir == -1 ? 0 : itemTexture.Width, itemTexture.Height);
+            Vector2 origin = tlozPlayer.IsSlashReversed ? new Vector2(dir == 1 ? 0 : itemTexture.Width, itemTexture.Height) : new Vector2(dir == -1 ? 0 : itemTexture.Width, itemTexture.Height);
             Instance.TwoHanderVFX = new Vector2((int)drawPlayer.MountedCenter.X, (int)drawPlayer.MountedCenter.Y + drawPlayer.gfxOffY) + new Vector2(22 * dir, 6) - posOffset;
             DrawData weaponData = new DrawData
             (
@@ -107,7 +105,7 @@ namespace TLoZ
             Color color = Lighting.GetColor((int)drawPlayer.Center.X / 16, (int)drawPlayer.Center.Y / 16);
             DrawData sheathData = new DrawData
             (
-                ModContent.GetTexture("TLoZ/Items/Weapons/MasterSword/MasterSwordSheath"),
+                ModContent.GetTexture("TLoZ/Items/Weapons/Melee/MasterSword/MasterSwordSheath"),
                 new Vector2((int)drawPlayer.MountedCenter.X - offsetX, (int)drawPlayer.MountedCenter.Y + offsetY + drawPlayer.gfxOffY) - Main.screenPosition,
                 null,
                 color,
@@ -120,7 +118,7 @@ namespace TLoZ
 
             DrawData swordData = new DrawData
             (
-                ModContent.GetTexture("TLoZ/Items/Weapons/MasterSword/MasterSheathedByLiz"),
+                ModContent.GetTexture("TLoZ/Items/Weapons/Melee/MasterSword/MasterSheathedByLiz"),
                 new Vector2((int)drawPlayer.MountedCenter.X + 2 * drawPlayer.direction, (int)drawPlayer.MountedCenter.Y - 2 + drawPlayer.gfxOffY) - Main.screenPosition,
                 null,
                 color,
@@ -149,7 +147,7 @@ namespace TLoZ
             Color color = Lighting.GetColor((int)drawPlayer.Center.X / 16, (int)drawPlayer.Center.Y / 16);
             DrawData sheathData = new DrawData
             (
-                ModContent.GetTexture("TLoZ/Items/Weapons/MasterSword/Buckle_Body"),
+                ModContent.GetTexture("TLoZ/Items/Weapons/Melee/MasterSword/Buckle_Body"),
                 new Vector2((int)drawPlayer.MountedCenter.X, (int)drawPlayer.MountedCenter.Y - 3 + drawPlayer.gfxOffY) - Main.screenPosition,
                 drawPlayer.bodyFrame,
                 color,
@@ -175,20 +173,27 @@ namespace TLoZ
 
             if (zPlayer.EquipedShield == null || drawPlayer.itemAnimation > 0)
                 return;
+
             Color color = Lighting.GetColor((int)drawPlayer.Center.X / 16, (int)drawPlayer.Center.Y / 16);
+
+            Texture2D texture = TLoZMod.Instance.GetTexture(zPlayer.EquipedShield.EquipedTexturePath);
+
             DrawData shieldData = new DrawData
             (
-                zPlayer.EquipedShield.EquipedTexture,
+                texture,
                 new Vector2((int)drawPlayer.MountedCenter.X, (int)drawPlayer.MountedCenter.Y + drawPlayer.gfxOffY) - Main.screenPosition,
-                new Rectangle(0, zPlayer.ParryVisualTime > 0? zPlayer.EquipedShield.EquipedTexture.Height / 2 : 0, zPlayer.EquipedShield.EquipedTexture.Width, zPlayer.EquipedShield.EquipedTexture.Height / 2),
+                new Rectangle(0, zPlayer.ParryVisualTime > 0 ? texture.Height / 2 : 0, texture.Width, texture.Height / 2),
                 color,
                 0,
-                new Vector2(zPlayer.EquipedShield.EquipedTexture.Width / 2, zPlayer.EquipedShield.EquipedTexture.Height / 4),
+                new Vector2(texture.Width / 2, texture.Height / 4),
                 1f,
                 drawPlayer.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally,
                 1
                 );
             Main.playerDrawData.Add(shieldData);
         });
+
+        public float TwoHanderRotation { get; private set; }
+        public Vector2 TwoHanderVFX { get; private set; }
     }
 }

@@ -34,12 +34,12 @@ namespace TLoZ.Runes
 
             foreach (Projectile projectile in Main.projectile)
             {
-                if (!projectile.active || !TLoZGlobalProjectile.GetFor(projectile).canBeStasised)
+                if (!projectile.active || !TLoZGlobalProjectile.GetFor(projectile).CanBeStasised)
                     continue;
 
                 if (Collision.CheckAABBvLineCollision(projectile.position, projectile.Hitbox.Size(), player.Center, Main.MouseWorld))
                 {
-                    TLoZGlobalProjectile.GetFor(projectile).stasisTimer = 420;
+                    TLoZGlobalProjectile.GetFor(projectile).StasisTimer = 420;
                     break;
                 }
             }
