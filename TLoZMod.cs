@@ -80,6 +80,8 @@ namespace TLoZ
             layers.Insert(1, new MiscInputsLayer(UIManager.MiscInputsUI));
 
             layers.Add(new StaminaLayer(UIManager.StaminaUI));
+
+            layers.Add(new InstrumentPlayLayer(UIManager.InstrumentPlayUIState));
         }
 
 
@@ -93,11 +95,12 @@ namespace TLoZ
             {
                 if (npc.type != NPCType<Guardian>() || !npc.active)
                     continue;
+
                 Guardian guardian = npc.modNPC as Guardian;
                 if (guardian != null && guardian.IsGuardianActive)
                 {
                     music = GetSoundSlot(SoundType.Music, "Sounds/Music/GuardianTheme");
-                    priority = MusicPriority.BossHigh;
+                    priority = MusicPriority.BossMedium;
                 }
             }
         }

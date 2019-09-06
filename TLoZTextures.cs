@@ -32,6 +32,8 @@ namespace TLoZ
 
             NPCFXGuardianGlow = ModContent.GetTexture("TLoZ/NPCs/Minibosses/Guardian/Guardian_Glow");
             NPCFXGuardianEye = ModContent.GetTexture("TLoZ/NPCs/Minibosses/Guardian/Guardian_Eye");
+
+            MiscNoteThing = ModContent.GetTexture("TLoZ/Notes/NoteThing");
         }
 
         public static void Unload()
@@ -59,6 +61,8 @@ namespace TLoZ
 
             NPCFXGuardianEye = null;
             NPCFXGuardianGlow = null;
+
+            MiscNoteThing = null;
         }
 
         public static Texture2D MiscStasisArrow { get; private set; }
@@ -83,5 +87,7 @@ namespace TLoZ
 
         public static Texture2D NPCFXGuardianGlow { get; private set; }
         public static Texture2D NPCFXGuardianEye { get; private set; }
+
+        public static Texture2D MiscNoteThing { get; private set; }
     }
 }
