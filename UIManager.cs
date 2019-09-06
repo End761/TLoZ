@@ -19,6 +19,9 @@ namespace TLoZ
 
             StaminaUI = new StaminaUIState();
             StaminaUI.Activate();
+
+            InstrumentPlayUIState = new InstrumentPlayUIState();
+            InstrumentPlayUIState.Activate();
         }
 
         public static void UpdateUIs(GameTime gameTime)
@@ -26,7 +29,10 @@ namespace TLoZ
             RuneSelectionUI?.Update(gameTime);
             MiscInputsUI?.Update(gameTime);
             StaminaUI?.Update(gameTime);
+            InstrumentPlayUIState?.Update(gameTime);
         }
+
+        public static InstrumentPlayUIState InstrumentPlayUIState { get; private set; }
 
         public static UserInterface RuneInterface { get; private set; }
         public static RuneSelectionUI RuneSelectionUI { get; private set; }

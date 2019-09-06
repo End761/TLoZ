@@ -45,6 +45,7 @@ namespace TLoZ.Players
         {
             InitializeRunes();
             InitializeStamina();
+            InitializeOcarina();
         }
 
         public override void ResetEffects()
@@ -243,17 +244,23 @@ namespace TLoZ.Players
         {
             ProcessRuneSelectionTriggers(triggersSet);
 
+            ProcessOcarinaTriggers(triggersSet);
+
             if (HasParaglider && TLoZInput.EquipParaglider.JustPressed && !Exhausted)
             {
                 player.mount?.Dismount(player);
                 Paragliding = !Paragliding;
             }
+
+            TLoZInput.Update();
         }
 
         public override void PostUpdate()
         {
             if (TargetDirection != -99)
                 player.direction = TargetDirection;
+
+            PostUpdateOcarina();
         }
 
         public override void PreUpdate()
@@ -270,6 +277,8 @@ namespace TLoZ.Players
                 BlockInputs(true, false, false, false);
 
             SetParryControls();
+
+            SetOcarinaInputs();
         }
         //Custom Methods:
 
