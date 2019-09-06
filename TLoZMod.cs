@@ -13,6 +13,7 @@ using TLoZ.Enums;
 using TLoZ.Network;
 using TLoZ.Players;
 using TLoZ.NPCs.Minibosses.Guardian;
+using TLoZ.Time;
 
 namespace TLoZ
 {
@@ -37,6 +38,7 @@ namespace TLoZ
             FillMagnesisList();
 
             StasisableProjectiles.Load();
+            TimeManagement.Load();
 
             if (!Main.dedServ)
             {
@@ -52,6 +54,8 @@ namespace TLoZ
             MagnesisRune.magnesisWhiteList.Clear();
 
             RuneManager.Instance.Unload();
+
+            TimeManagement.Unload();
 
             StasisableProjectiles.Unload();
             TLoZInput.Unload();
