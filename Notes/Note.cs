@@ -12,7 +12,7 @@ namespace TLoZ.Notes
             UnlocalizedName = "note." + name;
             TexturePath = GetType().GetTexturePath();
 
-            SoundPath = GetType().GetPath();
+            SoundPath = "Sounds/Custom/Notes/" + GetType().Name;
             SoundLoopPath = soundLoopPath;
 
             HeightOffset = offset;
@@ -21,9 +21,11 @@ namespace TLoZ.Notes
 
         public virtual void Play()
         {
-            Main.PlaySound(SoundLoader.customSoundType, -1, -1, TLoZMod.Instance.GetSoundSlot(SoundType.Custom, SoundPath));
+            Main.PlaySound(SoundLoader.customSoundType, -1, -1, Mod.GetSoundSlot(SoundType.Custom, SoundPath));
         }
 
+
+        public Mod Mod { get; internal set; }
 
         ///<summary>Determines height at which the note will be displayed when played. The higher the value, the lower the note is displayed.</summary> 
         public float HeightOffset { get; }

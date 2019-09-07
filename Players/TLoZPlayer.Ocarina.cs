@@ -47,20 +47,23 @@ namespace TLoZ.Players
 
         public void ProcessOcarinaTriggers(TriggersSet triggersSet)
         {
+            if (!IsPlayingInstrument)
+                return;
+
             if (TLoZInput.HasTriggeredKey(Keys.A))
-                PlayNote(new NoteA());
+                PlayNote(NoteManager.Instance.Get<NoteA>());
 
             if (TLoZInput.HasTriggeredKey(Keys.Left))
-                PlayNote(new NoteLeft());
+                PlayNote(NoteManager.Instance.Get<NoteLeft>());
 
             if (TLoZInput.HasTriggeredKey(Keys.Right))
-                PlayNote(new NoteRight());
+                PlayNote(NoteManager.Instance.Get<NoteRight>());
 
             if (TLoZInput.HasTriggeredKey(Keys.Up))
-                PlayNote(new NoteUp());
+                PlayNote(NoteManager.Instance.Get<NoteUp>());
 
             if (TLoZInput.HasTriggeredKey(Keys.Down))
-                PlayNote(new NoteDown());
+                PlayNote(NoteManager.Instance.Get<NoteDown>());
 
             if (TLoZInput.HasTriggeredKey(Keys.X))
                 _currentNotes.Clear();

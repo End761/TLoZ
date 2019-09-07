@@ -13,7 +13,7 @@ namespace TLoZ.UIs
     public class InstrumentPlayUIState : UIState
     {   
         private const float
-            PANEL_WIDTH = 410,
+            PANEL_WIDTH = 420,
             PANEL_HEIGHT = 200;
 
         public override void OnInitialize()
@@ -76,7 +76,7 @@ namespace TLoZ.UIs
                 spriteBatch.Draw(Main.magicPixel, position + new Vector2(0, 32 + 22 * i), new Rectangle(0, 0, (int)PANEL_WIDTH - 32, 4), Color.Red, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
 
             // draw note thing™
-            spriteBatch.Draw(TLoZTextures.MiscNoteThing, position + new Vector2(0, 32), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
+            spriteBatch.Draw(TLoZTextures.MiscNoteThing, position + new Vector2(-10, 20), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
 
 
             // no notes played, don't need the rest of code to be run
@@ -89,7 +89,7 @@ namespace TLoZ.UIs
 
                 int noteIndex = TLoZPlayer.CurrentNotes.FindIndex(x => x == note);
 
-                spriteBatch.Draw(texture, position + new Vector2(36 + 42 * noteIndex, note.HeightOffset), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
+                spriteBatch.Draw(texture, position + new Vector2(46 + 42 * noteIndex, note.HeightOffset), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
             }
         }
 

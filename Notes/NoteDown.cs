@@ -2,7 +2,7 @@
 {
     public class NoteDown : Note
     {
-        public NoteDown() : base("down", 78,"", "")
+        public NoteDown() : base("down", 78, "")
         {
         }
     }

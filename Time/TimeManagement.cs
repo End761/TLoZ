@@ -7,7 +7,7 @@ namespace TLoZ.Time
     public static class TimeManagement
     {
         internal static Dictionary<long, TileState[]> tileStatesPerTime;
-        internal static Dictionary<long, NPCState[]>
+        internal static Dictionary<long, NPCState[]> npcStatesPerTime;
 
 
         public static void Load()

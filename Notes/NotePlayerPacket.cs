@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using TLoZ.Players;
 using WebmilioCommons.Networking.Packets;
 
@@ -8,7 +9,7 @@ namespace TLoZ.Notes
     {
         public override bool PostReceive(BinaryReader reader, int fromWho)
         {
-            ModPlayer.PlayNote(Note);
+            ModPlayer.PlayNote(NoteManager.Instance[Note]);
 
             return true;
         }
