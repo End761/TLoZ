@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using Terraria;
 using Terraria.GameInput;
 using Terraria.ModLoader;
 using TLoZ.Notes;
@@ -28,33 +29,40 @@ namespace TLoZ.Players
 
         public void ProcessOcarinaTriggers(TriggersSet triggersSet)
         {
-            if (TLoZInput.HasTriggeredKey(Keys.A))
-                AddNote(new NoteA());
+            if (IsPlayingInstrument)
+            {
+                if (TLoZInput.HasTriggeredKey(Keys.A))
+                    AddNote(new NoteA());
 
-            if (TLoZInput.HasTriggeredKey(Keys.Left))
-                AddNote(new NoteLeft());
+                if (TLoZInput.HasTriggeredKey(Keys.Left))
+                    AddNote(new NoteLeft());
 
-            if (TLoZInput.HasTriggeredKey(Keys.Right))
-                AddNote(new NoteRight());
+                if (TLoZInput.HasTriggeredKey(Keys.Right))
+                    AddNote(new NoteRight());
 
-            if (TLoZInput.HasTriggeredKey(Keys.Up))
-                AddNote(new NoteUp());
+                if (TLoZInput.HasTriggeredKey(Keys.Up))
+                    AddNote(new NoteUp());
 
-            if (TLoZInput.HasTriggeredKey(Keys.Down))
-                AddNote(new NoteDown());
+                if (TLoZInput.HasTriggeredKey(Keys.Down))
+                    AddNote(new NoteDown());
 
-            if (TLoZInput.HasTriggeredKey(Keys.X))
-                CurrentNotes.Clear();
+                if (TLoZInput.HasTriggeredKey(Keys.X))
+                    CurrentNotes.Clear();
+            }
         }
 
         private void AddNote(Note note)
         {
+            if (note.SoundPath != "")
+                Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, note.SoundPath));
+
             if (CurrentNotes.Count > CurrentNotes.Capacity - 1)
             {
                 CurrentNotes.RemoveAt(7);
                 CurrentNotes.Insert(0, note);
                 return;
             }
+
             CurrentNotes.Add(note);
         }
 
