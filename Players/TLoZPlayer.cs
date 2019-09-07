@@ -278,7 +278,7 @@ namespace TLoZ.Players
 
             SetParryControls();
 
-            SetOcarinaInputs();
+            SetOcarinaControls();
         }
         //Custom Methods:
 

@@ -8,12 +8,31 @@ namespace TLoZ.Players
 {
     public partial class TLoZPlayer : ModPlayer
     {
-        public void InitializeOcarina()
+        private List<Note> _currentNotes;
+
+
+        public void PlayNote(Note note)
         {
-            CurrentNotes = new List<Note>(8);
+            if (_currentNotes.Count > _currentNotes.Capacity - 1)
+            {
+                _currentNotes.RemoveAt(7);
+                _currentNotes.Insert(0, note);
+
+                return;
+            }
+
+            _currentNotes.Add(note);
+
+            note.Play();
         }
 
-        public void SetOcarinaInputs()
+
+        public void InitializeOcarina()
+        {
+            _currentNotes = new List<Note>(8);
+        }
+
+        public void SetOcarinaControls()
         { 
             // Blocks movement, but you can still cancel out of it by using ocarina again
             if (IsPlayingInstrument)
@@ -23,43 +42,33 @@ namespace TLoZ.Players
         public void PostUpdateOcarina()
         {
             if (!IsPlayingInstrument)
-                CurrentNotes.Clear();
+                _currentNotes.Clear();
         }
 
         public void ProcessOcarinaTriggers(TriggersSet triggersSet)
         {
             if (TLoZInput.HasTriggeredKey(Keys.A))
-                AddNote(new NoteA());
+                PlayNote(new NoteA());
 
             if (TLoZInput.HasTriggeredKey(Keys.Left))
-                AddNote(new NoteLeft());
+                PlayNote(new NoteLeft());
 
             if (TLoZInput.HasTriggeredKey(Keys.Right))
-                AddNote(new NoteRight());
+                PlayNote(new NoteRight());
 
             if (TLoZInput.HasTriggeredKey(Keys.Up))
-                AddNote(new NoteUp());
+                PlayNote(new NoteUp());
 
             if (TLoZInput.HasTriggeredKey(Keys.Down))
-                AddNote(new NoteDown());
+                PlayNote(new NoteDown());
 
             if (TLoZInput.HasTriggeredKey(Keys.X))
-                CurrentNotes.Clear();
+                _currentNotes.Clear();
         }
 
-        private void AddNote(Note note)
-        {
-            if (CurrentNotes.Count > CurrentNotes.Capacity - 1)
-            {
-                CurrentNotes.RemoveAt(7);
-                CurrentNotes.Insert(0, note);
-                return;
-            }
-            CurrentNotes.Add(note);
-        }
 
         //Currently played notes
-        public List<Note> CurrentNotes { get; private set; }
+        public IReadOnlyList<Note> CurrentNotes => _currentNotes.AsReadOnly();
 
         public bool IsPlayingInstrument { get; set; }
     }

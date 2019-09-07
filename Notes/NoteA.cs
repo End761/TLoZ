@@ -2,7 +2,7 @@
 {
     public class NoteA : Note
     {
-        public NoteA() : base("a", "TLoZ/Notes/NoteA", 90, "", "")
+        public NoteA() : base("a", 90, "", "")
         {
         }
     }

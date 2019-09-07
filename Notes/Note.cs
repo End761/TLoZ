@@ -1,42 +1,42 @@
-﻿using TLoZ.Commons;
+﻿using Terraria;
+using Terraria.ModLoader;
+using WebmilioCommons.Extensions;
+using WebmilioCommons.Managers;
 
 namespace TLoZ.Notes
 {
     public abstract class Note : IHasUnlocalizedName
     {
-        public Note(string name, string texturePath, float offset, string soundPath = "", string soundLoopPath = "")
+        protected Note(string name, float offset, string soundLoopPath = "")
         {
-            UnlocalizedName = name;
-            TexturePath = texturePath;
+            UnlocalizedName = "note." + name;
+            TexturePath = GetType().GetTexturePath();
 
-            SoundPath = soundPath;
+            SoundPath = GetType().GetPath();
             SoundLoopPath = soundLoopPath;
 
             HeightOffset = offset;
         }
 
 
-        ///<summary>
-        /// Determines height at which the note will be displayed when played.
-        /// Bigger == lower
-        ///</summary> 
+        public virtual void Play()
+        {
+            Main.PlaySound(SoundLoader.customSoundType, -1, -1, TLoZMod.Instance.GetSoundSlot(SoundType.Custom, SoundPath));
+        }
+
+
+        ///<summary>Determines height at which the note will be displayed when played. The higher the value, the lower the note is displayed.</summary> 
         public float HeightOffset { get; }
 
         public string UnlocalizedName { get; }
 
-        /// <summary>
-        /// Path to Note's texture displayed in UI.
-        /// </summary>
-        public string TexturePath { get; }
+        /// <summary>Path to Note's texture displayed in UI.</summary>
+        public virtual string TexturePath { get; }
 
-        /// <summary>
-        /// Path to sound thats for tapping the note
-        /// </summary>
-        public string SoundPath { get; }
+        /// <summary>Path to sound played when tapping the note.</summary>
+        public virtual string SoundPath { get; }
 
-        /// <summary>
-        /// Path to sound thats for holding the note
-        /// </summary>
+        /// <summary>Path to sound played when holding the note</summary>
         public string SoundLoopPath { get; }
     }
 }
