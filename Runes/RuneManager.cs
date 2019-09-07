@@ -1,13 +1,11 @@
-﻿using TLoZ.Managers;
+﻿using WebmilioCommons.Managers;
 
 namespace TLoZ.Runes
 {
     public class RuneManager : SingletonManager<RuneManager, Rune>
     {
-        internal override void DefaultInitialize()
+        public override void DefaultInitialize()
         {
-            base.DefaultInitialize();
-
             Stasis = Add(new StasisRune()) as StasisRune;
 
             BombRound = Add(new BombRoundRune()) as BombRoundRune;
@@ -16,9 +14,10 @@ namespace TLoZ.Runes
             Magnesis = Add(new MagnesisRune() as MagnesisRune);
 
             Cryonis = Add(new CryonisRune() as CryonisRune);
+
+            base.DefaultInitialize();
         }
 
-        internal void Unload() => Clear();
 
         public Rune GetPrevious(Rune current)
         {
@@ -33,6 +32,7 @@ namespace TLoZ.Runes
 
             return index == Count - 1 ? this[0] : this[index + 1];
         }
+
 
         public StasisRune Stasis { get; private set; }
 

@@ -19,6 +19,7 @@ namespace TLoZ.Players
     public sealed partial class TLoZPlayer : ModPlayer
     {
 
+        public static TLoZPlayer Get() => Get(Main.LocalPlayer);
         public static TLoZPlayer Get(Player player) => player.GetModPlayer<TLoZPlayer>();
 
         private bool _paragliding;
@@ -119,6 +120,7 @@ namespace TLoZ.Players
             }
 
             ResetParryEffects();
+            ResetEffectOcarina();
         }
 
         public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)
@@ -357,7 +359,9 @@ namespace TLoZ.Players
                 if (_paragliding == value) return;
 
                 _paragliding = value;
-                NetworkPacketManager.Instance.SendPacketToServerIfLocal<PlayerParagliderStatePacket>(this.player, player.whoAmI, _paragliding);
+
+                if (Main.LocalPlayer == player)
+                    new PlayerParagliderStatePacket().Send();
             }
         }
 

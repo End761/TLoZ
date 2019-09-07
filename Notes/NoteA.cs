@@ -2,7 +2,7 @@
 {
     public class NoteA : Note
     {
-        public NoteA() : base("a", 90, "")
+        public NoteA() : base("a", 3.5f, "")
         {
         }
     }

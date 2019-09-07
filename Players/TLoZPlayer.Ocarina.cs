@@ -1,48 +1,94 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Terraria;
 using Terraria.GameInput;
 using Terraria.ModLoader;
 using TLoZ.Notes;
+using TLoZ.Songs;
+using TLoZ.Worlds;
 
 namespace TLoZ.Players
 {
     public partial class TLoZPlayer : ModPlayer
     {
-        private List<Note> _currentNotes;
+        public const float 
+            SECONDS_BEFORE_CHECK_SONG = 1.2f,
+            SECONDS_BEFORE_CANCEL_INSTRUMENT = 5;
 
 
         public void PlayNote(Note note)
         {
-            if (_currentNotes.Count > _currentNotes.Capacity - 1)
-            {
-                _currentNotes.RemoveAt(7);
-                _currentNotes.Insert(0, note);
+            if (CurrentNotes.Count > CurrentNotes.Capacity - 1)
+                CurrentNotes.RemoveAt(0);
 
-                return;
-            }
+            CurrentNotes.Add(note);
 
-            _currentNotes.Add(note);
-
+            TicksSinceLastNotePlayed = 0;
             note.Play();
+
+            if (Main.LocalPlayer == player)
+                new NotePlayedPacket()
+                {
+                    Note = note.UnlocalizedName
+                }.Send();
+        }
+
+        public void CancelInstrument()
+        {
+            IsPlayingInstrument = false;
+
+            if (!Main.dedServ)
+                UIManager.InstrumentPlayUIState.Visible = false;
         }
 
 
         public void InitializeOcarina()
         {
-            _currentNotes = new List<Note>(8);
+            CurrentNotes = new List<Note>(8);
         }
 
         public void SetOcarinaControls()
-        { 
+        {
             // Blocks movement, but you can still cancel out of it by using ocarina again
             if (IsPlayingInstrument)
                 BlockInputs(true, true, false, true);
         }
 
-        public void PostUpdateOcarina()
+
+        private void ResetEffectOcarina()
         {
-            if (!IsPlayingInstrument)
-                _currentNotes.Clear();
+            WorldSong worldSong = mod.GetModWorld<TLoZWorld>().CurrentSong;
+
+            //if (worldSong != null && worldSong.Player == this && worldSong.Variant == SongVariant.Normal)
+
+        }
+
+        private void PostUpdateOcarina()
+        {
+            if (IsPlayingInstrument)
+            {
+                if (TicksSinceLastNotePlayed >= SECONDS_BEFORE_CHECK_SONG * Constants.TICKS_PER_SECOND && CurrentNotes.Count > 0)
+                {
+                    Song song = SongManager.Instance.GetSong(CurrentNotes);
+
+                    if (song != null && song.CanPlay(this) && song.TryPlay(this, song.GetSongVariant(this)))
+                    {
+                        new SongPlayedPacket().Send();
+                        CancelInstrument();
+                    }
+                }
+
+                if (TicksSinceLastNotePlayed < SECONDS_BEFORE_CANCEL_INSTRUMENT * Constants.TICKS_PER_SECOND)
+                    TicksSinceLastNotePlayed++;
+                else
+                    CancelInstrument();
+            }
+            else
+            {
+                TicksSinceLastNotePlayed = 0;
+                CurrentNotes.Clear();
+            }
         }
 
         public void ProcessOcarinaTriggers(TriggersSet triggersSet)
@@ -51,28 +97,33 @@ namespace TLoZ.Players
                 return;
 
             if (TLoZInput.HasTriggeredKey(Keys.A))
-                PlayNote(NoteManager.Instance.Get<NoteA>());
+                PlayNote(new NoteA());
 
             if (TLoZInput.HasTriggeredKey(Keys.Left))
-                PlayNote(NoteManager.Instance.Get<NoteLeft>());
+                PlayNote(new NoteLeft());
 
             if (TLoZInput.HasTriggeredKey(Keys.Right))
-                PlayNote(NoteManager.Instance.Get<NoteRight>());
+                PlayNote(new NoteRight());
 
             if (TLoZInput.HasTriggeredKey(Keys.Up))
-                PlayNote(NoteManager.Instance.Get<NoteUp>());
+                PlayNote(new NoteUp());
 
             if (TLoZInput.HasTriggeredKey(Keys.Down))
-                PlayNote(NoteManager.Instance.Get<NoteDown>());
+                PlayNote(new NoteDown());
 
             if (TLoZInput.HasTriggeredKey(Keys.X))
-                _currentNotes.Clear();
+                CurrentNotes.Clear();
         }
 
 
         //Currently played notes
-        public IReadOnlyList<Note> CurrentNotes => _currentNotes.AsReadOnly();
+        public List<Note> CurrentNotes { get; private set; }
 
         public bool IsPlayingInstrument { get; set; }
+
+        public int TicksSinceLastNotePlayed { get; internal set; }
+
+
+        public Vector2 InvertedSongOfSoaringPosition { get; set; }
     }
 }

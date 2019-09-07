@@ -1,12 +1,13 @@
 ﻿using Terraria;
 using Terraria.ID;
 using TLoZ.Players;
+using TLoZ.Worlds;
 
 namespace TLoZ.Items.Tools.Misc
 {
     public class OcarinaOfTime : TLoZItem
     {
-        public OcarinaOfTime() : base("Ocarina of Time", "Possess magical powers.", 40, 40, Item.buyPrice(0, 10, 0, 0), 0, ItemRarityID.Quest)
+        public OcarinaOfTime() : base("Ocarina of Time", "Possess magical powers", 40, 40, Item.buyPrice(0, 10, 0, 0), 0, ItemRarityID.Quest)
         {
         }
 
@@ -19,10 +20,16 @@ namespace TLoZ.Items.Tools.Misc
             item.useTime = 15;
         }
 
+
+        public override bool CanUseItem(Player player) => !mod.GetModWorld<TLoZWorld>().IsSongPlaying;
+
         public override bool UseItem(Player player)
         {
             TLoZPlayer tlozPlayer = TLoZPlayer.Get(player);
             tlozPlayer.IsPlayingInstrument = !tlozPlayer.IsPlayingInstrument;
+
+            if (Main.LocalPlayer == player)
+                UIManager.InstrumentPlayUIState.Visible = !UIManager.InstrumentPlayUIState.Visible;
 
             return true;
         }

@@ -235,7 +235,6 @@ namespace TLoZ.NPCs.Minibosses.Guardian
                 return false;
             }
 
-            Main.NewText("DIEDED");
             Dusts();
 
             Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Custom/SheikahExplosion"));

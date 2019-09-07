@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using TLoZ.Commons;
 
 namespace TLoZ.Tiles
 {
@@ -13,7 +12,7 @@ namespace TLoZ.Tiles
 
         private readonly bool _tileSolidTop, _tileFrameImportant, _tileNoAttach, _tileLavaDeath;
 
-        public TLoZTile(string tileName, Color color, bool solidTop = false, bool frameImportant = false, bool noAttach = false, bool lavaDeath = false)
+        protected TLoZTile(string tileName, Color color, bool solidTop = false, bool frameImportant = false, bool noAttach = false, bool lavaDeath = false)
         {
 			_name = tileName;
 

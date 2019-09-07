@@ -11,9 +11,13 @@ using Terraria.Graphics.Shaders;
 using System.IO;
 using TLoZ.Enums;
 using TLoZ.Network;
+using TLoZ.Notes;
 using TLoZ.Players;
 using TLoZ.NPCs.Minibosses.Guardian;
+using TLoZ.Songs;
 using TLoZ.Time;
+using TLoZ.Worlds;
+using WebmilioCommons.Networking;
 
 namespace TLoZ
 {
@@ -29,7 +33,7 @@ namespace TLoZ
 
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
-            NetworkPacketManager.Instance.HandlePacket(reader, whoAmI);
+            NetworkPacketLoader.HandlePacket(reader, whoAmI);
         }
 
 
@@ -39,6 +43,8 @@ namespace TLoZ
 
             StasisableProjectiles.Load();
             TimeManagement.Load();
+
+            NoteLoader.Load();
 
             if (!Main.dedServ)
             {
@@ -90,6 +96,24 @@ namespace TLoZ
             if (Main.myPlayer == -1 || Main.gameMenu || !Main.LocalPlayer.active)
             {
                 return;
+            }
+
+            TLoZWorld tlozWorld = GetModWorld<TLoZWorld>();
+            WorldSong song = tlozWorld.CurrentSong;
+
+            if (song != null)
+            {
+                if (song.Variant == SongVariant.Normal && song.Player.player == Main.LocalPlayer)
+                    Main.blockInput = true;
+
+                music = GetSoundSlot(SoundType.Music, song.Path);
+                priority = MusicPriority.Event;
+
+                if (tlozWorld.TicksLeftOnSong > 0)
+                    tlozWorld.TicksLeftOnSong--;
+
+                if (tlozWorld.TicksLeftOnSong == 0)
+                    tlozWorld.ResetSong();
             }
             foreach (NPC npc in Main.npc)
             {

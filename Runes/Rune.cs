@@ -1,14 +1,14 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
-using TLoZ.Commons;
 using TLoZ.Players;
+using WebmilioCommons.Managers;
 
 namespace TLoZ.Runes
 {
     public abstract class Rune : IHasUnlocalizedName
     {
-        public Rune(string unlocalizedName, string displayName, Texture2D runeTexture)
+        protected Rune(string unlocalizedName, string displayName, Texture2D runeTexture)
         {
             UnlocalizedName = unlocalizedName;
             DisplayName = displayName;

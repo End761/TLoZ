@@ -65,38 +65,34 @@ namespace TLoZ.UIs
             if (!Visible)
                 return;
 
-
             base.DrawChildren(spriteBatch);
 
             Vector2 position = MainPanel.GetDimensions().Position() + new Vector2(16, 44);
 
-
-            // draw note stripes
+            // Draw note stripes
             for (int i = 0; i < 4; i++)
                 spriteBatch.Draw(Main.magicPixel, position + new Vector2(0, 32 + 22 * i), new Rectangle(0, 0, (int)PANEL_WIDTH - 32, 4), Color.Red, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
 
-            // draw note thing™
+            // Draw note thing™
             spriteBatch.Draw(TLoZTextures.MiscNoteThing, position + new Vector2(-10, 20), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
 
 
-            // no notes played, don't need the rest of code to be run
-            if(TLoZPlayer.CurrentNotes.Count <= 0)
+            TLoZPlayer tlozPlayer = TLoZPlayer.Get();
+
+            // No notes played, don't need the rest of code to be run
+            if(tlozPlayer.CurrentNotes.Count <= 0)
                 return;
 
-            foreach(Note note in TLoZPlayer.CurrentNotes)
+            foreach(Note note in tlozPlayer.CurrentNotes)
             {
-                Texture2D texture = ModContent.GetTexture(note.TexturePath);
+                int noteIndex = tlozPlayer.CurrentNotes.FindIndex(x => x == note);
 
-                int noteIndex = TLoZPlayer.CurrentNotes.FindIndex(x => x == note);
-
-                spriteBatch.Draw(texture, position + new Vector2(46 + 42 * noteIndex, note.HeightOffset), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
+                spriteBatch.Draw(note.GetTexture(tlozPlayer), position + new Vector2(46 + 42 * noteIndex, note.HeightOffset * 25), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
             }
         }
 
         public UIPanel MainPanel { get; private set; }
 
-        public bool Visible => TLoZPlayer.IsPlayingInstrument;
-
-        public TLoZPlayer TLoZPlayer => TLoZPlayer.Get(Main.LocalPlayer);
+        public bool Visible { get; set; }
     }
 }
