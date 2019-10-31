@@ -14,6 +14,8 @@ namespace TLoZ.Notes
 
         internal static void Load()
         {
+            _noteTypesByName.Clear();
+
             foreach (Mod mod in ModLoader.Mods)
             {
                 if (mod.Code == null)

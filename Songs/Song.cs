@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Terraria;
 using Terraria.Audio;
@@ -21,6 +22,7 @@ namespace TLoZ.Songs
         protected Song(string unlocalizedName, TimeSpan normalDuration, TimeSpan fullDuration, params Note[] composedNotes)
         {
             UnlocalizedName = "song." + unlocalizedName;
+            DisplayName = GetType().Name.SplitEveryCapital();
 
             NormalDuration = (int) Math.Ceiling(normalDuration.TotalSeconds * Constants.TICKS_PER_SECOND);
             FullDuration = (int)Math.Ceiling(fullDuration.TotalSeconds * Constants.TICKS_PER_SECOND);
@@ -74,6 +76,10 @@ namespace TLoZ.Songs
         {
             //Main.PlaySound(Mod.GetSoundSlot(SoundType.Music, ))
             Mod.GetModWorld<TLoZWorld>().PlaySong(tlozPlayer, this, variant);
+
+            Vector2 playerPosition = tlozPlayer.player.position;
+            CombatText.NewText(new Rectangle((int) playerPosition.X, (int) playerPosition.Y, tlozPlayer.player.width, tlozPlayer.player.height), Color.PaleVioletRed, DisplayName);
+            
             OnPlay(tlozPlayer, variant);
         }
 
@@ -88,6 +94,7 @@ namespace TLoZ.Songs
 
 
         public string UnlocalizedName { get; }
+        public virtual string DisplayName { get; }
 
         public int NormalDuration { get; }
         public int FullDuration { get; }

@@ -18,7 +18,21 @@ namespace TLoZ.Items
         public override void SetDefaults(Item item)
         {
             _defaultUseTurn = item.useTurn;
+
+            
         }
+
+        public override bool Shoot(Item item, Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        {
+            if (player.variable)
+            {
+                speedX /= 2;
+                speedY /= 2;
+            }
+
+            return true;
+        }
+
 
         public override bool CanUseItem(Item item, Player player)
         {

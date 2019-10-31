@@ -213,7 +213,7 @@ namespace TLoZ.NPCs.Minibosses.Guardian
                 }
             }
 
-            return farEnough && numberOfGuardians <= 8 && spawnInfo.player.ZoneOverworldHeight ? 0.1f : 0f ;
+            return farEnough && numberOfGuardians <= 5 && spawnInfo.player.ZoneOverworldHeight ? 0.02f : 0f ;
         }
 
         public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
