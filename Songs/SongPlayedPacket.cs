@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 using TLoZ.Players;
 using TLoZ.Worlds;
 using WebmilioCommons.Networking.Packets;
@@ -11,7 +12,7 @@ namespace TLoZ.Songs
     {
         public string Name
         {
-            get => Mod.GetModWorld<TLoZWorld>().CurrentSong.Song.UnlocalizedName;
+            get => ModContent.GetInstance<TLoZWorld>().CurrentSong.Song.UnlocalizedName;
             set
             {
                 Song song = SongManager.Instance[Name];

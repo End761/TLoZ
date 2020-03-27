@@ -26,6 +26,11 @@ namespace TLoZ.NPCs.Minibosses.Guardian
             HasResetAI3 = false;
             Died = false;
             IsGuardianActive = false;
+
+            EarMossID = Main.rand.Next(3);
+            HeadMossID = Main.rand.Next(3);
+            BodyMossID = Main.rand.Next(3);
+            LowerMossID = Main.rand.Next(3);
         }
         
         public override void AI()
@@ -87,7 +92,7 @@ namespace TLoZ.NPCs.Minibosses.Guardian
                     {
                         Vector2 laserPos = npc.Center - new Vector2(-1, 48).RotatedBy(npc.rotation);
                         Helpers.CircleDust(laserPos, Vector2.Zero, DustID.AncientLight, 12, 12);
-                        int laser = Projectile.NewProjectile(laserPos, Helpers.DirectToPosition(laserPos, ShootPos, 16f), mod.ProjectileType<GuardianLaser>(), 60, 0f, Main.myPlayer);
+                        int laser = Projectile.NewProjectile(laserPos, Helpers.DirectToPosition(laserPos, ShootPos, 16f), ModContent.ProjectileType<GuardianLaser>(), 60, 0f, Main.myPlayer);
                         Main.projectile[laser].ai[0] = npc.whoAmI;
                         Main.projectile[laser].ai[1] = 1f;
                         ScanTimer = 9.6f;
@@ -157,7 +162,7 @@ namespace TLoZ.NPCs.Minibosses.Guardian
                                 ShootPos = Target.Center + Target.velocity / 8f - new Vector2(0, 6);
                                 Vector2 laserPos = npc.Center - new Vector2(-1, 48).RotatedBy(npc.rotation);
                                 Helpers.CircleDust(laserPos, Vector2.Zero, DustID.AncientLight, 12, 12);
-                                int laser = Projectile.NewProjectile(laserPos, Helpers.DirectToPosition(laserPos, ShootPos, 16f), mod.ProjectileType<GuardianLaser>(), 60, 0f, Main.myPlayer);
+                                int laser = Projectile.NewProjectile(laserPos, Helpers.DirectToPosition(laserPos, ShootPos, 16f), ModContent.ProjectileType<GuardianLaser>(), 60, 0f, Main.myPlayer);
                                 Main.projectile[laser].ai[0] = npc.whoAmI;
                                 Main.projectile[laser].ai[1] = 1f;
                             }
@@ -204,7 +209,7 @@ namespace TLoZ.NPCs.Minibosses.Guardian
                 if (!npc.active)
                     continue;
 
-                if (npc.type == mod.NPCType<Guardian>())
+                if (npc.type == ModContent.NPCType<Guardian>())
                 {
                     numberOfGuardians += 1;
 
@@ -255,6 +260,8 @@ namespace TLoZ.NPCs.Minibosses.Guardian
 
             Texture2D eyeTexture = TLoZTextures.NPCFXGuardianEye;
 
+            Texture2D mossTexture = ModContent.GetTexture("TLoZ/NPCs/Minibosses/Guardian/GuardianMoss");
+
             Effect deathEffect = TLoZMod.Instance.GetEffect("Effects/GuardianDeath");
 
             deathEffect.Parameters["uColor"].SetValue(new Vector4(ShotPreparationTimer, ShotPreparationTimer, ShotPreparationTimer, 0.8f));
@@ -273,6 +280,17 @@ namespace TLoZ.NPCs.Minibosses.Guardian
 
             spriteBatch.Draw(eyeTexture, npc.Center - new Vector2(0, 30) - Main.screenPosition, null, Color.White * (EyeBootUpTimer >= 1.0f ? 1f : 0f), npc.rotation, new Vector2(baseTexture.Width / 2, baseTexture.Height / 2), 1f, SpriteEffects.None, 1f);
 
+            //draw moss
+            // ears
+            spriteBatch.Draw(mossTexture, npc.Center - new Vector2(0, 30) - Main.screenPosition, new Rectangle(134 * EarMossID, 135, 134, 134), drawColor, npc.rotation, new Vector2(baseTexture.Width / 2, baseTexture.Height / 2), 1f, SpriteEffects.None, 1f);
+            //head
+            spriteBatch.Draw(mossTexture, npc.Center - new Vector2(0, 30) - Main.screenPosition, new Rectangle(134 * HeadMossID, 268, 134, 134), drawColor, npc.rotation, new Vector2(baseTexture.Width / 2, baseTexture.Height / 2), 1f, SpriteEffects.None, 1f);
+            //body
+            spriteBatch.Draw(mossTexture, npc.Center - new Vector2(0, 30) - Main.screenPosition, new Rectangle(134 * BodyMossID, 402, 134, 134), drawColor, npc.rotation, new Vector2(baseTexture.Width / 2, baseTexture.Height / 2), 1f, SpriteEffects.None, 1f);
+            //lower body
+            spriteBatch.Draw(mossTexture, npc.Center - new Vector2(0, 30) - Main.screenPosition, new Rectangle(134 * LowerMossID, 536, 134, 134), drawColor, npc.rotation, new Vector2(baseTexture.Width / 2, baseTexture.Height / 2), 1f, SpriteEffects.None, 1f);
+            // end moss //
+
             if (Died && HasResetAI3)
                 deathEffect.CurrentTechnique.Passes[0].Apply();
 
@@ -284,8 +302,8 @@ namespace TLoZ.NPCs.Minibosses.Guardian
                 float y = Main.rand.NextFloat(ScanTimer * -1, ScanTimer) * 4;
 
                 Vector2 position = ShootPos - new Vector2(0, 6) + new Vector2(x, y);
-
-                Helpers.DrawLine(npc.Center - new Vector2(-1, 48).RotatedBy(npc.rotation), position, mod.GetTexture("Textures/Misc/Laser"), mod.GetTexture("Textures/Misc/LaserEnd"), spriteBatch, ScanTimer <= 2.0f ? Color.Red : Color.Crimson, ScanTimer <= 2.0f ? 2 : 4);
+                Helpers.DrawLine(npc.Center - new Vector2(-1, 48).RotatedBy(npc.rotation), position, mod.GetTexture("Textures/Misc/Laser"), mod.GetTexture("Textures/Misc/Laser"), spriteBatch, ScanTimer <= 2.0f ? Color.Red * 0.5f : Color.Crimson * 0.25f, ScanTimer <= 2.0f ? 4 : 8);
+                Helpers.DrawLine(npc.Center - new Vector2(-1, 48).RotatedBy(npc.rotation), position, mod.GetTexture("Textures/Misc/Laser"), mod.GetTexture("Textures/Misc/LaserEnd"), spriteBatch, ScanTimer <= 2.0f ? Color.Red * 0.8f : Color.Crimson * 0.8f, ScanTimer <= 2.0f ? 1 : 3);
             }
         }
 
@@ -361,5 +379,10 @@ namespace TLoZ.NPCs.Minibosses.Guardian
         public int TimeSinceLastActivation { get; private set; }
         public int NoStunTimer { get; private set; }
         public int FocusTimer { get; private set; }
+
+        public int EarMossID { get; private set; }
+        public int HeadMossID { get; private set; }
+        public int BodyMossID { get; private set; }
+        public int LowerMossID { get; private set; }
     }
 }

@@ -122,7 +122,7 @@ namespace TLoZ.Projectiles
         }
         public override bool PreDraw(Projectile projectile, SpriteBatch spriteBatch, Color lightColor)
         {
-            if (CanBeStasised && projectile.active && Main.LocalPlayer.HeldItem.type == mod.ItemType<SheikahSlate>() && TLoZPlayer.Get(Main.LocalPlayer).SelectedRune is StasisRune)
+            if (CanBeStasised && projectile.active && Main.LocalPlayer.HeldItem.type == ModContent.ItemType<SheikahSlate>() && TLoZPlayer.Get(Main.LocalPlayer).SelectedRune is StasisRune)
             {
                 Helpers.StartShader(spriteBatch);
                 GameShaders.Armor.Apply(GameShaders.Armor.GetShaderIdFromItemId(ItemID.PixieDye), projectile);

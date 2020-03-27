@@ -59,7 +59,7 @@ namespace TLoZ.Songs
 
         public bool TryPlay(TLoZPlayer tlozPlayer, SongVariant variant = SongVariant.Normal)
         {
-            if (TLoZMod.Instance.GetModWorld<TLoZWorld>().IsSongPlaying)
+            if (ModContent.GetInstance<TLoZWorld>().IsSongPlaying)
             {
                 Main.NewText("There is already a song playing in the world!");
                 return false;
@@ -75,7 +75,7 @@ namespace TLoZ.Songs
         public void Play(TLoZPlayer tlozPlayer, SongVariant variant)
         {
             //Main.PlaySound(Mod.GetSoundSlot(SoundType.Music, ))
-            Mod.GetModWorld<TLoZWorld>().PlaySong(tlozPlayer, this, variant);
+            ModContent.GetInstance<TLoZWorld>().PlaySong(tlozPlayer, this, variant);
 
             Vector2 playerPosition = tlozPlayer.player.position;
             CombatText.NewText(new Rectangle((int) playerPosition.X, (int) playerPosition.Y, tlozPlayer.player.width, tlozPlayer.player.height), Color.PaleVioletRed, DisplayName);

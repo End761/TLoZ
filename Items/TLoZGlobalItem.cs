@@ -21,7 +21,7 @@ namespace TLoZ.Items
 
             
         }
-
+        /*
         public override bool Shoot(Item item, Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
             if (player.variable)
@@ -31,7 +31,7 @@ namespace TLoZ.Items
             }
 
             return true;
-        }
+        } <= wtf??????? */
 
 
         public override bool CanUseItem(Item item, Player player)

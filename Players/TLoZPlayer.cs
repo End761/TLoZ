@@ -57,12 +57,12 @@ namespace TLoZ.Players
             if (ItemUseDelay > 0)
                 ItemUseDelay--;
 
-            if (player.ownedProjectileCounts[mod.ProjectileType<BombRound>()] <= 0)
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<BombRound>()] <= 0)
                 HasBomb = false;
 
-            HasMasterSword = player.HasItem(mod.ItemType<MasterSword>());
+            HasMasterSword = player.HasItem(ModContent.ItemType<MasterSword>());
 
-            UsingMasterSword = !(player.itemAnimation <= 0 && Holds(mod.ItemType<MasterSword>()));
+            UsingMasterSword = !(player.itemAnimation <= 0 && Holds(ModContent.ItemType<MasterSword>()));
 
             if (LastChatFromNPC != null && LastChatFromNPC.active)
                 HandleNPCChat(LastChatFromNPC);
@@ -200,7 +200,7 @@ namespace TLoZ.Players
 
         public override bool? CanHitNPC(Item item, NPC target)
         {
-            if (item.type == mod.ItemType<MasterSword>() && (target.type == NPCID.Clothier || target.type == NPCID.OldMan))
+            if (item.type == ModContent.ItemType<MasterSword>() && (target.type == NPCID.Clothier || target.type == NPCID.OldMan))
                 return true;
 
             if (TLoZGlobalNPC.GetFor(target).Stasised)
@@ -349,7 +349,7 @@ namespace TLoZ.Players
 
         public NPC LastChatFromNPC { get; internal set; }
 
-        private bool HasParaglider => player.HasItem(mod.ItemType<ParagliderItem>());
+        private bool HasParaglider => player.HasItem(ModContent.ItemType<ParagliderItem>());
 
         public bool Paragliding
         {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.ModLoader;
 using Terraria.UI;
 using TLoZ.Players;
 using TLoZ.Projectiles.Runes;
@@ -39,10 +40,10 @@ namespace TLoZ.UIs
 
                 if (!loZPlayer.HasBomb )
                 {
-                    if (!loZPlayer.IsNearBomb && loZPlayer.SelectedRune is BombRoundRune && player.ownedProjectileCounts[TLoZMod.Instance.ProjectileType<BombRound>()] > 0)
+                    if (!loZPlayer.IsNearBomb && loZPlayer.SelectedRune is BombRoundRune && player.ownedProjectileCounts[ModContent.ProjectileType<BombRound>()] > 0)
                         Helpers.DrawInputButtonMouse(spriteBatch, position, 2, "Detonate Bomb( Round ).");
 
-                    else if(!loZPlayer.IsNearBomb && loZPlayer.SelectedRune is BombSquareRune && player.ownedProjectileCounts[TLoZMod.Instance.ProjectileType<BombSquare>()] > 0)
+                    else if(!loZPlayer.IsNearBomb && loZPlayer.SelectedRune is BombSquareRune && player.ownedProjectileCounts[ModContent.ProjectileType<BombSquare>()] > 0)
                         Helpers.DrawInputButtonMouse(spriteBatch, position, 2, "Detonate Bomb( Square ).");
 
                     else if(loZPlayer.IsNearBomb)

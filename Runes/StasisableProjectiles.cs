@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria.ID;
+using Terraria.ModLoader;
 using TLoZ.Projectiles.Runes;
 
 namespace TLoZ.Runes
@@ -14,8 +15,8 @@ namespace TLoZ.Runes
         public static void Load()
         {
             SuitableProjectiles = new List<int>();
-            SuitableProjectiles.Add(TLoZMod.Instance.ProjectileType<BombRound>());
-            SuitableProjectiles.Add(TLoZMod.Instance.ProjectileType<BombSquare>());
+            SuitableProjectiles.Add(ModContent.ProjectileType<BombRound>());
+            SuitableProjectiles.Add(ModContent.ProjectileType<BombSquare>());
             SuitableProjectiles.Add(ProjectileID.Boulder);
         }
         public static void Unload()

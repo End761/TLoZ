@@ -14,10 +14,10 @@ namespace TLoZ.Runes
 
         public override bool UseItem(ModItem item, Player player, TLoZPlayer tlozPlayer)
         {
-            if (!tlozPlayer.HasBomb && player.ownedProjectileCounts[item.mod.ProjectileType<BombRound>()] <= 0)
-                Projectile.NewProjectile(player.Center, Vector2.Zero, item.mod.ProjectileType<BombRound>(), 0, 0, player.whoAmI);
+            if (!tlozPlayer.HasBomb && player.ownedProjectileCounts[ModContent.ProjectileType<BombRound>()] <= 0)
+                Projectile.NewProjectile(player.Center, Vector2.Zero, ModContent.ProjectileType<BombRound>(), 0, 0, player.whoAmI);
 
-            else if (player.ownedProjectileCounts[item.mod.ProjectileType<BombRound>()] > 0)
+            else if (player.ownedProjectileCounts[ModContent.ProjectileType<BombRound>()] > 0)
             {
                 player.itemAnimation = 0;
                 return false;

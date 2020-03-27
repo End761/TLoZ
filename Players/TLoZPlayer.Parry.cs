@@ -82,7 +82,7 @@ namespace TLoZ.Players
             {
                 proj.hostile = false;
                 proj.friendly = true;
-                if(proj.type != mod.ProjectileType<GuardianLaser>())
+                if(proj.type != ModContent.ProjectileType<GuardianLaser>())
                     proj.velocity = Helpers.DirectToMouse(proj.Center) * 16;
             }
         }

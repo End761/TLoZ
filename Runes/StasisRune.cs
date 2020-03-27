@@ -21,13 +21,13 @@ namespace TLoZ.Runes
 
                 if(tlozPlayer.MyTarget != null && !tlozPlayer.MyTarget.boss)
                 {
-                    tlozPlayer.MyTarget.AddBuff(item.mod.BuffType<StasisDebuff>(), 420);
+                    tlozPlayer.MyTarget.AddBuff(ModContent.BuffType<StasisDebuff>(), 420);
                     break;
                 }
 
                 if (Collision.CheckAABBvLineCollision(npc.position, npc.Hitbox.Size(), player.Center, Main.MouseWorld))
                 {
-                    npc.AddBuff(item.mod.BuffType<StasisDebuff>(), 420);
+                    npc.AddBuff(ModContent.BuffType<StasisDebuff>(), 420);
                     break;
                 }
             }

@@ -59,7 +59,7 @@ namespace TLoZ.Players
                 }
                 if (SwingRotation > 3.0f)
                 {
-                    Projectile.NewProjectile(player.Center, new Vector2(0.5f * player.direction, -0.5f), mod.ProjectileType<TwoHandedWeaponHitbox>(), player.HeldItem.damage, player.HeldItem.knockBack * 2f, player.whoAmI);
+                    Projectile.NewProjectile(player.Center, new Vector2(0.5f * player.direction, -0.5f), ModContent.ProjectileType<TwoHandedWeaponHitbox>(), player.HeldItem.damage, player.HeldItem.knockBack * 2f, player.whoAmI);
                     Main.PlaySound(2, (int)player.position.X, (int)player.position.Y, 71);
                 }
             }
@@ -79,7 +79,7 @@ namespace TLoZ.Players
                     SwingRotation *= 0.875f;
                     if (SwingRotation <= 2.0f)
                     {
-                        Projectile.NewProjectile(player.Center, new Vector2(1 * player.direction, -0.5f), mod.ProjectileType<TwoHandedWeaponHitbox>(), player.HeldItem.damage, player.HeldItem.knockBack * 1.5f, player.whoAmI);
+                        Projectile.NewProjectile(player.Center, new Vector2(1 * player.direction, -0.5f), ModContent.ProjectileType<TwoHandedWeaponHitbox>(), player.HeldItem.damage, player.HeldItem.knockBack * 1.5f, player.whoAmI);
                         Main.PlaySound(2, (int)player.position.X, (int)player.position.Y, 71);
                     }
                 }
@@ -125,7 +125,7 @@ namespace TLoZ.Players
             if (TwoHanderChargeAttack)
             {
                 if(LeftClickTimer == 20)
-                    Projectile.NewProjectile(player.Center, new Vector2(1 * player.direction, -0.5f), mod.ProjectileType<TwoHandedWeaponHitbox>(), player.HeldItem.damage, player.HeldItem.knockBack * 1.5f, Main.myPlayer);
+                    Projectile.NewProjectile(player.Center, new Vector2(1 * player.direction, -0.5f), ModContent.ProjectileType<TwoHandedWeaponHitbox>(), player.HeldItem.damage, player.HeldItem.knockBack * 1.5f, Main.myPlayer);
                 if (SwingRotation <= -6.28)
                     SwingRotation = 0.0f;
                 SwingRotation -= LeftClickTimer * 0.001f;

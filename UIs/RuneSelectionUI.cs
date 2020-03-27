@@ -6,6 +6,7 @@ using TLoZ.Extensions;
 using TLoZ.Players;
 using TLoZ.Runes;
 using TLoZ.Items.Tools;
+using Terraria.ModLoader;
 
 namespace TLoZ.UIs
 {
@@ -15,7 +16,7 @@ namespace TLoZ.UIs
         {
             TLoZPlayer tlozPlayer = TLoZPlayer.Get(Main.LocalPlayer);
 
-            if (Main.LocalPlayer.HeldItem.type == TLoZMod.Instance.ItemType<SheikahSlate>() && tlozPlayer.SelectedRune is StasisRune)
+            if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<SheikahSlate>() && tlozPlayer.SelectedRune is StasisRune)
             {
                 spriteBatch.Draw(Main.magicPixel, Vector2.Zero, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Yellow * 0.17f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
             }

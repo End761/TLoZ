@@ -33,7 +33,7 @@ namespace TLoZ
 
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
-            NetworkPacketLoader.HandlePacket(reader, whoAmI);
+            NetworkPacketLoader.Instance.HandlePacket(reader, whoAmI);
         }
 
 
@@ -98,7 +98,7 @@ namespace TLoZ
                 return;
             }
 
-            TLoZWorld tlozWorld = GetModWorld<TLoZWorld>();
+            TLoZWorld tlozWorld = ModContent.GetInstance<TLoZWorld>();
             WorldSong song = tlozWorld.CurrentSong;
 
             if (song != null)
@@ -117,7 +117,7 @@ namespace TLoZ
             }
             foreach (NPC npc in Main.npc)
             {
-                if (npc.type != NPCType<Guardian>() || !npc.active)
+                if (npc.type != ModContent.NPCType<Guardian>() || !npc.active)
                     continue;
 
                 Guardian guardian = npc.modNPC as Guardian;

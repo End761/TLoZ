@@ -34,7 +34,7 @@ namespace TLoZ.Projectiles.Misc
         }
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
-            if (target.type == TLoZMod.Instance.NPCType<Guardian>())
+            if (target.type == ModContent.NPCType<Guardian>())
             {
                 crit = true;
                 damage = target.lifeMax;

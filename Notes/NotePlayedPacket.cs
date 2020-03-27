@@ -7,7 +7,7 @@ namespace TLoZ.Notes
 {
     public class NotePlayedPacket : ModPlayerNetworkPacket<TLoZPlayer>
     {
-        public override bool PostReceive(BinaryReader reader, int fromWho)
+        protected override bool PostReceive(BinaryReader reader, int fromWho)
         {
             ModPlayer.PlayNote(NoteLoader.NewNote(Note));
 

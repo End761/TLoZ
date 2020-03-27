@@ -24,7 +24,7 @@ namespace TLoZ.Projectiles.Misc
             projectile.velocity = Vector2.Zero;
             projectile.position += oldVelocity;
             if (projectile.damage > 0)
-                Projectile.NewProjectile(projectile.Center, Vector2.Zero, mod.ProjectileType<DeflectedLaserExplosion>(), 60, 4f, Main.myPlayer);
+                Projectile.NewProjectile(projectile.Center, Vector2.Zero, ModContent.ProjectileType<DeflectedLaserExplosion>(), 60, 4f, Main.myPlayer);
 
             projectile.damage = 0;
 
@@ -34,7 +34,7 @@ namespace TLoZ.Projectiles.Misc
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             damage *= 4;
-            if (target.type == TLoZMod.Instance.NPCType<Guardian>())
+            if (target.type == ModContent.NPCType<Guardian>())
             {
                 crit = true;
                 damage = target.lifeMax;
@@ -46,7 +46,7 @@ namespace TLoZ.Projectiles.Misc
             projectile.Center += projectile.velocity;
             projectile.damage = 0;
             projectile.velocity = Vector2.Zero;
-            Projectile.NewProjectile(projectile.Center, Vector2.Zero, mod.ProjectileType<DeflectedLaserExplosion>(), 60, 4f, Main.myPlayer);
+            Projectile.NewProjectile(projectile.Center, Vector2.Zero, ModContent.ProjectileType<DeflectedLaserExplosion>(), 60, 4f, Main.myPlayer);
         }
 
         public override void AI()
@@ -69,7 +69,9 @@ namespace TLoZ.Projectiles.Misc
         }
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            Helpers.DrawLine(Owner.Center + new Vector2(6 * Owner.direction, 0), projectile.Center, Main.projectileTexture[projectile.type], Main.projectileTexture[projectile.type], spriteBatch, Color.Cyan, projectile.ai[1]);
+            Helpers.DrawLine(Owner.Center + new Vector2(6 * Owner.direction, 0), projectile.Center, Main.projectileTexture[projectile.type], Main.projectileTexture[projectile.type], spriteBatch, Color.DarkCyan * 0.2f, projectile.ai[1] * 2.2f);
+            Helpers.DrawLine(Owner.Center + new Vector2(6 * Owner.direction, 0), projectile.Center, Main.projectileTexture[projectile.type], Main.projectileTexture[projectile.type], spriteBatch, Color.DarkCyan * 0.5f, projectile.ai[1] * 1.35f);
+            Helpers.DrawLine(Owner.Center + new Vector2(6 * Owner.direction, 0), projectile.Center, Main.projectileTexture[projectile.type], Main.projectileTexture[projectile.type], spriteBatch, Color.White * 0.7f, projectile.ai[1] * 0.5f);
         }
     }
 }

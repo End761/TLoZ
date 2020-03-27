@@ -1,4 +1,5 @@
 ﻿using System;
+using Terraria.ModLoader;
 using TLoZ.Notes;
 using TLoZ.Players;
 using TLoZ.Worlds;
@@ -16,7 +17,7 @@ namespace TLoZ.Songs.SongsOfTime
 
         public override void OnPlay(TLoZPlayer tlozPlayer, SongVariant variant)
         {
-            Mod.GetModWorld<TLoZWorld>().ToggleInvertedSongOfTime();
+            ModContent.GetInstance<TLoZWorld>().ToggleInvertedSongOfTime();
         }
     }
 }

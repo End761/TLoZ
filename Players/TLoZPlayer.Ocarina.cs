@@ -58,7 +58,7 @@ namespace TLoZ.Players
 
         private void ResetEffectOcarina()
         {
-            WorldSong worldSong = mod.GetModWorld<TLoZWorld>().CurrentSong;
+            WorldSong worldSong = ModContent.GetInstance<TLoZWorld>().CurrentSong;
 
             //if (worldSong != null && worldSong.Player == this && worldSong.Variant == SongVariant.Normal)
 

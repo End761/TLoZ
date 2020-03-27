@@ -1,5 +1,6 @@
 ﻿using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 using TLoZ.Players;
 using TLoZ.Worlds;
 
@@ -21,7 +22,7 @@ namespace TLoZ.Items.Tools.Misc
         }
 
 
-        public override bool CanUseItem(Player player) => !mod.GetModWorld<TLoZWorld>().IsSongPlaying;
+        public override bool CanUseItem(Player player) => !ModContent.GetInstance<TLoZWorld>().IsSongPlaying;
 
         public override bool UseItem(Player player)
         {

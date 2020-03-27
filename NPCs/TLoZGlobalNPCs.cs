@@ -98,13 +98,13 @@ namespace TLoZ.NPCs
             if (StasisChainsOpacity > 0.0f)
                 StasisChainsOpacity -= 0.02f;
 
-            if (Stasised && !npc.HasBuff(mod.BuffType<StasisDebuff>()))
+            if (Stasised && !npc.HasBuff(ModContent.BuffType<StasisDebuff>()))
             {
                 npc.color = PreStasisColor;
                 Main.PlaySound(13);
             }
 
-            if (!Stasised && npc.HasBuff(mod.BuffType<StasisDebuff>()))
+            if (!Stasised && npc.HasBuff(ModContent.BuffType<StasisDebuff>()))
             {
                 StasisChainsOpacity = 2.0f;
 
@@ -121,7 +121,7 @@ namespace TLoZ.NPCs
         }
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
         {
-            if (!npc.boss && npc.active && Main.LocalPlayer.HeldItem.type == mod.ItemType<SheikahSlate>() && TLoZPlayer.Get(Main.LocalPlayer).SelectedRune is StasisRune)
+            if (!npc.boss && npc.active && Main.LocalPlayer.HeldItem.type == ModContent.ItemType<SheikahSlate>() && TLoZPlayer.Get(Main.LocalPlayer).SelectedRune is StasisRune)
             {
                 Helpers.StartShader(spriteBatch);
                 GameShaders.Armor.Apply(GameShaders.Armor.GetShaderIdFromItemId(ItemID.PixieDye), npc);

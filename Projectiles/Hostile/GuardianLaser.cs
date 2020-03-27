@@ -26,7 +26,7 @@ namespace TLoZ.Projectiles.Hostile
             projectile.velocity = Vector2.Zero;
             projectile.position += oldVelocity;
             if(projectile.damage > 0)
-                Projectile.NewProjectile(projectile.Center, Vector2.Zero, mod.ProjectileType<GuardianLaserExplosion>(), 60, 4f, Main.myPlayer);
+                Projectile.NewProjectile(projectile.Center, Vector2.Zero, ModContent.ProjectileType<GuardianLaserExplosion>(), 60, 4f, Main.myPlayer);
 
             projectile.damage = 0;
 
@@ -44,11 +44,11 @@ namespace TLoZ.Projectiles.Hostile
                 projectile.damage = 0;
                 projectile.Center += projectile.velocity;
                 projectile.velocity = Vector2.Zero;
-                Projectile.NewProjectile(projectile.Center, Vector2.Zero, mod.ProjectileType<GuardianLaserExplosion>(), 60, 4f, Main.myPlayer);
+                Projectile.NewProjectile(projectile.Center, Vector2.Zero, ModContent.ProjectileType<GuardianLaserExplosion>(), 60, 4f, Main.myPlayer);
             }
             else
             {
-                int proj = Projectile.NewProjectile(projectile.Center, Vector2.Zero, mod.ProjectileType<DeflectedLaser>(), 60, 4f, Main.myPlayer);
+                int proj = Projectile.NewProjectile(projectile.Center, Vector2.Zero, ModContent.ProjectileType<DeflectedLaser>(), 60, 4f, Main.myPlayer);
                 if (Owner.whoAmI == Main.myPlayer)
                     Main.projectile[proj].velocity = Helpers.DirectToMouse(target.Center, 16f);
 
@@ -59,17 +59,17 @@ namespace TLoZ.Projectiles.Hostile
         }
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            if(target.type != mod.NPCType<Guardian>())
+            if(target.type != ModContent.NPCType<Guardian>())
             {
                 projectile.Center += projectile.velocity;
                 projectile.damage = 0;
                 projectile.velocity = Vector2.Zero;
-                Projectile.NewProjectile(projectile.Center, Vector2.Zero, mod.ProjectileType<GuardianLaserExplosion>(), 60, 4f, Main.myPlayer);
+                Projectile.NewProjectile(projectile.Center, Vector2.Zero, ModContent.ProjectileType<GuardianLaserExplosion>(), 60, 4f, Main.myPlayer);
             }
         }
         public override bool? CanHitNPC(NPC target)
         {
-            return target.type != mod.NPCType<Guardian>();
+            return target.type != ModContent.NPCType<Guardian>();
         }
         public override void AI()
         {
@@ -78,7 +78,7 @@ namespace TLoZ.Projectiles.Hostile
                 Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Custom/GuardianLaserSpawn"));
             Lighting.AddLight(projectile.position, Color.Cyan.ToVector3());
             if (projectile.timeLeft <= 510)
-                projectile.ai[1] *= 0.95f;
+                projectile.ai[1] *= 0.985f;
             else
                 projectile.ai[1] += 0.1f;
             if (projectile.ai[1] <= 0.02f)
@@ -91,7 +91,10 @@ namespace TLoZ.Projectiles.Hostile
         }
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
-            Helpers.DrawLine(Main.npc[(int)projectile.ai[0]].Center - new Vector2(0, 48), projectile.Center, Main.projectileTexture[projectile.type], Main.projectileTexture[projectile.type], spriteBatch, Color.Cyan, projectile.ai[1]);
+            Helpers.DrawLine(Main.npc[(int)projectile.ai[0]].Center - new Vector2(0, 48), projectile.Center, Main.projectileTexture[projectile.type], Main.projectileTexture[projectile.type], spriteBatch, Color.DarkCyan * 0.2f, projectile.ai[1] * 2.2f);
+            Helpers.DrawLine(Main.npc[(int)projectile.ai[0]].Center - new Vector2(0, 48), projectile.Center, Main.projectileTexture[projectile.type], Main.projectileTexture[projectile.type], spriteBatch, Color.DarkCyan * 0.5f, projectile.ai[1] * 1.35f);
+            Helpers.DrawLine(Main.npc[(int)projectile.ai[0]].Center - new Vector2(0, 48), projectile.Center, Main.projectileTexture[projectile.type], Main.projectileTexture[projectile.type], spriteBatch, Color.White * 0.7f, projectile.ai[1] * 0.5f);
+
         }
     }
 }

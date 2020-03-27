@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.ModLoader;
 using TLoZ.Dusts;
 
 namespace TLoZ
@@ -62,7 +63,7 @@ namespace TLoZ
         {
             for (int i = 0; i < count + 1; i++)
             {
-                int dust = Dust.NewDust(position, 0, 0, TLoZMod.Instance.DustType<GeneralUseDust>());
+                int dust = Dust.NewDust(position, 0, 0, ModContent.DustType<GeneralUseDust>());
                 Main.dust[dust].color = color == new Color() ? Color.White : color;
             }
         }

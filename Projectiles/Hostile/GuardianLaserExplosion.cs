@@ -39,7 +39,7 @@ namespace TLoZ.Projectiles.Hostile
         }
         public override bool? CanHitNPC(NPC target)
         {
-            return target.type != mod.NPCType<Guardian>();
+            return target.type != ModContent.NPCType<Guardian>();
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
         {

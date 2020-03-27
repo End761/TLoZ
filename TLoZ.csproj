@@ -34,7 +34,7 @@
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="WebmilioCommons">
-      <HintPath>..\WebmilioCommons\bin\Debug\net45\WebmilioCommons.dll</HintPath>
+      <HintPath>..\WebmilioCommons-Releases\WebmilioCommons.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
